@@ -119,10 +119,10 @@ class App:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
-                self.pl.x -= 1
+                self.pl.x -= 3
             if keys[pygame.K_RIGHT]:
                 self.pl.image = self.pl.pl_right
-                self.pl.x += 1
+                self.pl.x += 3
             self.functions()
             if self.pl.y > 800: self.flag = False; break
             pygame.display.flip()
