@@ -85,7 +85,7 @@ class App:
 
     def get_fps(self):
         f2 = pygame.font.SysFont('serif', 14)
-        text2 = f2.render(f'FPS: {self.clock.get_fps()}', False,
+        text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (255, 0, 0))
 
         self.screen.blit(text2, (10, 10))
