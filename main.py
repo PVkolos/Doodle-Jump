@@ -111,7 +111,7 @@ class App:
             if keys[pygame.K_RIGHT]:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 1
-            self.clock.tick(150)
+            self.clock.tick(120)
             self.check_play()
             self.screen.blit(self.bg, (0, 0))
             self.draw(self.boosts)
