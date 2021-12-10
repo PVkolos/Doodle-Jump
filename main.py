@@ -11,8 +11,9 @@ class Player:
         self.pl_left = pygame.image.load("images/left_1.png").convert_alpha()
         self.pl_left_pr = pygame.image.load("images/left.png").convert_alpha()
         self.pl_right_pr = pygame.image.load("images/right.png").convert_alpha()
-        self.jump_sound = pygame.mixer.Sound('sfx/jump.wav')
-        self.platform_destroy_sound = pygame.mixer.Sound('sfx/break.mp3')
+        self.jump_sound = pygame.mixer.Sound('sfx/jump.wav') # звук прыжка
+        self.platform_destroy_sound = pygame.mixer.Sound('sfx/break.mp3') # звук ломания платформы
+        self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3') # звук пружины
         self.image = self.pl_right
         self.jump = False
         self.screen = screen
