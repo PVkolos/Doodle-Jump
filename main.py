@@ -1,5 +1,6 @@
 import pygame
 import random
+from boost import StaticBoost, RedBoost
 
 
 class Player:
@@ -11,9 +12,6 @@ class Player:
         self.pl_left = pygame.image.load("images/left_1.png").convert_alpha()
         self.pl_left_pr = pygame.image.load("images/left.png").convert_alpha()
         self.pl_right_pr = pygame.image.load("images/right.png").convert_alpha()
-        self.jump_sound = pygame.mixer.Sound('sfx/jump.wav') # звук прыжка
-        self.platform_destroy_sound = pygame.mixer.Sound('sfx/break.mp3') # звук ломания платформы
-        self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3') # звук пружины
         self.image = self.pl_right
         self.jump = False
         self.screen = screen
@@ -23,13 +21,12 @@ class Player:
         for el in boosts:
             if ((el.x - 40 <= self.x <= el.x + 55) or (el.x - 40 <= self.x + self.width <= el.x + 55)) and self.y == \
                     el.y and not self.jump:
-                if el.static:
+                if type(el) == StaticBoost:
                     self.jump = True
                     self.is_jump = 200
-                    self.jump_sound.play()
                 else:
                     el.image = pygame.image.load("images/red_1.png").convert_alpha()
-                    self.platform_destroy_sound.play()
+                el.play_sound()
         if not self.jump:
             self.y += 5
         elif self.is_jump == 0 or self.is_jump < 0:
@@ -52,26 +49,13 @@ class Player:
         self.screen.blit(self.image, (self.x, self.y - 82))
 
 
-class Boost:
-    def __init__(self, x, y, static=True):
-        self.x = x
-        self.y = y
-        self.size = 80
-        self.image = None
-        self.static = static
-        if self.static:
-            self.image = pygame.image.load("images/green.png").convert_alpha()
-        else:
-            self.image = pygame.image.load("images/red.png").convert_alpha()
-
-
 class App:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
         self.bg = pygame.image.load("images/bg.jpg")
-        self.boosts = [Boost(100, 750, True), Boost(300, 750, True), Boost(500, 750, True)]
+        self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
         self.flag = True
@@ -87,18 +71,17 @@ class App:
         if len(self.boosts) < 15:
             for _ in range(15 - len(self.boosts)):
                 y = self.boosts[-1].y
-                if not self.boosts[-1].static:
+                if not type(self.boosts[-1]) == StaticBoost:
                     for i in range(2, 15):
-                        if self.boosts[-i].static:
+                        if type(self.boosts[-i]) == StaticBoost:
                             y = self.boosts[-i].y
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
-                if random.choice([1, 1, 1, 1, 1, 0]) == 1:
-                    static = True
+                if random.random() > 0.2:
+                    self.boosts.append(StaticBoost(coord[0], coord[1]))
                 else:
-                    static = False
-                self.boosts.append(Boost(coord[0], coord[1], static))
+                    self.boosts.append(RedBoost(coord[0], coord[1]))
         if self.pl.x < -80:
             self.pl.x = 580
         elif self.pl.x > 680:
