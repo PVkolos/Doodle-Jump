@@ -20,8 +20,11 @@ class Player:
         for el in boosts:
             if ((el.x - 40 <= self.x <= el.x + 55) or (el.x - 40 <= self.x + self.width <= el.x + 55)) and self.y == \
                     el.y and not self.jump:
-                self.jump = True
-                self.is_jump = 200
+                if el.static:
+                    self.jump = True
+                    self.is_jump = 200
+                else:
+                    el.image = pygame.image.load("images/red_1.png").convert_alpha()
         if not self.jump:
             self.y += 5
         elif self.is_jump == 0 or self.is_jump < 0:
@@ -45,10 +48,16 @@ class Player:
 
 
 class Boost:
-    def __init__(self, x, y):
+    def __init__(self, x, y, static=True):
         self.x = x
         self.y = y
         self.size = 80
+        self.image = None
+        self.static = static
+        if self.static:
+            self.image = pygame.image.load("images/green.png").convert_alpha()
+        else:
+            self.image = pygame.image.load("images/red.png").convert_alpha()
 
 
 class App:
@@ -57,10 +66,9 @@ class App:
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
         self.bg = pygame.image.load("images/bg.jpg")
-        self.boosts = [Boost(100, 750), Boost(300, 750), Boost(500, 750)]
+        self.boosts = [Boost(100, 750, True), Boost(300, 750, True), Boost(500, 750, True)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
-        self.image_boost = pygame.image.load("images/green.png").convert_alpha()
         self.flag = True
         self.score = 0
         self.running = True
@@ -68,14 +76,22 @@ class App:
 
     def draw(self, boosts):
         for boost in boosts:
-            self.screen.blit(self.image_boost, (boost.x - 60 / 2, boost.y))
+            self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
 
     def check_play(self):
         if len(self.boosts) < 15:
             for i in range(15 - len(self.boosts)):
+                y = self.boosts[-1].y
+                if not self.boosts[-1].static:
+                    for i in range(2, 15):
+                        if self.boosts[-i].static:
+                            y = self.boosts[-i].y
+                            break
                 coord = (random.randint(80, 600 - 80),
-                         random.randrange(round(self.boosts[-1].y - 150), round(self.boosts[-1].y), 5))
-                self.boosts.append(Boost(coord[0], coord[1]))
+                         random.randrange(round(y - 150), round(y), 5))
+                if random.choice([1, 1, 1, 1, 1, 0]) == 1: static = True
+                else: static = False
+                self.boosts.append(Boost(coord[0], coord[1], static))
         if self.pl.x < -80:
             self.pl.x = 580
         elif self.pl.x > 680:
@@ -113,7 +129,7 @@ class App:
             self.screen.blit(text2, (200, 350))
             pygame.display.flip()
 
-    def set_score(self):
+    def scoree(self):
         if self.score < 0:
             f2 = pygame.font.SysFont('serif', 20)
             text2 = f2.render(str(self.score - 500), False,
@@ -137,7 +153,7 @@ class App:
         self.draw(self.boosts)
         self.pl.down(self.boosts)
         self.get_fps()
-        self.set_score()
+        self.scoree()
 
     def start(self):
         self.running = True
@@ -148,14 +164,12 @@ class App:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
-                self.pl.x -= 3
+                self.pl.x -= 5
             if keys[pygame.K_RIGHT]:
                 self.pl.image = self.pl.pl_right
-                self.pl.x += 3
+                self.pl.x += 5
             self.functions()
-            if self.pl.y > 800:
-                self.flag = False
-                break
+            if self.pl.y > 800: self.flag = False; break
             pygame.display.flip()
 
         if not self.flag:
