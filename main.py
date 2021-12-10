@@ -68,6 +68,7 @@ class App:
 
     def start(self):
         running = True
+        flag = True
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -86,6 +87,7 @@ class App:
                     self.coord = (random.randint(80, 600 - 80), random.randint(round(self.boosts[-1][1] - 150), round(self.boosts[-1][1])))
                     self.boosts.append([self.coord[0], self.coord[1], 80])
             if self.pl.y > 800:
+                flag = False
                 break
             if self.pl.x < -80:
                 self.pl.x = 580
@@ -106,7 +108,18 @@ class App:
             self.screen.blit(text2, (10, 10))
 
             pygame.display.flip()
-        pygame.quit()
+        if not flag:
+            while running:
+                self.screen.fill((0, 0, 0))
+                f2 = pygame.font.SysFont('serif', 30)
+                text2 = f2.render('game over', False,
+                              (255, 0, 0))
+                self.screen.blit(text2, (250, 250))
+                pygame.display.flip()
+
+        else:
+            print('lol')
+            pygame.quit()
 
 
 if __name__ == '__main__':
