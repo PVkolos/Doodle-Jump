@@ -85,7 +85,7 @@ class App:
 
     def check_play(self):
         if len(self.boosts) < 15:
-            for i in range(15 - len(self.boosts)):
+            for _ in range(15 - len(self.boosts)):
                 y = self.boosts[-1].y
                 if not self.boosts[-1].static:
                     for i in range(2, 15):
@@ -94,8 +94,10 @@ class App:
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
-                if random.choice([1, 1, 1, 1, 1, 0]) == 1: static = True
-                else: static = False
+                if random.choice([1, 1, 1, 1, 1, 0]) == 1:
+                    static = True
+                else:
+                    static = False
                 self.boosts.append(Boost(coord[0], coord[1], static))
         if self.pl.x < -80:
             self.pl.x = 580
@@ -134,7 +136,7 @@ class App:
             self.screen.blit(text2, (200, 350))
             pygame.display.flip()
 
-    def scoree(self):
+    def set_score(self):
         if self.score < 0:
             f2 = pygame.font.SysFont('serif', 20)
             text2 = f2.render(str(self.score - 500), False,
@@ -158,7 +160,7 @@ class App:
         self.draw(self.boosts)
         self.pl.down(self.boosts)
         self.get_fps()
-        self.scoree()
+        self.set_score()
 
     def start(self):
         self.running = True
@@ -174,7 +176,9 @@ class App:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 5
             self.functions()
-            if self.pl.y > 800: self.flag = False; break
+            if self.pl.y > 800:
+                self.flag = False
+                break
             pygame.display.flip()
 
         if not self.flag:
