@@ -129,20 +129,8 @@ class App:
             f3 = pygame.font.SysFont('serif', 70)
             text3 = f3.render('game over', False,
                               (255, 0, 0))
-            if self.score < 0:
-                f1 = pygame.font.SysFont('serif', 20)
-                text1 = f1.render(f'Счет: {str(self.score - 500)}', False,
-                                  (255, 0, 0))
-            elif self.score == 0:
-                f1 = pygame.font.SysFont('serif', 20)
-                text1 = f1.render(f'Счет: {str(self.score)}', False,
-                                  (255, 0, 0))
-            else:
-                f1 = pygame.font.SysFont('serif', 20)
-                text1 = f1.render(f'Счет: {str(self.score - 400)}', False,
-                                  (255, 0, 0))
             self.screen.blit(self.bg, (0, 0))
-            self.screen.blit(text1, (10, 10))
+            self.scoree()
             self.screen.blit(text3, (150, 250))
             self.screen.blit(text2, (200, 350))
             pygame.display.flip()
@@ -150,19 +138,19 @@ class App:
     def scoree(self):
         if self.score < 0:
             f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(str(self.score - 500), False,
+            text2 = f2.render(f'Счет: {str(self.score - 500)}', False,
                               (255, 0, 0))
-            self.screen.blit(text2, (530, 10))
+            self.screen.blit(text2, (500, 10))
         elif self.score == 0:
             f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(str(self.score), False,
+            text2 = f2.render(f'Счет: {str(self.score)}', False,
                               (255, 0, 0))
-            self.screen.blit(text2, (530, 10))
+            self.screen.blit(text2, (500, 10))
         else:
             f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(str(self.score - 400), False,
+            text2 = f2.render(f'Счет: {str(self.score - 400)}', False,
                               (255, 0, 0))
-            self.screen.blit(text2, (530, 10))
+            self.screen.blit(text2, (500, 10))
 
     def functions(self):
         self.clock.tick(60)
