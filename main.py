@@ -2,18 +2,6 @@ import pygame
 import random
 
 
-class Boost:
-    def __init__(self, x, y, width, screen):
-        self.coord = (x, y)
-        self.screen = screen
-        self.width = width
-        self.image = pygame.image.load('images/green.png')
-
-    def draw(self):
-        self.screen.blit(self.image, (self.coord[0] - self.width / 2, self.coord[1]))
-        pygame.draw.line(self.screen, 'green', (self.coord[0] - self.width / 2, self.coord[1]), (self.coord[0] + self.width / 2, self.coord[1]), width=5)
-
-
 class Player:
     def __init__(self, screen):
         self.y = 400
@@ -61,18 +49,54 @@ class App:
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
         self.image_boost = pygame.image.load("images/green.png").convert_alpha()
+        self.flag = True
+        self.running = True
+        pygame.display.set_caption('DoodleJumpDemo')
 
     def draw(self, boosts):
         for coord in boosts:
             self.screen.blit(self.image_boost, (coord[0] - 60 / 2, coord[1]))
 
-    def start(self):
-        running = True
-        flag = True
-        while running:
+    def check_play(self):
+        if len(self.boosts) < 15:
+            for i in range(15 - len(self.boosts)):
+                self.coord = (random.randint(80, 600 - 80),
+                              random.randint(round(self.boosts[-1][1] - 150), round(self.boosts[-1][1])))
+                self.boosts.append([self.coord[0], self.coord[1], 80])
+        if self.pl.x < -80:
+            self.pl.x = 580
+        elif self.pl.x > 680:
+            self.pl.x = -40
+        a = self.boosts.copy()
+        for i in range(len(a)):
+            if a[i][1] > 800:
+                del self.boosts[i]
+
+    def get_fps(self):
+        f2 = pygame.font.SysFont('serif', 14)
+        text2 = f2.render(f'FPS: {self.clock.get_fps()}', False,
+                          (255, 0, 0))
+
+        self.screen.blit(text2, (10, 10))
+
+    def game_over(self):
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.running = False
+            self.screen.fill((0, 0, 0))
+            f2 = pygame.font.SysFont('serif', 30)
+            text2 = f2.render('game over', False,
+                              (255, 0, 0))
+            self.screen.blit(text2, (250, 250))
+            pygame.display.flip()
+
+    def start(self):
+        self.running = True
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
@@ -80,46 +104,18 @@ class App:
             if keys[pygame.K_RIGHT]:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 1
-            self.clock.tick()
-            pygame.display.set_caption('DoodleJumpDemo')
-            if len(self.boosts) < 15:
-                for i in range(15 - len(self.boosts)):
-                    self.coord = (random.randint(80, 600 - 80), random.randint(round(self.boosts[-1][1] - 150), round(self.boosts[-1][1])))
-                    self.boosts.append([self.coord[0], self.coord[1], 80])
-            if self.pl.y > 800:
-                flag = False
-                break
-            if self.pl.x < -80:
-                self.pl.x = 580
-            elif self.pl.x > 680:
-                self.pl.x = -40
-            a = self.boosts.copy()
-            for i in range(len(a)):
-                if a[i][1] > 800:
-                    del self.boosts[i]
-
+            self.clock.tick(150)
+            self.check_play()
             self.screen.blit(self.bg, (0, 0))
             self.draw(self.boosts)
             self.pl.down(self.boosts)
-            f2 = pygame.font.SysFont('serif', 14)
-            text2 = f2.render(f'FPS: {self.clock.get_fps()}', False,
-                              (255, 0, 0))
-
-            self.screen.blit(text2, (10, 10))
-
+            self.get_fps()
+            if self.pl.y > 800: self.flag = False; break
             pygame.display.flip()
-        if not flag:
-            while running:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        running = False
-                self.screen.fill((0, 0, 0))
-                f2 = pygame.font.SysFont('serif', 30)
-                text2 = f2.render('game over', False,
-                              (255, 0, 0))
-                self.screen.blit(text2, (250, 250))
-                pygame.display.flip()
 
+        if not self.flag:
+            self.running = True
+            self.game_over()
         else:
             pygame.quit()
 
@@ -127,5 +123,4 @@ class App:
 if __name__ == '__main__':
     app = App()
     app.start()
-
 
