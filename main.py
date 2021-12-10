@@ -121,7 +121,6 @@ class App:
                 pygame.display.flip()
 
         else:
-            print('lol')
             pygame.quit()
 
 
