@@ -79,9 +79,10 @@ class App:
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
                 if random.random() > 0.2:
-                    self.boosts.append(StaticBoost(coord[0], coord[1]))
+                    bst = StaticBoost(coord[0], coord[1])
                 else:
-                    self.boosts.append(RedBoost(coord[0], coord[1]))
+                    bst = RedBoost(coord[0], coord[1])
+                self.boosts.append(bst)
         if self.pl.x < -80:
             self.pl.x = 580
         elif self.pl.x > 680:
