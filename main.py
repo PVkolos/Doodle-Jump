@@ -16,9 +16,9 @@ class Player:
         self.screen = screen
         self.is_jump = 0
 
-    def down(self, boost):
-        for el in boost:
-            if ((el[0] - 40 <= self.x <= el[0] + 55) or (el[0] - 40 <= self.x + self.width <= el[0] + 55)) and self.y == el[1] and not self.jump:
+    def down(self, boosts):
+        for boost in boosts:
+            if ((boost.x - 40 <= self.x <= boost.x + 55) or (boost.x - 40 <= self.x + self.width <= boost.x + 55)) and self.y == boost.y and not self.jump:
                 self.jump = True
                 self.is_jump = 200
         if not self.jump:
@@ -27,8 +27,8 @@ class Player:
             self.jump = False
         elif self.jump:
             if self.y <= 400:
-                for el in boost:
-                    el[1] += 1
+                for boost in boosts:
+                    boost.y += 1
                 self.y += 1
             self.y -= 1
             self.is_jump -= 1
@@ -39,13 +39,20 @@ class Player:
         self.screen.blit(self.image, (self.x, self.y - 82))
 
 
+class Boost:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.size = 80
+
+
 class App:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
         self.bg = pygame.image.load("images/Фон уровней.jpg")
-        self.boosts = [[100, 750, 80], [300, 750, 80], [500, 750, 80]]
+        self.boosts = [Boost(100, 750), Boost(300, 750), Boost(500, 750)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
         self.image_boost = pygame.image.load("images/green.png").convert_alpha()
@@ -54,22 +61,22 @@ class App:
         pygame.display.set_caption('DoodleJumpDemo')
 
     def draw(self, boosts):
-        for coord in boosts:
-            self.screen.blit(self.image_boost, (coord[0] - 60 / 2, coord[1]))
+        for boost in boosts:
+            self.screen.blit(self.image_boost, (boost.x - 60 / 2, boost.y))
 
     def check_play(self):
         if len(self.boosts) < 15:
             for i in range(15 - len(self.boosts)):
                 self.coord = (random.randint(80, 600 - 80),
-                              random.randint(round(self.boosts[-1][1] - 150), round(self.boosts[-1][1])))
-                self.boosts.append([self.coord[0], self.coord[1], 80])
+                              random.randint(round(self.boosts[-1].y - 150), round(self.boosts[-1].y)))
+                self.boosts.append(Boost(self.coord[0], self.coord[1]))
         if self.pl.x < -80:
             self.pl.x = 580
         elif self.pl.x > 680:
             self.pl.x = -40
         a = self.boosts.copy()
         for i in range(len(a)):
-            if a[i][1] > 800:
+            if a[i].y > 800:
                 del self.boosts[i]
 
     def get_fps(self):
