@@ -110,6 +110,9 @@ class App:
             pygame.display.flip()
         if not flag:
             while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
                 self.screen.fill((0, 0, 0))
                 f2 = pygame.font.SysFont('serif', 30)
                 text2 = f2.render('game over', False,
