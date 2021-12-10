@@ -18,7 +18,8 @@ class Player:
 
     def down(self, boosts):
         for boost in boosts:
-            if ((boost.x - 40 <= self.x <= boost.x + 55) or (boost.x - 40 <= self.x + self.width <= boost.x + 55)) and self.y == boost.y and not self.jump:
+            if ((boost.x - 40 <= self.x <= boost.x + 55) or (
+                    boost.x - 40 <= self.x + self.width <= boost.x + 55)) and self.y == boost.y and not self.jump:
                 self.jump = True
                 self.is_jump = 200
         if not self.jump:
@@ -32,10 +33,14 @@ class Player:
                 self.y += 1
             self.y -= 1
             self.is_jump -= 1
-            if self.image == self.pl_right and self.is_jump > 100: self.image = self.pl_right_pr
-            elif self.image == self.pl_left and self.is_jump > 100: self.image = self.pl_left_pr
-            elif self.is_jump <= 100 and self.image == self.pl_right_pr: self.image = self.pl_right
-            elif self.is_jump <= 100 and self.image == self.pl_left_pr: self.image = self.pl_left
+            if self.image == self.pl_right and self.is_jump > 100:
+                self.image = self.pl_right_pr
+            elif self.image == self.pl_left and self.is_jump > 100:
+                self.image = self.pl_left_pr
+            elif self.is_jump <= 100 and self.image == self.pl_right_pr:
+                self.image = self.pl_right
+            elif self.is_jump <= 100 and self.image == self.pl_left_pr:
+                self.image = self.pl_left
         self.screen.blit(self.image, (self.x, self.y - 82))
 
 
@@ -51,7 +56,7 @@ class App:
         pygame.init()
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
-        self.bg = pygame.image.load("images/Фон уровней.jpg")
+        self.bg = pygame.image.load("images/bg.jpg")
         self.boosts = [Boost(100, 750), Boost(300, 750), Boost(500, 750)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
@@ -117,7 +122,9 @@ class App:
             self.draw(self.boosts)
             self.pl.down(self.boosts)
             self.get_fps()
-            if self.pl.y > 800: self.flag = False; break
+            if self.pl.y > 800:
+                self.flag = False
+                break
             pygame.display.flip()
 
         if not self.flag:
@@ -130,4 +137,3 @@ class App:
 if __name__ == '__main__':
     app = App()
     app.start()
-
