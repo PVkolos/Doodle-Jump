@@ -72,9 +72,9 @@ class App:
     def check_play(self):
         if len(self.boosts) < 15:
             for i in range(15 - len(self.boosts)):
-                self.coord = (random.randint(80, 600 - 80),
-                              random.randint(round(self.boosts[-1].y - 150), round(self.boosts[-1].y)))
-                self.boosts.append(Boost(self.coord[0], self.coord[1]))
+                coord = (random.randint(80, 600 - 80),
+                         random.randint(round(self.boosts[-1].y - 150), round(self.boosts[-1].y)))
+                self.boosts.append(Boost(coord[0], coord[1]))
         if self.pl.x < -80:
             self.pl.x = 580
         elif self.pl.x > 680:
