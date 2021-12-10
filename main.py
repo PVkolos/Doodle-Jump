@@ -11,6 +11,8 @@ class Player:
         self.pl_left = pygame.image.load("images/left_1.png").convert_alpha()
         self.pl_left_pr = pygame.image.load("images/left.png").convert_alpha()
         self.pl_right_pr = pygame.image.load("images/right.png").convert_alpha()
+        self.jump_sound = pygame.mixer.Sound('sfx/jump.wav')
+        self.platform_destroy_sound = pygame.mixer.Sound('sfx/break.mp3')
         self.image = self.pl_right
         self.jump = False
         self.screen = screen
@@ -23,8 +25,10 @@ class Player:
                 if el.static:
                     self.jump = True
                     self.is_jump = 200
+                    self.jump_sound.play()
                 else:
                     el.image = pygame.image.load("images/red_1.png").convert_alpha()
+                    self.platform_destroy_sound.play()
         if not self.jump:
             self.y += 5
         elif self.is_jump == 0 or self.is_jump < 0:
