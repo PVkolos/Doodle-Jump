@@ -62,6 +62,7 @@ class App:
         self.clock = pygame.time.Clock()
         self.image_boost = pygame.image.load("images/green.png").convert_alpha()
         self.flag = True
+        self.score = 0
         self.running = True
         pygame.display.set_caption('DoodleJumpDemo')
 
@@ -82,6 +83,7 @@ class App:
         for i in range(len(a)):
             if a[i][1] > 800:
                 del self.boosts[i]
+                self.score += 100
 
     def get_fps(self):
         f2 = pygame.font.SysFont('serif', 14)
@@ -109,6 +111,11 @@ class App:
             self.screen.blit(text3, (230, 250))
             self.screen.blit(text2, (200, 350))
             pygame.display.flip()
+    def scoree(self):
+        f2 = pygame.font.SysFont('serif', 20)
+        text2 = f2.render(str(self.score - 500), False,
+                          (255, 0, 0))
+        self.screen.blit(text2, (560, 10))
 
     def functions(self):
         self.clock.tick(60)
@@ -117,6 +124,7 @@ class App:
         self.draw(self.boosts)
         self.pl.down(self.boosts)
         self.get_fps()
+        self.scoree()
 
     def start(self):
         self.running = True
