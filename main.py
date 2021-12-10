@@ -112,10 +112,21 @@ class App:
             self.screen.blit(text2, (200, 350))
             pygame.display.flip()
     def scoree(self):
-        f2 = pygame.font.SysFont('serif', 20)
-        text2 = f2.render(str(self.score - 500), False,
-                          (255, 0, 0))
-        self.screen.blit(text2, (560, 10))
+        if self.score < 0:
+            f2 = pygame.font.SysFont('serif', 20)
+            text2 = f2.render(str(self.score - 500), False,
+                              (255, 0, 0))
+            self.screen.blit(text2, (560, 10))
+        elif self.score == 0:
+            f2 = pygame.font.SysFont('serif', 20)
+            text2 = f2.render(str(self.score), False,
+                              (255, 0, 0))
+            self.screen.blit(text2, (560, 10))
+        else:
+            f2 = pygame.font.SysFont('serif', 20)
+            text2 = f2.render(str(self.score - 400), False,
+                              (255, 0, 0))
+            self.screen.blit(text2, (560, 10))
 
     def functions(self):
         self.clock.tick(60)
