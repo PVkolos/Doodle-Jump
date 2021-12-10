@@ -113,7 +113,7 @@ class App:
             self.screen.blit(text2, (200, 350))
             pygame.display.flip()
 
-    def scoree(self):
+    def set_score(self):
         if self.score < 0:
             f2 = pygame.font.SysFont('serif', 20)
             text2 = f2.render(str(self.score - 500), False,
@@ -137,7 +137,7 @@ class App:
         self.draw(self.boosts)
         self.pl.down(self.boosts)
         self.get_fps()
-        self.scoree()
+        self.set_score()
 
     def start(self):
         self.running = True
@@ -153,7 +153,9 @@ class App:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 3
             self.functions()
-            if self.pl.y > 800: self.flag = False; break
+            if self.pl.y > 800:
+                self.flag = False
+                break
             pygame.display.flip()
 
         if not self.flag:
