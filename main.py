@@ -126,10 +126,24 @@ class App:
             f2 = pygame.font.SysFont('serif', 20)
             text2 = f2.render('press "space" to play', False,
                               (255, 0, 0))
-            f3 = pygame.font.SysFont('serif', 30)
+            f3 = pygame.font.SysFont('serif', 70)
             text3 = f3.render('game over', False,
                               (255, 0, 0))
-            self.screen.blit(text3, (230, 250))
+            if self.score < 0:
+                f1 = pygame.font.SysFont('serif', 20)
+                text1 = f1.render(f'Счет: {str(self.score - 500)}', False,
+                                  (255, 0, 0))
+            elif self.score == 0:
+                f1 = pygame.font.SysFont('serif', 20)
+                text1 = f1.render(f'Счет: {str(self.score)}', False,
+                                  (255, 0, 0))
+            else:
+                f1 = pygame.font.SysFont('serif', 20)
+                text1 = f1.render(f'Счет: {str(self.score - 400)}', False,
+                                  (255, 0, 0))
+            self.screen.blit(self.bg, (0, 0))
+            self.screen.blit(text1, (10, 10))
+            self.screen.blit(text3, (150, 250))
             self.screen.blit(text2, (200, 350))
             pygame.display.flip()
 
