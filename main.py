@@ -34,16 +34,16 @@ class Player:
                 self.jump = True
                 self.is_jump = 200
         if not self.jump:
-            self.y += 0.5
+            self.y += 1
         elif self.is_jump == 0 or self.is_jump < 0:
             self.jump = False
         elif self.jump:
             if self.y <= 400:
                 for el in boost:
-                    el[1] += 0.5
-                self.y += 0.5
-            self.y -= 0.5
-            self.is_jump -= 0.5
+                    el[1] += 1
+                self.y += 1
+            self.y -= 1
+            self.is_jump -= 1
             if self.image == self.pl_right and self.is_jump > 100: self.image = self.pl_right_pr
             elif self.image == self.pl_left and self.is_jump > 100: self.image = self.pl_left_pr
             elif self.is_jump <= 100 and self.image == self.pl_right_pr: self.image = self.pl_right
@@ -80,12 +80,17 @@ class App:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 1
             self.clock.tick()
-            pygame.display.set_caption(f'FPS: {self.clock.get_fps()}')
+            pygame.display.set_caption('DoodleJumpDemo')
             if len(self.boosts) < 15:
                 for i in range(15 - len(self.boosts)):
                     self.coord = (random.randint(80, 600 - 80), random.randint(round(self.boosts[-1][1] - 150), round(self.boosts[-1][1])))
                     self.boosts.append([self.coord[0], self.coord[1], 80])
-
+            if self.pl.y > 800:
+                break
+            if self.pl.x < -80:
+                self.pl.x = 580
+            elif self.pl.x > 680:
+                self.pl.x = -40
             a = self.boosts.copy()
             for i in range(len(a)):
                 if a[i][1] > 800:
@@ -94,6 +99,11 @@ class App:
             self.screen.blit(self.bg, (0, 0))
             self.draw(self.boosts)
             self.pl.down(self.boosts)
+            f2 = pygame.font.SysFont('serif', 14)
+            text2 = f2.render(f'FPS: {self.clock.get_fps()}', False,
+                              (255, 0, 0))
+
+            self.screen.blit(text2, (10, 10))
 
             pygame.display.flip()
         pygame.quit()
