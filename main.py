@@ -183,6 +183,10 @@ class App:
                     keys = pygame.key.get_pressed()
                     if keys[pygame.K_2]:
                         self.pauseflagg = False
+                    font = pygame.font.SysFont("serif", 72)
+                    text_paused = font.render("PAUSED", True, (255, 0, 0))
+                    self.screen.blit(text_paused, (150, 250))
+                    pygame.display.flip()
             # конец цикла с паузой
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
