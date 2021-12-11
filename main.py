@@ -1,7 +1,6 @@
 import pygame
 import random
 
-
 class Player:
     def __init__(self, screen):
         self.y = 400
@@ -67,6 +66,7 @@ class Boost:
 class App:
     def __init__(self):
         pygame.init()
+        self.pauseflagg = False
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
         self.bg = pygame.image.load("images/bg.jpg")
@@ -153,11 +153,9 @@ class App:
                               (255, 0, 0))
             self.screen.blit(text2, (500, 10))
     def play_again(self):
-        while self.running:
-            app = App()
-            app.start()
-            self.screen.blit(self.bg, (0, 0))
-            pygame.display.flip()
+        app = App()
+        app.start()
+        pygame.display.flip()
     def functions(self):
         self.clock.tick(60)
         self.check_play()
@@ -175,6 +173,17 @@ class App:
                     self.running = False
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]: self.play_again(); break
+            # пауза
+            if keys[pygame.K_1]:
+                self.pauseflagg = True
+                while self.pauseflagg:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            self.running = False
+                    keys = pygame.key.get_pressed()
+                    if keys[pygame.K_2]:
+                        self.pauseflagg = False
+            # конец цикла с паузой
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.x -= 5
