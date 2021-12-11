@@ -70,6 +70,7 @@ class App:
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
         self.bg = pygame.image.load("images/bg.jpg")
+        self.game_over_bg = pygame.image.load("images/game_over_bg.jpg")
         self.boosts = [Boost(100, 750, True), Boost(300, 750, True), Boost(500, 750, True)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
@@ -124,16 +125,17 @@ class App:
                         app = App()
                         app.start()
             self.screen.fill((0, 0, 0))
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render('press "space" to play', False,
+            if self.score < 0:
+                scoreee = str(self.score - 500)
+            elif self.score == 0:
+                scoreee = str(self.score)
+            else:
+                scoreee = str(self.score - 400)
+            self.screen.blit(self.game_over_bg, (0, 0))
+            f2 = pygame.font.SysFont('serif', 30)
+            text2 = f2.render(scoreee, False,
                               (255, 0, 0))
-            f3 = pygame.font.SysFont('serif', 70)
-            text3 = f3.render('game over', False,
-                              (255, 0, 0))
-            self.screen.blit(self.bg, (0, 0))
-            self.scoree()
-            self.screen.blit(text3, (150, 250))
-            self.screen.blit(text2, (200, 350))
+            self.screen.blit(text2, (350, 400))
             pygame.display.flip()
 
     def scoree(self):
