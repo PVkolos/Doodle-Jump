@@ -76,6 +76,7 @@ class App:
         self.flag = True
         self.score = 0
         self.running = True
+
         pygame.display.set_caption('DoodleJumpDemo')
 
     def draw(self, boosts):
@@ -151,7 +152,12 @@ class App:
             text2 = f2.render(f'Счет: {str(self.score - 400)}', False,
                               (255, 0, 0))
             self.screen.blit(text2, (500, 10))
-
+    def play_again(self):
+        while self.running:
+            app = App()
+            app.start()
+            self.screen.blit(self.bg, (0, 0))
+            pygame.display.flip()
     def functions(self):
         self.clock.tick(60)
         self.check_play()
@@ -168,6 +174,7 @@ class App:
                 if event.type == pygame.QUIT:
                     self.running = False
             keys = pygame.key.get_pressed()
+            if keys[pygame.K_ESCAPE]: self.play_again(); break
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.x -= 5
@@ -175,7 +182,7 @@ class App:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 5
             self.functions()
-            if self.pl.y > 800: self.flag = False; break
+            if self.pl.y > 800: self.flag = False; break;
             pygame.display.flip()
 
         if not self.flag:
