@@ -214,7 +214,7 @@ class App:
                     self.running = False
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_ESCAPE]:
-                    self.running = False
+                    self.start_scrn()
                 if keys[pygame.K_2]:
                     self.pause_flag = False
                 font = pygame.font.SysFont("serif", 72)
