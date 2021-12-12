@@ -154,10 +154,10 @@ class App:
 
     def set_score(self):
         self.get_score()
-        f2 = pygame.font.SysFont('al seana', 20)
+        f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(f'Score: {str(self.score)}', False,
                         (255, 0, 0))
-        self.screen.blit(text2, (500, 10))
+        self.screen.blit(text2, (450, 10))
 
     def play_again(self):
         app = App()
