@@ -54,6 +54,7 @@ class App:
         pygame.init()
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load("images/bg.jpg")
+        self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
@@ -150,6 +151,7 @@ class App:
         self.set_score()
 
     def start(self):
+        x = True
         self.running = True
         while self.running:
             for event in pygame.event.get():
@@ -172,7 +174,9 @@ class App:
                 self.flag = False
                 break
             pygame.display.flip()
-
+        if self.pl.y > 800 and x:
+            x = False
+            self.lose_sound.play()
         if not self.flag:
             self.running = True
             self.game_over()
