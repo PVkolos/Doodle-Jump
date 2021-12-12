@@ -71,6 +71,7 @@ class Boost:
 class App:
     def __init__(self):
         pygame.init()
+        pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         self.pause_flag = False
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
