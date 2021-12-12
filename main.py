@@ -11,8 +11,9 @@ class Player:
         self.pl_left = pygame.image.load("images/left_1.png").convert_alpha()
         self.pl_left_pr = pygame.image.load("images/left.png").convert_alpha()
         self.pl_right_pr = pygame.image.load("images/right.png").convert_alpha()
-        self.jump_sound = pygame.mixer.Sound('sfx/jump.wav')
-        self.platform_destroy_sound = pygame.mixer.Sound('sfx/break.mp3')
+        self.jump_sound = pygame.mixer.Sound('sfx/jump.wav') # звук прыжка
+        self.platform_destroy_sound = pygame.mixer.Sound('sfx/break.mp3') # звук ломания платформы
+        self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3') # звук пружины
         self.image = self.pl_right
         self.jump = False
         self.screen = screen
@@ -159,10 +160,10 @@ class App:
 
     def set_score(self):
         self.get_score()
-        f2 = pygame.font.SysFont('al seana', 20)
+        f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(f'Score: {str(self.score)}', False,
                         (255, 0, 0))
-        self.screen.blit(text2, (500, 10))
+        self.screen.blit(text2, (450, 10))
 
     def play_again(self):
         app = App()
@@ -210,6 +211,7 @@ class App:
             pygame.display.flip()
 
     def start(self):
+        x = True
         if self.cc != 1:
             self.start_scrn()
         self.cc = 1
@@ -231,7 +233,8 @@ class App:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 5
             self.functions()
-            if self.pl.y > 800:
+            if self.pl.y > 800 and x:
+                x = False
                 self.lose_sound.play()
                 self.running = True
                 self.game_over()
