@@ -219,7 +219,7 @@ class App:
                     self.pause_flag = False
                 font = pygame.font.SysFont("al seana", 72)
                 text_paused = font.render("PAUSED", True, (255, 0, 0))
-                self.screen.blit(text_paused, (150, 250))
+                self.screen.blit(text_paused, (210, 250))
                 pygame.display.flip()
 
 
