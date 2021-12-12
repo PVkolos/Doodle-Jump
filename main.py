@@ -191,6 +191,7 @@ class App:
         self.set_score()
 
     def start(self):
+        x = True
         if self.cc != 1:
             self.start_scrn()
         self.cc = 1
@@ -226,7 +227,8 @@ class App:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 5
             self.functions()
-            if self.pl.y > 800:
+            if self.pl.y > 800 and x:
+                x = False
                 self.lose_sound.play()
             if self.pl.y > 1000:
                 self.flag = False
