@@ -217,7 +217,7 @@ class App:
                     self.start_scrn()
                 if keys[pygame.K_2]:
                     self.pause_flag = False
-                font = pygame.font.SysFont("serif", 72)
+                font = pygame.font.SysFont("al seana", 72)
                 text_paused = font.render("PAUSED", True, (255, 0, 0))
                 self.screen.blit(text_paused, (150, 250))
                 pygame.display.flip()
