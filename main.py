@@ -189,6 +189,7 @@ class App:
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
                             self.running = False
+                            exit()
                     keys = pygame.key.get_pressed()
                     if keys[pygame.K_2]:
                         self.pause_flag = False
