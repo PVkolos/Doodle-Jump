@@ -105,9 +105,11 @@ class App:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.restart()
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_ESCAPE]:
+                    self.running = False
+                if keys[pygame.K_SPACE]:
+                    self.restart()
             self.screen.fill((0, 0, 0))
             f2 = pygame.font.SysFont('serif', 20)
             text2 = f2.render('press "space" to play', False,
@@ -183,15 +185,13 @@ class App:
         app.start()
 
     def pause(self):
-        while self.pause_flag:
+        while self.pause_flag and self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                    break
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_ESCAPE]:
                     self.running = False
-                    break
                 if keys[pygame.K_2]:
                     self.pause_flag = False
                 font = pygame.font.SysFont("serif", 72)
