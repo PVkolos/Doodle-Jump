@@ -98,6 +98,7 @@ class App:
             if a[i].y > 800:
                 del self.boosts[i]
                 self.score += 100
+                self.cntr += 1
 
     def get_fps(self):
         f2 = pygame.font.SysFont('al seana', 14)
