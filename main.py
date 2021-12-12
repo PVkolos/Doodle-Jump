@@ -175,6 +175,9 @@ class App:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.start()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.start()
 
     def functions(self):
         self.clock.tick(60)
@@ -188,6 +191,7 @@ class App:
     def start(self):
         if self.cc != 1:
             self.start_scrn()
+        self.cc = 1
         self.running = True
         while self.running:
             for event in pygame.event.get():
