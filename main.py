@@ -142,6 +142,7 @@ class App:
                               (255, 0, 0))
             self.screen.blit(text2, (350, 400))
             pygame.display.flip()
+
     def get_score(self):
         if self.cntr < 6:
             # в начале создается удаляется несколько платформ(чтобы их не считать создан cntr)
@@ -151,7 +152,6 @@ class App:
                 self.score = 0
             elif self.score > 0:
                 self.score = 100
-
 
     def set_score(self):
         self.get_score()
