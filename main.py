@@ -19,6 +19,7 @@ class Player:
         self.is_jump = 0
 
     def down(self, boosts):
+        # Проверка на столконовение игрока и платформы
         for el in boosts:
             if ((el.x - 40 <= self.x <= el.x + 55) or (el.x - 40 <= self.x + self.width <= el.x + 55)) and self.y == \
                     el.y and not self.jump:
@@ -34,12 +35,14 @@ class Player:
         elif self.is_jump == 0 or self.is_jump < 0:
             self.jump = False
         elif self.jump:
-            if self.y <= 400:
+            if self.y <= 400: # Если У игрока меньше 400, то все платформы смещаются вниз вместе с игроком,
+                # создавая впечатление передвижения камеры
                 for el in boosts:
                     el.y += 5
                 self.y += 5
             self.y -= 5
             self.is_jump -= 5
+            # Смена спрайтов игрока
             if self.image == self.pl_right and self.is_jump > 100:
                 self.image = self.pl_right_pr
             elif self.image == self.pl_left and self.is_jump > 100:
@@ -82,14 +85,15 @@ class App:
         self.cc = 0
         self.running = True
         self.cntr = 0
-
         pygame.display.set_caption('DoodleJumpDemo')
 
     def draw(self, boosts):
+        # Отрисовка всех платформ
         for boost in boosts:
             self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
 
     def check_play(self):
+        # Проверка на то, что на поле находится 15 платформ, иначе они создаются
         if len(self.boosts) < 15:
             for _ in range(15 - len(self.boosts)):
                 y = self.boosts[-1].y
@@ -100,15 +104,17 @@ class App:
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
-                if random.choice([1, 1, 0, 1, 1, 1]) == 1:
+                if random.choice([1, 1, 0, 1, 1, 1]) == 1: # шанс 1 к 6 что будет ломающаяся платформа
                     static = True
                 else:
                     static = False
                 self.boosts.append(Boost(coord[0], coord[1], static))
+        # Проверка на то, что игрок вышел за поле
         if self.pl.x < -80:
             self.pl.x = 580
         elif self.pl.x > 680:
             self.pl.x = -40
+        # Проверка координты У у всех платформ, если координата > 800, то платформа удаляется
         a = self.boosts.copy()
         for i in range(len(a)):
             if a[i].y > 800:
@@ -120,7 +126,6 @@ class App:
         f2 = pygame.font.SysFont('al seana', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (255, 0, 0))
-
         self.screen.blit(text2, (10, 10))
 
     def game_over(self):
@@ -141,6 +146,7 @@ class App:
                               (255, 0, 0))
             self.screen.blit(text2, (350, 400))
             pygame.display.flip()
+
     def get_score(self):
         if self.cntr < 6:
             # в начале создается удаляется несколько платформ(чтобы их не считать создан cntr)
@@ -150,7 +156,6 @@ class App:
                 self.score = 0
             elif self.score > 0:
                 self.score = 100
-
 
     def set_score(self):
         self.get_score()
@@ -189,6 +194,21 @@ class App:
         self.get_fps()
         self.set_score()
 
+    def paused(self):
+        self.pause_flag = True
+        while self.pause_flag:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    exit()
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_2]:
+                self.pause_flag = False
+            font = pygame.font.SysFont("al seana", 72)
+            text_paused = font.render("PAUSED", True, (255, 0, 0))
+            self.screen.blit(text_paused, (210, 250))
+            pygame.display.flip()
+
     def start(self):
         if self.cc != 1:
             self.start_scrn()
@@ -200,24 +220,10 @@ class App:
                     self.running = False
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
-                self.play_again()
+                self.start_scrn()
                 break
-            # пауза
             if keys[pygame.K_1]:
-                self.pause_flag = True
-                while self.pause_flag:
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            self.running = False
-                            exit()
-                    keys = pygame.key.get_pressed()
-                    if keys[pygame.K_2]:
-                        self.pause_flag = False
-                    font = pygame.font.SysFont("al seana", 72)
-                    text_paused = font.render("PAUSED", True, (255, 0, 0))
-                    self.screen.blit(text_paused, (210, 250))
-                    pygame.display.flip()
-            # конец цикла с паузой
+                self.paused()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.x -= 5
@@ -227,16 +233,10 @@ class App:
             self.functions()
             if self.pl.y > 800:
                 self.lose_sound.play()
-            if self.pl.y > 1000:
-                self.flag = False
+                self.running = True
+                self.game_over()
                 break
             pygame.display.flip()
-
-        if not self.flag:
-            self.running = True
-            self.game_over()
-        else:
-            pygame.quit()
 
 
 if __name__ == '__main__':
