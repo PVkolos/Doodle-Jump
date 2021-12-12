@@ -163,7 +163,7 @@ class App:
                     self.running = False
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
-                self.running = False
+                self.start_scrn()
             if keys[pygame.K_1]:
                 self.pause_flag = True
                 self.pause()
