@@ -223,7 +223,7 @@ class App:
                     self.running = False
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
-                self.start_scrn()
+                self.play_again()
                 break
             if keys[pygame.K_1]:
                 self.paused()
