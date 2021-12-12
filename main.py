@@ -112,8 +112,6 @@ class App:
                 if event.type == pygame.QUIT:
                     exit()
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_ESCAPE]:
-                    self.running = False
                 if keys[pygame.K_SPACE]:
                     self.restart()
             self.screen.fill((0, 0, 0))
@@ -157,6 +155,7 @@ class App:
             self.start_scrn()
         self.cc = 1
         self.running = True
+        self.pl = Player(self.screen)
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
