@@ -110,7 +110,7 @@ class App:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    exit()
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_ESCAPE]:
                     self.running = False
@@ -164,7 +164,7 @@ class App:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
                 self.start_scrn()
-            if keys[pygame.K_1]:
+            if keys[pygame.K_1] and not self.pause_flag:
                 self.pause_flag = True
                 self.pause()
             if keys[pygame.K_LEFT]:
@@ -211,10 +211,8 @@ class App:
         while self.pause_flag and self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    exit()
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_ESCAPE]:
-                    self.start_scrn()
                 if keys[pygame.K_2]:
                     self.pause_flag = False
                 font = pygame.font.SysFont("al seana", 72)
