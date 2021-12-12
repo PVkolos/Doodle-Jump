@@ -54,6 +54,7 @@ class App:
         pygame.init()
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load("images/bg.jpg")
+        self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
         self.pl = Player(self.screen)
@@ -61,6 +62,7 @@ class App:
         self.flag = True
         self.pause_flag = False
         self.score = 0
+        self.cntr = 0
         self.running = True
         pygame.display.set_caption('DoodleJumpDemo')
 
@@ -95,10 +97,9 @@ class App:
                 self.score += 100
 
     def get_fps(self):
-        f2 = pygame.font.SysFont('serif', 14)
+        f2 = pygame.font.SysFont('al seana', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (255, 0, 0))
-
         self.screen.blit(text2, (10, 10))
 
     def game_over(self):
@@ -112,17 +113,23 @@ class App:
                 if keys[pygame.K_SPACE]:
                     self.restart()
             self.screen.fill((0, 0, 0))
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render('press "space" to play', False,
+            self.get_score()
+            self.screen.blit(self.game_over_bg, (0, 0))
+            f2 = pygame.font.SysFont('al seana', 30)
+            text2 = f2.render(str(self.score), False,
                               (255, 0, 0))
-            f3 = pygame.font.SysFont('serif', 70)
-            text3 = f3.render('game over', False,
-                              (255, 0, 0))
-            self.screen.blit(self.bg, (0, 0))
-            self.set_score()
-            self.screen.blit(text3, (150, 250))
-            self.screen.blit(text2, (200, 350))
+            self.screen.blit(text2, (350, 400))
             pygame.display.flip()
+
+    def get_score(self):
+        if self.cntr < 6:
+            # в начале создается удаляется несколько платформ(чтобы их не считать создан cntr)
+            if self.score < 0:
+                self.score = 0
+            elif self.score == 0:
+                self.score = 0
+            elif self.score > 0:
+                self.score = 100
 
     def set_score(self):
         if self.score < 0:
