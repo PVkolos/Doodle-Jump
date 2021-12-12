@@ -78,6 +78,7 @@ class App:
         self.flag = True
         self.score = 0
         self.running = True
+        self.cntr = 0
 
         pygame.display.set_caption('DoodleJumpDemo')
 
@@ -110,6 +111,7 @@ class App:
             if a[i].y > 800:
                 del self.boosts[i]
                 self.score += 100
+                self.cntr += 1
 
     def get_fps(self):
         f2 = pygame.font.SysFont('serif', 14)
@@ -127,41 +129,39 @@ class App:
                     if event.key == pygame.K_SPACE:
                         app = App()
                         app.start()
+                        self.start_flag = 0
             self.screen.fill((0, 0, 0))
-            if self.score < 0:
-                score = str(self.score - 500)
-            elif self.score == 0:
-                score = str(self.score)
-            else:
-                score = str(self.score - 400)
+            self.get_score()
             self.screen.blit(self.game_over_bg, (0, 0))
             f2 = pygame.font.SysFont('serif', 30)
-            text2 = f2.render(score, False,
+            text2 = f2.render(str(self.score), False,
                               (255, 0, 0))
             self.screen.blit(text2, (350, 400))
             pygame.display.flip()
+    def get_score(self):
+        if self.cntr < 6:
+            # в начале создается удаляется несколько платформ(чтобы их не считать создан cntr)
+            if self.score < 0:
+                self.score = 0
+            elif self.score == 0:
+                self.score = 0
+            elif self.score > 0:
+                self.score = 100
+            self.start_flag = False
+
 
     def set_score(self):
-        if self.score < 0:
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(f'Счет: {str(self.score - 500)}', False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (500, 10))
-        elif self.score == 0:
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(f'Счет: {str(self.score)}', False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (500, 10))
-        else:
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(f'Счет: {str(self.score - 400)}', False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (500, 10))
+        self.get_score()
+        f2 = pygame.font.SysFont('serif', 20)
+        text2 = f2.render(f'Счет: {str(self.score)}', False,
+                        (255, 0, 0))
+        self.screen.blit(text2, (500, 10))
 
     def play_again(self):
         app = App()
         app.start()
         pygame.display.flip()
+        self.start_flag = 0
 
     def functions(self):
         self.clock.tick(60)
