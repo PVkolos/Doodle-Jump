@@ -117,7 +117,7 @@ class App:
                 self.cntr += 1
 
     def get_fps(self):
-        f2 = pygame.font.SysFont('serif', 14)
+        f2 = pygame.font.SysFont('al seana', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (255, 0, 0))
 
@@ -136,7 +136,7 @@ class App:
             self.screen.fill((0, 0, 0))
             self.get_score()
             self.screen.blit(self.game_over_bg, (0, 0))
-            f2 = pygame.font.SysFont('serif', 30)
+            f2 = pygame.font.SysFont('al seana', 30)
             text2 = f2.render(str(self.score), False,
                               (255, 0, 0))
             self.screen.blit(text2, (350, 400))
@@ -154,8 +154,8 @@ class App:
 
     def set_score(self):
         self.get_score()
-        f2 = pygame.font.SysFont('serif', 20)
-        text2 = f2.render(f'Счет: {str(self.score)}', False,
+        f2 = pygame.font.SysFont('al seana', 20)
+        text2 = f2.render(f'Score: {str(self.score)}', False,
                         (255, 0, 0))
         self.screen.blit(text2, (500, 10))
 
@@ -213,9 +213,9 @@ class App:
                     keys = pygame.key.get_pressed()
                     if keys[pygame.K_2]:
                         self.pause_flag = False
-                    font = pygame.font.SysFont("serif", 72)
+                    font = pygame.font.SysFont("al seana", 72)
                     text_paused = font.render("PAUSED", True, (255, 0, 0))
-                    self.screen.blit(text_paused, (150, 250))
+                    self.screen.blit(text_paused, (210, 250))
                     pygame.display.flip()
             # конец цикла с паузой
             if keys[pygame.K_LEFT]:
@@ -241,4 +241,4 @@ class App:
 
 if __name__ == '__main__':
     app = App()
-    app.start() 
+    app.start()
