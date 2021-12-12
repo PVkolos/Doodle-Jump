@@ -58,6 +58,7 @@ class App:
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
         self.flag = True
+        self.pause_flag = False
         self.score = 0
         self.running = True
         pygame.display.set_caption('DoodleJumpDemo')
@@ -106,8 +107,7 @@ class App:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        app = App()
-                        app.start()
+                        self.restart()
             self.screen.fill((0, 0, 0))
             f2 = pygame.font.SysFont('serif', 20)
             text2 = f2.render('press "space" to play', False,
@@ -138,11 +138,6 @@ class App:
                               (255, 0, 0))
             self.screen.blit(text2, (500, 10))
 
-    def play_again(self):
-        app = App()
-        app.start()
-        pygame.display.flip()
-
     def functions(self):
         self.clock.tick(60)
         self.check_play()
@@ -159,22 +154,11 @@ class App:
                 if event.type == pygame.QUIT:
                     self.running = False
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_ESCAPE]: self.play_again(); break
-            # пауза
+            if keys[pygame.K_ESCAPE]:
+                self.running = False
             if keys[pygame.K_1]:
-                self.pauseflagg = True
-                while self.pauseflagg:
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            self.running = False
-                    keys = pygame.key.get_pressed()
-                    if keys[pygame.K_2]:
-                        self.pauseflagg = False
-                    font = pygame.font.SysFont("serif", 72)
-                    text_paused = font.render("PAUSED", True, (255, 0, 0))
-                    self.screen.blit(text_paused, (150, 250))
-                    pygame.display.flip()
-            # конец цикла с паузой
+                self.pause_flag = True
+                self.pause()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.x -= 5
@@ -192,6 +176,28 @@ class App:
             self.game_over()
         else:
             pygame.quit()
+
+    @staticmethod
+    def restart():
+        app = App()
+        app.start()
+
+    def pause(self):
+        while self.pause_flag:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    break
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_ESCAPE]:
+                    self.running = False
+                    break
+                if keys[pygame.K_2]:
+                    self.pause_flag = False
+                font = pygame.font.SysFont("serif", 72)
+                text_paused = font.render("PAUSED", True, (255, 0, 0))
+                self.screen.blit(text_paused, (150, 250))
+                pygame.display.flip()
 
 
 if __name__ == '__main__':
