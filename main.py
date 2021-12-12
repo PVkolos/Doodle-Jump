@@ -1,6 +1,7 @@
 import pygame
 import random
 
+
 class Player:
     def __init__(self, screen):
         self.y = 400
@@ -66,7 +67,7 @@ class Boost:
 class App:
     def __init__(self):
         pygame.init()
-        self.pauseflagg = False
+        self.pause_flag = False
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
         self.bg = pygame.image.load("images/bg.jpg")
@@ -86,7 +87,7 @@ class App:
 
     def check_play(self):
         if len(self.boosts) < 15:
-            for i in range(15 - len(self.boosts)):
+            for _ in range(15 - len(self.boosts)):
                 y = self.boosts[-1].y
                 if not self.boosts[-1].static:
                     for i in range(2, 15):
@@ -95,8 +96,10 @@ class App:
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
-                if random.choice([1, 1, 1, 1, 1, 0]) == 1: static = True
-                else: static = False
+                if random.choice([1, 1, 1, 1, 1, 0]) == 1:
+                    static = True
+                else:
+                    static = False
                 self.boosts.append(Boost(coord[0], coord[1], static))
         if self.pl.x < -80:
             self.pl.x = 580
@@ -126,19 +129,19 @@ class App:
                         app.start()
             self.screen.fill((0, 0, 0))
             if self.score < 0:
-                scoreee = str(self.score - 500)
+                score = str(self.score - 500)
             elif self.score == 0:
-                scoreee = str(self.score)
+                score = str(self.score)
             else:
-                scoreee = str(self.score - 400)
+                score = str(self.score - 400)
             self.screen.blit(self.game_over_bg, (0, 0))
             f2 = pygame.font.SysFont('serif', 30)
-            text2 = f2.render(scoreee, False,
+            text2 = f2.render(score, False,
                               (255, 0, 0))
             self.screen.blit(text2, (350, 400))
             pygame.display.flip()
 
-    def scoree(self):
+    def set_score(self):
         if self.score < 0:
             f2 = pygame.font.SysFont('serif', 20)
             text2 = f2.render(f'Счет: {str(self.score - 500)}', False,
@@ -154,10 +157,12 @@ class App:
             text2 = f2.render(f'Счет: {str(self.score - 400)}', False,
                               (255, 0, 0))
             self.screen.blit(text2, (500, 10))
+
     def play_again(self):
         app = App()
         app.start()
         pygame.display.flip()
+
     def functions(self):
         self.clock.tick(60)
         self.check_play()
@@ -165,7 +170,7 @@ class App:
         self.draw(self.boosts)
         self.pl.down(self.boosts)
         self.get_fps()
-        self.scoree()
+        self.set_score()
 
     def start(self):
         self.running = True
@@ -174,17 +179,19 @@ class App:
                 if event.type == pygame.QUIT:
                     self.running = False
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_ESCAPE]: self.play_again(); break
+            if keys[pygame.K_ESCAPE]:
+                self.play_again()
+                break
             # пауза
             if keys[pygame.K_1]:
-                self.pauseflagg = True
-                while self.pauseflagg:
+                self.pause_flag = True
+                while self.pause_flag:
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
                             self.running = False
                     keys = pygame.key.get_pressed()
                     if keys[pygame.K_2]:
-                        self.pauseflagg = False
+                        self.pause_flag = False
                     font = pygame.font.SysFont("serif", 72)
                     text_paused = font.render("PAUSED", True, (255, 0, 0))
                     self.screen.blit(text_paused, (150, 250))
@@ -197,7 +204,9 @@ class App:
                 self.pl.image = self.pl.pl_right
                 self.pl.x += 5
             self.functions()
-            if self.pl.y > 800: self.flag = False; break;
+            if self.pl.y > 800:
+                self.flag = False
+                break
             pygame.display.flip()
 
         if not self.flag:
