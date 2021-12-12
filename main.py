@@ -71,12 +71,14 @@ class App:
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
         self.bg = pygame.image.load("images/bg.jpg")
+        self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
         self.game_over_bg = pygame.image.load("images/game_over_bg.jpg")
         self.boosts = [Boost(100, 750, True), Boost(300, 750, True), Boost(500, 750, True)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
         self.flag = True
         self.score = 0
+        self.cc = 0
         self.running = True
         self.cntr = 0
 
@@ -147,7 +149,6 @@ class App:
                 self.score = 0
             elif self.score > 0:
                 self.score = 100
-            self.start_flag = False
 
 
     def set_score(self):
@@ -161,7 +162,19 @@ class App:
         app = App()
         app.start()
         pygame.display.flip()
-        self.start_flag = 0
+        self.cntr = 0
+
+    def start_scrn(self):
+        while True:
+            self.cc = 1
+            self.screen.blit(self.start_screen, (0, 0))
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.start()
 
     def functions(self):
         self.clock.tick(60)
@@ -173,6 +186,8 @@ class App:
         self.set_score()
 
     def start(self):
+        if self.cc != 1:
+            self.start_scrn()
         self.running = True
         while self.running:
             for event in pygame.event.get():
