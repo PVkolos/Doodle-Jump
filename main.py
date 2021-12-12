@@ -56,6 +56,7 @@ class App:
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load("images/bg.jpg")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
+        self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
         self.pl = Player(self.screen)
@@ -64,6 +65,7 @@ class App:
         self.pause_flag = False
         self.score = 0
         self.cntr = 0
+        self.cc = 0
         self.running = True
         pygame.display.set_caption('DoodleJumpDemo')
 
@@ -133,21 +135,11 @@ class App:
                 self.score = 100
 
     def set_score(self):
-        if self.score < 0:
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(f'Счет: {str(self.score - 500)}', False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (500, 10))
-        elif self.score == 0:
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(f'Счет: {str(self.score)}', False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (500, 10))
-        else:
-            f2 = pygame.font.SysFont('serif', 20)
-            text2 = f2.render(f'Счет: {str(self.score - 400)}', False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (500, 10))
+        self.get_score()
+        f2 = pygame.font.SysFont('al seana', 30)
+        text2 = f2.render(f'Score: {str(self.score)}', False,
+                          (255, 0, 0))
+        self.screen.blit(text2, (450, 10))
 
     def functions(self):
         self.clock.tick(60)
@@ -160,6 +152,9 @@ class App:
 
     def start(self):
         x = True
+        if self.cc != 1:
+            self.start_scrn()
+        self.cc = 1
         self.running = True
         while self.running:
             for event in pygame.event.get():
@@ -195,6 +190,21 @@ class App:
     def restart():
         app = App()
         app.start()
+
+    def start_scrn(self):
+        while True:
+            self.cc = 1
+            self.screen.blit(self.start_screen, (0, 0))
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.start()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.start()
 
     def pause(self):
         while self.pause_flag and self.running:
