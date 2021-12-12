@@ -129,7 +129,7 @@ class App:
                     if event.key == pygame.K_SPACE:
                         app = App()
                         app.start()
-                        self.start_flag = 0
+                        self.cntr = 0
             self.screen.fill((0, 0, 0))
             self.get_score()
             self.screen.blit(self.game_over_bg, (0, 0))
