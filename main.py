@@ -52,6 +52,7 @@ class Player:
 class App:
     def __init__(self):
         pygame.init()
+        pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load("images/bg.jpg")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
