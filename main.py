@@ -70,6 +70,7 @@ class App:
         self.pause_flag = False
         self.screen = pygame.display.set_mode((600, 800))
         self.screen.set_alpha(None)
+        self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.bg = pygame.image.load("images/bg.jpg")
         self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
         self.game_over_bg = pygame.image.load("images/game_over_bg.jpg")
@@ -99,7 +100,7 @@ class App:
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
-                if random.choice([1, 1, 1, 1, 1, 0]) == 1:
+                if random.choice([1, 1, 0, 1, 1, 1]) == 1:
                     static = True
                 else:
                     static = False
@@ -225,6 +226,8 @@ class App:
                 self.pl.x += 5
             self.functions()
             if self.pl.y > 800:
+                self.lose_sound.play()
+            if self.pl.y > 1000:
                 self.flag = False
                 break
             pygame.display.flip()
