@@ -58,6 +58,7 @@ class App:
                 elif random.random() > 0.1:
                     bst = RedBoost(coord[0], coord[1])
                 else:
+                    print('Movement boost')
                     bst = MovementBoost(100, coord[1])
                 self.boosts.append(bst)
 
