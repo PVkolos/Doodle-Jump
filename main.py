@@ -76,8 +76,11 @@ class App:
                           (255, 0, 0))
         self.screen.blit(text2, (10, 10))
 
-    def check_collision(self, items, item):
+    @staticmethod
+    def check_collision(items, item):
         for i in items:
+            #if item.rect.colliderect(i.rect):
+            #    return True
             if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
                 return True
         return False
@@ -135,7 +138,7 @@ class App:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    exit()
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
                 self.restart()

@@ -15,6 +15,8 @@ class StaticBoost(Boost):
         self.image = pygame.image.load("images/green.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
 
     def play_sound(self):
         self.sound.play()
@@ -27,6 +29,8 @@ class RedBoost(Boost):
         self.is_destroyed = False
         self.sound = pygame.mixer.Sound('sfx/break.mp3')
         self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
 
     def play_sound(self):
         if self.is_destroyed:
@@ -43,6 +47,8 @@ class FederBoost(Boost):
         self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3')
         self.is_feder = False
         self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
 
     def play_sound(self):
         if self.is_feder:
@@ -59,6 +65,8 @@ class MovementBoost(Boost):
         self.right = True
         self.left = True
         self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
 
     def play_sound(self):
         self.sound.play()
