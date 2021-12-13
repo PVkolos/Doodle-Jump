@@ -15,6 +15,7 @@ class App:
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
+        self.bullets = []
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
         self.flag = True
@@ -26,13 +27,16 @@ class App:
         self.n_boosts = 20
         pygame.display.set_caption('DoodleJumpDemo')
 
-    def draw(self, boosts):
+    def draw(self, boosts, bullets):
         for boost in boosts:
             if type(boost) == MovementBoost:
                 boost.update()
             elif type(boost) == FederBoost:
                 self.screen.blit(boost.get_image(), (boost.x - 60 / 2 + 30, boost.y - 35))
             self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
+        for bullet in bullets:
+            self.screen.blit(bullet.image, (bullet.x, bullet.y))
+            bullet.update()
 
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
@@ -131,7 +135,7 @@ class App:
         self.clock.tick(60)
         self.check_play()
         self.screen.blit(self.bg, (0, 0))
-        self.draw(self.boosts)
+        self.draw(self.boosts, self.bullets)
         self.pl.down(self.boosts)
         self.get_fps()
         self.set_score()
@@ -147,6 +151,9 @@ class App:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        self.bullets.append(self.pl.shoot())
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
                 self.restart()

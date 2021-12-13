@@ -57,10 +57,21 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.pl_left
         self.screen.blit(self.image, (self.x, self.y - 82))
 
+    def shoot(self):
+        return Bullet(self.x, self.y - 82)
 
-class Bullet(pygame.sprite.Sprite):
+
+class Bullet:
     def __init__(self, x, y):
-        pass
+        self.x = x
+        self.y = y
+        self.speed = 10
+        self.image = pygame.image.load("images/spring2.png").convert_alpha()
+        self.sound = pygame.mixer.Sound('sfx/pistol_shoot.mp3')
+        self.play_sound()
+
+    def play_sound(self):
+        self.sound.play()
 
     def update(self):
-        pass
+        self.y -= self.speed
