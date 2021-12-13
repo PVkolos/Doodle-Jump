@@ -1,5 +1,5 @@
 import pygame
-from boost import StaticBoost, RedBoost
+from boost import StaticBoost, RedBoost, MovementBoost
 
 
 class Player:
@@ -20,7 +20,7 @@ class Player:
         for el in boosts:
             if ((el.x - 40 <= self.x <= el.x + 55) or (el.x - 40 <= self.x + self.width <= el.x + 55)) and self.y == \
                     el.y and not self.jump:
-                if type(el) == StaticBoost:
+                if type(el) == StaticBoost or type(el) == MovementBoost:
                     self.jump = True
                     self.is_jump = 200
                 else:
