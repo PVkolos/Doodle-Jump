@@ -43,6 +43,7 @@ class RedBoost(Boost):
 class FederBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
+        self.image = pygame.image.load("images/green.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3')
         self.is_feder = False
@@ -55,6 +56,13 @@ class FederBoost(Boost):
             self.feder_sound.play()
         else:
             self.sound.play()
+
+    def get_image(self):
+        if self.is_feder:
+            self.image_spring = pygame.image.load("images/spring2.png").convert_alpha()
+        else:
+            self.image_spring = pygame.image.load("images/spring_comp.png").convert_alpha()
+        return self.image_spring
 
 
 class MovementBoost(Boost):
