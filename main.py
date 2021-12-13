@@ -53,11 +53,11 @@ class App:
                         a -= 1
                     else:
                         break
-                if random.random() > 0.3:
+                if random.random() > 0.2:
                     bst = StaticBoost(coord[0], coord[1])
-                elif random.random() > 0.1:
-                    bst = RedBoost(coord[0], coord[1])
                 elif random.random() > 0.5:
+                    bst = RedBoost(coord[0], coord[1])
+                elif random.random() > 0.7:
                     bst = MovementBoost(coord[0], coord[1])
                 else:
                     bst = FederBoost(random.randint(100, 200), coord[1] + 5)
