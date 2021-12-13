@@ -62,9 +62,9 @@ class FederBoost(Boost):
 
     def get_image(self):
         if self.is_feder:
-            self.image_spring = pygame.image.load("images/spring2.png").convert_alpha()
+            self.image_spring = self.spring_image2
         else:
-            self.image_spring = pygame.image.load("images/spring_comp.png").convert_alpha()
+            self.image_spring = self.spring_image
         return self.image_spring
 
 
