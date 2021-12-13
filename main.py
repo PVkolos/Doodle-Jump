@@ -48,6 +48,12 @@ class Player:
                 self.image = self.pl_left
         self.screen.blit(self.image, (self.x, self.y - 82))
 
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pass
+
+    def update(self):
+        pass
 
 class App:
     def __init__(self):
