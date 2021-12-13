@@ -1,6 +1,6 @@
 import pygame
 import random
-from boost import StaticBoost, RedBoost
+from boost import StaticBoost, RedBoost, MovementBoost
 from player import *
 
 
@@ -23,15 +23,19 @@ class App:
         self.cntr = 0
         self.cc = 0
         self.running = True
+        self.n_boosts = 20
         pygame.display.set_caption('DoodleJumpDemo')
 
     def draw(self, boosts):
         for boost in boosts:
+            if type(boost) == MovementBoost:
+                boost.update()
             self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
 
-    def generate_boosts(self):
-        if len(self.boosts) < 15:
-            for _ in range(15 - len(self.boosts)):
+    def check_play(self):
+        if len(self.boosts) < self.n_boosts:
+            while self.n_boosts - len(self.boosts) != 0:
+                # fl = False
                 y = self.boosts[-1].y
                 if not type(self.boosts[-1]) == StaticBoost:
                     for i in range(2, 15):
@@ -39,12 +43,22 @@ class App:
                             y = self.boosts[-i].y
                             break
                 coord = (random.randint(80, 600 - 80),
-                         random.randrange(round(y - 150), round(y), 10))
-                if random.random() > 0.2:
+                         random.randrange(round(y - 150), round(y), 5))
+                # Проверка на то, что платформа не прикосается к другой платформе
+                # for boost in self.boosts:
+                #     if coord[0] + 70 >= boost.x and coord[1] + 15 >= boost.y:
+                #         print(coord)
+                #         fl = True
+                # if fl: continue
+                if random.random() > 0.3:
                     bst = StaticBoost(coord[0], coord[1])
-                else:
+                elif random.random() > 0.1:
+                    print('Movement boost')
                     bst = RedBoost(coord[0], coord[1])
+                else:
+                    bst = MovementBoost(100, coord[1])
                 self.boosts.append(bst)
+
         if self.pl.x < -80:
             self.pl.x = 580
         elif self.pl.x > 680:
@@ -98,7 +112,7 @@ class App:
 
     def functions(self):
         self.clock.tick(60)
-        self.generate_boosts()
+        self.check_play()
         self.screen.blit(self.bg, (0, 0))
         self.draw(self.boosts)
         self.pl.down(self.boosts)
