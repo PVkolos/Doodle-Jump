@@ -2,8 +2,9 @@ import pygame
 from boost import StaticBoost, RedBoost, MovementBoost
 
 
-class Player:
-    def __init__(self, screen):
+class Player(pygame.sprite.Sprite):
+    def __init__(self, screen, *groups):
+        super().__init__(*groups)
         self.y = 400
         self.x = 270
         self.width = 60
@@ -15,6 +16,7 @@ class Player:
         self.jump = False
         self.screen = screen
         self.is_jump = 0
+        self.rect = self.image.get_rect()
 
     def down(self, boosts):
         for el in boosts:

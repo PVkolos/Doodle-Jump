@@ -35,7 +35,7 @@ class App:
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
             while self.n_boosts - len(self.boosts) != 0:
-                # fl = False
+                fl = False
                 y = self.boosts[-1].y
                 if not type(self.boosts[-1]) == StaticBoost:
                     for i in range(2, 15):
@@ -44,16 +44,18 @@ class App:
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
-                # Проверка на то, что платформа не прикосается к другой платформе
-                # for boost in self.boosts:
-                #     if coord[0] + 70 >= boost.x and coord[1] + 15 >= boost.y:
-                #         print(coord)
-                #         fl = True
-                # if fl: continue
+                x = True
+                while x:
+                    for boost in self.boosts:
+                        if coord[0] + 70 >= boost.x and coord[1] + 15 >= boost.y:
+                            x = False
+                            coord = (random.randint(80, 600 - 80),
+                                     random.randrange(round(y - 150), round(y), 5))
+                        else:
+                            x = False
                 if random.random() > 0.3:
                     bst = StaticBoost(coord[0], coord[1])
                 elif random.random() > 0.1:
-                    print('Movement boost')
                     bst = RedBoost(coord[0], coord[1])
                 else:
                     bst = MovementBoost(100, coord[1])

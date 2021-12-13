@@ -1,29 +1,32 @@
 import pygame
 
 
-class Boost:
-    def __init__(self, x, y):
+class Boost(pygame.sprite.Sprite):
+    def __init__(self, x, y, *groups):
+        super().__init__(*groups)
         self.x = x
         self.y = y
         self.size = 80
 
 
 class StaticBoost(Boost):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y, *groups):
+        super().__init__(x, y, *groups)
         self.image = pygame.image.load("images/green.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
+        self.rect = self.image.get_rect()
 
     def play_sound(self):
         self.sound.play()
 
 
 class RedBoost(Boost):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y, *groups):
+        super().__init__(x, y, *groups)
         self.image = pygame.image.load("images/red.png").convert_alpha()
         self.is_destroyed = False
         self.sound = pygame.mixer.Sound('sfx/break.mp3')
+        self.rect = self.image.get_rect()
 
     def play_sound(self):
         if self.is_destroyed:
@@ -34,11 +37,12 @@ class RedBoost(Boost):
 
 
 class FederBoost(Boost):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y, *groups):
+        super().__init__(x, y, *groups)
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3')
         self.is_feder = False
+        self.rect = self.image.get_rect()
 
     def play_sound(self):
         if self.is_feder:
@@ -48,12 +52,13 @@ class FederBoost(Boost):
 
 
 class MovementBoost(Boost):
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y, *groups):
+        super().__init__(x, y, *groups)
         self.image = pygame.image.load("images/blue.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.right = True
         self.left = True
+        self.rect = self.image.get_rect()
 
     def play_sound(self):
         self.sound.play()
@@ -66,6 +71,8 @@ class MovementBoost(Boost):
         elif self.x >= 500:
             self.left = True
             self.right = False
-        if self.left: self.x -= 5
-        else: self.x += 5
+        if self.left:
+            self.x -= 5
+        else:
+            self.x += 5
 
