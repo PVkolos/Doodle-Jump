@@ -43,21 +43,20 @@ class App:
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
-                x = True
-                while x:
-                    for boost in self.boosts:
-                        if coord[0] + 70 >= boost.x and coord[1] + 15 >= boost.y:
-                            x = False
-                            coord = (random.randint(80, 600 - 80),
-                                     random.randrange(round(y - 150), round(y), 5))
-                        else:
-                            x = False
+                a = 100
+                while a != 0:
+                    if self.check_collision(self.boosts, coord):
+                        coord = (random.randint(80, 600 - 80),
+                                 random.randrange(round(y - 150), round(y), 5))
+                        a -= 1
+                    else:
+                        break
                 if random.random() > 0.3:
                     bst = StaticBoost(coord[0], coord[1])
                 elif random.random() > 0.1:
                     bst = RedBoost(coord[0], coord[1])
                 else:
-                    bst = MovementBoost(100, coord[1])
+                    bst = MovementBoost(100, coord[1] + 5)
                 self.boosts.append(bst)
 
         if self.pl.x < -80:
@@ -76,6 +75,12 @@ class App:
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (255, 0, 0))
         self.screen.blit(text2, (10, 10))
+
+    def check_collision(self, items, item):
+        for i in items:
+            if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
+                return True
+        return False
 
     def game_over(self):
         while self.running:
