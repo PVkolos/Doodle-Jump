@@ -29,7 +29,7 @@ class App:
         for boost in boosts:
             self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
 
-    def check_play(self):
+    def generate_boosts(self):
         if len(self.boosts) < 15:
             for _ in range(15 - len(self.boosts)):
                 y = self.boosts[-1].y
@@ -39,7 +39,7 @@ class App:
                             y = self.boosts[-i].y
                             break
                 coord = (random.randint(80, 600 - 80),
-                         random.randrange(round(y - 150), round(y), 5))
+                         random.randrange(round(y - 150), round(y), 10))
                 if random.random() > 0.2:
                     bst = StaticBoost(coord[0], coord[1])
                 else:
@@ -98,7 +98,7 @@ class App:
 
     def functions(self):
         self.clock.tick(60)
-        self.check_play()
+        self.generate_boosts()
         self.screen.blit(self.bg, (0, 0))
         self.draw(self.boosts)
         self.pl.down(self.boosts)
