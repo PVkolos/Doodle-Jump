@@ -183,7 +183,10 @@ class App:
                     if event.key == pygame.K_SPACE:
                         self.start_sound.play()
                         self.start()
-
+    
+    def get_results(self):
+        pass
+        
     def pause(self):
         while self.pause_flag and self.running:
             for event in pygame.event.get():
