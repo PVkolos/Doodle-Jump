@@ -183,10 +183,6 @@ class App:
                     if event.key == pygame.K_SPACE:
                         self.start_sound.play()
                         self.start()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.start_sound.play()
-                        self.start()
 
     def pause(self):
         while self.pause_flag and self.running:
@@ -211,4 +207,3 @@ class App:
 if __name__ == '__main__':
     app = App()
     app.start()
-1
