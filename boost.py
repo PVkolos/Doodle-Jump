@@ -50,7 +50,22 @@ class FederBoost(Boost):
 class MovementBoost(Boost):
     def __init__(self, x, y):
         super().__init__(x, y)
+        self.image = pygame.image.load("images/blue.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
+        self.right = True
+        self.left = True
 
     def play_sound(self):
         self.sound.play()
+
+    def update(self):
+        if self.x < 55:
+            self.left = False
+            self.right = True
+            self.x += 5
+        elif self.x >= 500:
+            self.left = True
+            self.right = False
+        if self.left: self.x -= 5
+        else: self.x += 5
+
