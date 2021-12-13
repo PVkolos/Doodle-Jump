@@ -64,6 +64,7 @@ class App:
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
+        self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
@@ -207,9 +208,11 @@ class App:
                     exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
+                        self.start_sound.play()
                         self.start()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
+                        self.start_sound.play()
                         self.start()
 
     def pause(self):
