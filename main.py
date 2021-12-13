@@ -4,6 +4,7 @@ from boost import StaticBoost, RedBoost, MovementBoost
 from player import *
 
 
+
 class App:
     def __init__(self):
         pygame.init()
@@ -79,7 +80,7 @@ class App:
     @staticmethod
     def check_collision(items, item):
         for i in items:
-            #if item.rect.colliderect(i.rect):
+            # if item.rect.colliderect(i.rect):
             #    return True
             if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
                 return True
@@ -195,13 +196,19 @@ class App:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_2]:
                     self.pause_flag = False
+                self.screen.blit(self.bg, (0, 0))
                 font = pygame.font.SysFont("al seana", 72)
                 text_paused = font.render("PAUSED", True, (255, 0, 0))
+                font = pygame.font.SysFont("al seana", 72)
+                bestplayers = font.render("BEST PLAYERS", True, (255, 0, 0))
                 self.screen.blit(text_paused, (210, 250))
+                self.screen.blit(bestplayers, (130, 340))
+                pygame.draw.rect(self.screen, (255, 255, 255),
+                                 (150, 420, 300, 180))
                 pygame.display.flip()
 
 
 if __name__ == '__main__':
     app = App()
     app.start()
- 
+1
