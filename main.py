@@ -78,6 +78,10 @@ class App:
                 del self.boosts[i]
                 self.score += 100
                 self.cntr += 1
+        a = self.bullets.copy()
+        for i in range(len(a)):
+            if a[i].y < 0:
+                del self.bullets[i]
 
     def get_fps(self):
         f2 = pygame.font.SysFont('al seana', 14)
