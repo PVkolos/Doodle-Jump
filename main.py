@@ -53,11 +53,12 @@ class App:
                         a -= 1
                     else:
                         break
-                if random.random() > 0.3:
+                rndm = random.random()
+                if rndm > 0.4:
                     bst = StaticBoost(coord[0], coord[1])
-                elif random.random() > 0.1:
+                elif rndm > 0.2:
                     bst = RedBoost(coord[0], coord[1])
-                elif random.random() > 0.5:
+                elif rndm > 0.1:
                     bst = MovementBoost(coord[0], coord[1])
                 else:
                     bst = FederBoost(random.randint(100, 200), coord[1] + 5)
@@ -79,6 +80,9 @@ class App:
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (255, 0, 0))
         self.screen.blit(text2, (10, 10))
+
+    def get_results(self):
+        pass
 
     @staticmethod
     def check_collision(items, item):
@@ -186,10 +190,6 @@ class App:
                     if event.key == pygame.K_SPACE:
                         self.start_sound.play()
                         self.start()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.start_sound.play()
-                        self.start()
 
     def pause(self):
         while self.pause_flag and self.running:
@@ -199,9 +199,15 @@ class App:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_2]:
                     self.pause_flag = False
+                self.screen.blit(self.bg, (0, 0))
                 font = pygame.font.SysFont("al seana", 72)
                 text_paused = font.render("PAUSED", True, (255, 0, 0))
+                font = pygame.font.SysFont("al seana", 72)
+                bestplayers = font.render("BEST PLAYERS", True, (255, 0, 0))
                 self.screen.blit(text_paused, (210, 250))
+                self.screen.blit(bestplayers, (130, 340))
+                pygame.draw.rect(self.screen, (255, 255, 255),
+                                 (150, 420, 300, 180))
                 pygame.display.flip()
 
 
