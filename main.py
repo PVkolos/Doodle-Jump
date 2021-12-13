@@ -35,7 +35,6 @@ class App:
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
             while self.n_boosts - len(self.boosts) != 0:
-                fl = False
                 y = self.boosts[-1].y
                 if not type(self.boosts[-1]) == StaticBoost:
                     for i in range(2, 15):
