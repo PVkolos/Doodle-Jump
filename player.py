@@ -1,5 +1,5 @@
 import pygame
-from boost import StaticBoost, RedBoost, MovementBoost
+from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
 
 
 class Player(pygame.sprite.Sprite):
@@ -17,6 +17,8 @@ class Player(pygame.sprite.Sprite):
         self.screen = screen
         self.is_jump = 0
         self.rect = self.image.get_rect()
+        self.speed_down = 5
+        self.speed_up = 5
 
     def down(self, boosts):
         for el in boosts:
@@ -25,20 +27,26 @@ class Player(pygame.sprite.Sprite):
                 if type(el) == StaticBoost or type(el) == MovementBoost:
                     self.jump = True
                     self.is_jump = 200
+                elif type(el) == FederBoost:
+                    el.is_feder = True
+                    self.jump = True
+                    self.is_jump = 1000
+                    self.speed_up = 10
                 else:
                     el.image = pygame.image.load("images/red_1.png").convert_alpha()
                 el.play_sound()
         if not self.jump:
-            self.y += 5
+            self.y += self.speed_down
         elif self.is_jump == 0 or self.is_jump < 0:
             self.jump = False
+            self.speed_up = 5
         elif self.jump:
             if self.y <= 400:
                 for el in boosts:
-                    el.y += 5
-                self.y += 5
-            self.y -= 5
-            self.is_jump -= 5
+                    el.y += self.speed_up
+                self.y += self.speed_up
+            self.y -= self.speed_up
+            self.is_jump -= self.speed_up
             if self.image == self.pl_right and self.is_jump > 100:
                 self.image = self.pl_right_pr
             elif self.image == self.pl_left and self.is_jump > 100:
