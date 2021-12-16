@@ -66,7 +66,7 @@ class Bullet:
         self.x = x
         self.y = y
         self.speed = 10
-        self.image = pygame.image.load("images/spring2.png").convert_alpha()
+        self.image = pygame.image.load("images/bullet.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/pistol_shoot.mp3')
         self.play_sound()
 
