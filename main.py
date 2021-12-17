@@ -25,6 +25,8 @@ class App:
         self.cc = 0
         self.running = True
         self.n_boosts = 20
+        self.monst = []
+        self.flag_monst = True
         pygame.display.set_caption('DoodleJumpDemo')
 
     def draw(self, boosts, bullets):
@@ -35,7 +37,7 @@ class App:
                 self.screen.blit(boost.get_image(), (boost.x - 60 / 2 + 30, boost.y - 35))
             self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
         for bullet in bullets:
-            self.screen.blit(bullet.image, (bullet.x, bullet.y))
+            self.screen.blit(bullet.image, (bullet.rect.x, bullet.rect.y))
             bullet.update()
 
     def check_play(self):
@@ -68,10 +70,10 @@ class App:
                     bst = FederBoost(random.randint(100, 200), coord[1] + 5)
                 self.boosts.append(bst)
 
-        if self.pl.x < -80:
-            self.pl.x = 580
-        elif self.pl.x > 680:
-            self.pl.x = -40
+        if self.pl.rect.x < -80:
+            self.pl.rect.x = 580
+        elif self.pl.rect.x > 680:
+            self.pl.rect.x = -40
         a = self.boosts.copy()
         for i in range(len(a)):
             if a[i].y > 800:
@@ -80,7 +82,7 @@ class App:
                 self.cntr += 1
         a = self.bullets.copy()
         for i in range(len(a)):
-            if a[i].y < 0:
+            if a[i].rect.y < -100:
                 del self.bullets[i]
 
     def get_fps(self):
@@ -100,6 +102,15 @@ class App:
             if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
                 return True
         return False
+
+    def check_collision_monster_bullet(self):
+        for monster in self.monst:
+            for bullet in self.bullets:
+                if pygame.sprite.collide_mask(monster, bullet):
+                    del self.monst[0]
+                    del self.bullets[self.bullets.index(bullet)]
+                    self.flag_monst = True
+                    break
 
     def game_over(self):
         while self.running:
@@ -135,14 +146,26 @@ class App:
                           (255, 0, 0))
         self.screen.blit(text2, (450, 10))
 
+    def draw_monster(self):
+        for monster in self.monst:
+            monster.update()
+            if pygame.sprite.collide_mask(monster, self.pl):
+                self.game_over()
+            self.screen.blit(monster.image, (monster.rect.x, monster.rect.y))
+            if monster.rect.y > 800:
+                del self.monst[0]
+                self.flag_monst = True
+
     def functions(self):
         self.clock.tick(60)
         self.check_play()
         self.screen.blit(self.bg, (0, 0))
         self.draw(self.boosts, self.bullets)
-        self.pl.down(self.boosts)
+        self.pl.down(self.boosts, self.monst)
         self.get_fps()
         self.set_score()
+        self.check_collision_monster_bullet()
+        self.draw_monster()
 
     def start(self):
         x = True
@@ -166,16 +189,20 @@ class App:
                 self.pause()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
-                self.pl.x -= 5
+                self.pl.rect.x -= 5
             if keys[pygame.K_RIGHT]:
                 self.pl.image = self.pl.pl_right
-                self.pl.x += 5
+                self.pl.rect.x += 5
             self.functions()
-            if self.pl.y > 800:
+            if self.pl.rect.y > 800:
                 self.flag = False
                 break
             pygame.display.flip()
-        if self.pl.y > 800 and x:
+            if self.score > 3000 and self.flag_monst:
+                rnd = random.random()
+                if rnd < 0.005:
+                    self.monster()
+        if self.pl.rect.y > 800 and x:
             x = False
             self.lose_sound.play()
         if not self.flag:
@@ -183,6 +210,11 @@ class App:
             self.game_over()
         else:
             pygame.quit()
+
+    def monster(self):
+        monster_ = Monster(250, -400)
+        self.monst.append(monster_)
+        self.flag_monst = False
 
     @staticmethod
     def restart():
