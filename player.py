@@ -5,8 +5,6 @@ from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, *groups):
         super().__init__(*groups)
-        self.y = 400
-        self.x = 270
         self.width = 60
         self.pl_right = pygame.image.load("images/right_1.png").convert_alpha()
         self.pl_left = pygame.image.load("images/left_1.png").convert_alpha()
@@ -17,12 +15,15 @@ class Player(pygame.sprite.Sprite):
         self.screen = screen
         self.is_jump = 0
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.y = 400
+        self.rect.x = 270
         self.speed_down = 5
         self.speed_up = 5
 
-    def down(self, boosts):
+    def down(self, boosts, monst):
         for el in boosts:
-            if ((el.x - 40 <= self.x <= el.x + 55) or (el.x - 40 <= self.x + self.width <= el.x + 55)) and self.y == \
+            if ((el.x - 40 <= self.rect.x <= el.x + 55) or (el.x - 40 <= self.rect.x + self.width <= el.x + 55)) and self.rect.y == \
                     el.y and not self.jump:
                 if type(el) == StaticBoost or type(el) == MovementBoost:
                     self.jump = True
@@ -36,16 +37,18 @@ class Player(pygame.sprite.Sprite):
                     el.image = pygame.image.load("images/red_1.png").convert_alpha()
                 el.play_sound()
         if not self.jump:
-            self.y += self.speed_down
+            self.rect.y += self.speed_down
         elif self.is_jump == 0 or self.is_jump < 0:
             self.jump = False
             self.speed_up = 5
         elif self.jump:
-            if self.y <= 400:
+            if self.rect.y <= 400:
                 for el in boosts:
                     el.y += self.speed_up
-                self.y += self.speed_up
-            self.y -= self.speed_up
+                for monster in monst:
+                    monster.rect.y += self.speed_up
+                self.rect.y += self.speed_up
+            self.rect.y -= self.speed_up
             self.is_jump -= self.speed_up
             if self.image == self.pl_right and self.is_jump > 100:
                 self.image = self.pl_right_pr
@@ -55,18 +58,21 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.pl_right
             elif self.is_jump <= 100 and self.image == self.pl_left_pr:
                 self.image = self.pl_left
-        self.screen.blit(self.image, (self.x, self.y - 82))
+        self.screen.blit(self.image, (self.rect.x, self.rect.y - 82))
 
     def shoot(self):
-        return Bullet(self.x, self.y - 82)
+        return Bullet(self.rect.x, self.rect.y - 82)
 
 
-class Bullet:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y, *groups):
+        super().__init__(*groups)
         self.speed = 10
         self.image = pygame.image.load("images/bullet.png").convert_alpha()
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.x = x
+        self.rect.y = y
         self.sound = pygame.mixer.Sound('sfx/pistol_shoot.mp3')
         self.play_sound()
 
@@ -74,4 +80,36 @@ class Bullet:
         self.sound.play()
 
     def update(self):
-        self.y -= self.speed
+        self.rect.y -= self.speed
+
+
+class Monster(pygame.sprite.Sprite):
+    def __init__(self, x, y, *groups):
+        super().__init__(*groups)
+        self.image_one = pygame.image.load("images/bat1.png").convert_alpha()
+        self.image_two = pygame.image.load("images/bat2.png").convert_alpha()
+        self.image_free = pygame.image.load("images/bat3.png").convert_alpha()
+        self.im_dict = {0: self.image_one, 1: self.image_two, 2: self.image_free}
+        self.image = self.im_dict[0]
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.right = True
+        self.left = True
+        self.rect.x = x
+        self.rect.y = y
+        self.i = 1
+
+    def update(self):
+        self.image = self.im_dict[self.i % 3]
+        if self.rect.x < 55:
+            self.left = False
+            self.right = True
+            self.rect.x += 5
+        elif self.rect.x >= 500:
+            self.left = True
+            self.right = False
+        if self.left:
+            self.rect.x -= 5
+        else:
+            self.rect.x += 5
+        self.i += 1
