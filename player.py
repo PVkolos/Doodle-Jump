@@ -20,8 +20,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = 270
         self.speed_down = 5
         self.speed_up = 5
+        self.shoot_pass = 0
 
-    def down(self, boosts, monst):
+    def down(self, boosts, monsters):
         for el in boosts:
             if ((el.x - 40 <= self.rect.x <= el.x + 55) or (el.x - 40 <= self.rect.x + self.width <= el.x + 55)) and self.rect.y == \
                     el.y and not self.jump:
@@ -45,7 +46,7 @@ class Player(pygame.sprite.Sprite):
             if self.rect.y <= 400:
                 for el in boosts:
                     el.y += self.speed_up
-                for monster in monst:
+                for monster in monsters:
                     monster.rect.y += self.speed_up
                 self.rect.y += self.speed_up
             self.rect.y -= self.speed_up
@@ -61,6 +62,7 @@ class Player(pygame.sprite.Sprite):
         self.screen.blit(self.image, (self.rect.x, self.rect.y - 82))
 
     def shoot(self):
+        self.shoot_pass = 60
         return Bullet(self.rect.x, self.rect.y - 82)
 
 

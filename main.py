@@ -1,6 +1,4 @@
-import pygame
 import random
-from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
 from player import *
 
 
@@ -8,6 +6,7 @@ class App:
     def __init__(self):
         pygame.init()
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
+        pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load("images/bg.jpg")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
@@ -16,18 +15,17 @@ class App:
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
         self.bullets = []
+        self.monsters = []
         self.pl = Player(self.screen)
         self.clock = pygame.time.Clock()
-        self.flag = True
-        self.pause_flag = False
         self.score = 0
         self.cntr = 0
         self.cc = 0
-        self.running = True
         self.n_boosts = 20
-        self.monst = []
-        self.flag_monst = True
-        pygame.display.set_caption('DoodleJumpDemo')
+        self.flag = True
+        self.pause_flag = False
+        self.running = True
+        self.flag_monster = True
 
     def draw(self, boosts, bullets):
         for boost in boosts:
@@ -97,19 +95,17 @@ class App:
     @staticmethod
     def check_collision(items, item):
         for i in items:
-            #if item.rect.colliderect(i.rect):
-            #    return True
             if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
                 return True
         return False
 
     def check_collision_monster_bullet(self):
-        for monster in self.monst:
+        for monster in self.monsters:
             for bullet in self.bullets:
                 if pygame.sprite.collide_mask(monster, bullet):
-                    del self.monst[0]
+                    del self.monsters[0]
                     del self.bullets[self.bullets.index(bullet)]
-                    self.flag_monst = True
+                    self.flag_monster = True
                     break
 
     def game_over(self):
@@ -147,21 +143,21 @@ class App:
         self.screen.blit(text2, (450, 10))
 
     def draw_monster(self):
-        for monster in self.monst:
+        for monster in self.monsters:
             monster.update()
             if pygame.sprite.collide_mask(monster, self.pl):
                 self.game_over()
             self.screen.blit(monster.image, (monster.rect.x, monster.rect.y))
             if monster.rect.y > 800:
-                del self.monst[0]
-                self.flag_monst = True
+                del self.monsters[0]
+                self.flag_monster = True
 
     def functions(self):
         self.clock.tick(60)
         self.check_play()
         self.screen.blit(self.bg, (0, 0))
         self.draw(self.boosts, self.bullets)
-        self.pl.down(self.boosts, self.monst)
+        self.pl.down(self.boosts, self.monsters)
         self.get_fps()
         self.set_score()
         self.check_collision_monster_bullet()
@@ -198,12 +194,11 @@ class App:
                 self.flag = False
                 break
             pygame.display.flip()
-            if self.score > 3000 and self.flag_monst:
+            if self.score > 3000 and self.flag_monster:
                 rnd = random.random()
                 if rnd < 0.005:
                     self.monster()
         if self.pl.rect.y > 800 and x:
-            x = False
             self.lose_sound.play()
         if not self.flag:
             self.running = True
@@ -213,8 +208,8 @@ class App:
 
     def monster(self):
         monster_ = Monster(250, -400)
-        self.monst.append(monster_)
-        self.flag_monst = False
+        self.monsters.append(monster_)
+        self.flag_monster = False
 
     @staticmethod
     def restart():
@@ -246,9 +241,9 @@ class App:
                 font = pygame.font.SysFont("al seana", 72)
                 text_paused = font.render("PAUSED", True, (255, 0, 0))
                 font = pygame.font.SysFont("al seana", 72)
-                bestplayers = font.render("BEST PLAYERS", True, (255, 0, 0))
+                best_players = font.render("BEST PLAYERS", True, (255, 0, 0))
                 self.screen.blit(text_paused, (210, 250))
-                self.screen.blit(bestplayers, (130, 340))
+                self.screen.blit(best_players, (130, 340))
                 pygame.draw.rect(self.screen, (255, 255, 255),
                                  (150, 420, 300, 180))
                 pygame.display.flip()
