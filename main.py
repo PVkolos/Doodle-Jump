@@ -8,7 +8,7 @@ class App:
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 800))
-        self.bg = pygame.image.load("images/bg.jpg")
+        self.bg = pygame.image.load("images/bg.png")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
@@ -57,15 +57,16 @@ class App:
                         a -= 1
                     else:
                         break
-                rndm = random.random()
-                if rndm > 0.4:
-                    bst = StaticBoost(coord[0], coord[1])
-                elif rndm > 0.2:
+                bst = StaticBoost(coord[0], coord[1])
+                if random.random() > 0.5:
+                    if random.random() > 0.7:
+                        bst = FederBoost(random.randint(100, 200), coord[1] + 5)
+                    else:
+                        bst = StaticBoost(coord[0], coord[1])
+                elif random.random() > 0.7:
                     bst = RedBoost(coord[0], coord[1])
-                elif rndm > 0.1:
+                elif random.random() > 0.9:
                     bst = MovementBoost(coord[0], coord[1])
-                else:
-                    bst = FederBoost(random.randint(100, 200), coord[1] + 5)
                 self.boosts.append(bst)
 
         if self.pl.rect.x < -80:
