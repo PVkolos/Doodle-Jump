@@ -10,7 +10,7 @@ class App:
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load("images/bg.png")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
-        self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
+        self.start_screen = pygame.image.load("images/start_screen_bg.png")
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
