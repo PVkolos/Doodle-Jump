@@ -1,7 +1,4 @@
 import random
-
-import pygame
-
 from player import *
 
 
@@ -72,7 +69,6 @@ class App:
                 elif random.random() > 0.9:
                     bst = MovementBoost(coord[0], coord[1])
                 self.boosts.append(bst)
-
         if self.pl.rect.x < -80:
             self.pl.rect.x = 580
         elif self.pl.rect.x > 680:
