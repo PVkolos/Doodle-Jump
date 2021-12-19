@@ -1,4 +1,7 @@
 import random
+
+import pygame
+
 from player import *
 
 
@@ -7,10 +10,11 @@ class App:
         pygame.init()
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
-        self.screen = pygame.display.set_mode((600, 800))
+        self.screen = pygame.display.set_mode((600, 750))
         self.bg = pygame.image.load("images/bg.png")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.png")
+        self.pause_screen = pygame.image.load('images/pause.png')
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
@@ -239,14 +243,14 @@ class App:
                 if keys[pygame.K_2]:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
-                font = pygame.font.SysFont("al seana", 72)
-                text_paused = font.render("PAUSED", True, (255, 0, 0))
-                font = pygame.font.SysFont("al seana", 72)
-                best_players = font.render("BEST PLAYERS", True, (255, 0, 0))
-                self.screen.blit(text_paused, (210, 250))
-                self.screen.blit(best_players, (130, 340))
-                pygame.draw.rect(self.screen, (255, 255, 255),
-                                 (150, 420, 300, 180))
+                self.screen.blit(self.pause_screen, (0, 0))
+                # font = pygame.font.SysFont("al seana", 72)
+                # text_paused = font.render("PAUSED", True, (255, 0, 0))
+                # font = pygame.font.SysFont("al seana", 72)
+                # best_players = font.render("BEST PLAYERS", True, (255, 0, 0))
+                # self.screen.blit(text_paused, (210, 250))
+                # self.screen.blit(best_players, (130, 340))
+                # pygame.draw.rect(self.screen, (255, 255, 255), (150, 420, 300, 180))
                 pygame.display.flip()
 
 
