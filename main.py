@@ -28,13 +28,21 @@ class App:
         self.running = True
         self.flag_monster = True
 
-    def draw(self, boosts, bullets):
+    def draw(self, boosts: list, bullets: list):
         for boost in boosts:
             boost.update()
             boost.draw(self.screen)
         for bullet in bullets:
             bullet.update()
             bullet.draw(self.screen)
+        for monster in self.monsters:
+            monster.update()
+            if pygame.sprite.collide_mask(monster, self.pl):
+                self.game_over()
+            self.screen.blit(monster.image, (monster.rect.x, monster.rect.y))
+            if monster.rect.y > 800:
+                del self.monsters[0]
+                self.flag_monster = True
 
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
@@ -91,7 +99,7 @@ class App:
         pass
 
     @staticmethod
-    def check_collision(items, item):
+    def check_collision(items, item) -> bool:
         for i in items:
             if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
                 return True
@@ -123,6 +131,15 @@ class App:
             self.screen.blit(text2, (350, 400))
             pygame.display.flip()
 
+    def new_game_over(self):
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_SPACE]:
+                    self.restart()
+
     def get_score(self):
         if self.cntr < 6:
             # в начале создается удаляется несколько платформ(чтобы их не считать создан cntr)
@@ -140,16 +157,6 @@ class App:
                           (255, 0, 0))
         self.screen.blit(text2, (450, 10))
 
-    def draw_monster(self):
-        for monster in self.monsters:
-            monster.update()
-            if pygame.sprite.collide_mask(monster, self.pl):
-                self.game_over()
-            self.screen.blit(monster.image, (monster.rect.x, monster.rect.y))
-            if monster.rect.y > 800:
-                del self.monsters[0]
-                self.flag_monster = True
-
     def functions(self):
         self.clock.tick(60)
         self.check_play()
@@ -159,7 +166,6 @@ class App:
         self.get_fps()
         self.set_score()
         self.check_collision_monster_bullet()
-        self.draw_monster()
 
     def start(self):
         x = True
@@ -192,7 +198,7 @@ class App:
                 self.flag = False
                 break
             pygame.display.flip()
-            if self.score > 3000 and self.flag_monster:
+            if self.score > 9000 and self.flag_monster:
                 rnd = random.random()
                 if rnd < 0.005:
                     self.monster()
@@ -205,8 +211,8 @@ class App:
             pygame.quit()
 
     def monster(self):
-        monster_ = Monster(250, -400)
-        self.monsters.append(monster_)
+        monster = Monster(250, -400)
+        self.monsters.append(monster)
         self.flag_monster = False
 
     @staticmethod
