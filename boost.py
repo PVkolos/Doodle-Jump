@@ -8,6 +8,9 @@ class Boost(pygame.sprite.Sprite):
         self.y = y
         self.size = 80
 
+    def update(self) -> None:
+        pass
+
 
 class StaticBoost(Boost):
     def __init__(self, x, y, *groups):
@@ -31,6 +34,7 @@ class RedBoost(Boost):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+        self.fall_speed = 5
 
     def play_sound(self):
         if self.is_destroyed:
@@ -38,6 +42,10 @@ class RedBoost(Boost):
         else:
             self.sound.play()
             self.is_destroyed = True
+
+    def update(self) -> None:
+        if self.is_destroyed:
+            self.y += self.fall_speed
 
 
 class FederBoost(Boost):
@@ -60,7 +68,7 @@ class FederBoost(Boost):
         else:
             self.sound.play()
 
-    def get_image(self):
+    def get_image(self) -> str:
         if self.is_feder:
             self.image_spring = self.spring_image2
         else:
@@ -82,7 +90,7 @@ class MovementBoost(Boost):
     def play_sound(self):
         self.sound.play()
 
-    def update(self):
+    def update(self) -> None:
         if self.x < 55:
             self.left = False
             self.right = True
@@ -94,4 +102,3 @@ class MovementBoost(Boost):
             self.x -= 5
         else:
             self.x += 5
-

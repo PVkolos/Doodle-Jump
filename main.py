@@ -7,10 +7,11 @@ class App:
         pygame.init()
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
-        self.screen = pygame.display.set_mode((600, 800))
+        self.screen = pygame.display.set_mode((600, 750))
         self.bg = pygame.image.load("images/bg.jpg")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
+        self.pause_screen = pygame.image.load('images/pause.png')
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
@@ -29,9 +30,8 @@ class App:
 
     def draw(self, boosts, bullets):
         for boost in boosts:
-            if type(boost) == MovementBoost:
-                boost.update()
-            elif type(boost) == FederBoost:
+            boost.update()
+            if type(boost) == FederBoost:
                 self.screen.blit(boost.get_image(), (boost.x - 60 / 2 + 30, boost.y - 35))
             self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
         for bullet in bullets:
@@ -57,17 +57,17 @@ class App:
                         a -= 1
                     else:
                         break
-                rndm = random.random()
-                if rndm > 0.4:
-                    bst = StaticBoost(coord[0], coord[1])
-                elif rndm > 0.2:
+                bst = StaticBoost(coord[0], coord[1])
+                if random.random() > 0.5:
+                    if random.random() > 0.7:
+                        bst = FederBoost(random.randint(100, 200), coord[1] + 5)
+                    else:
+                        bst = StaticBoost(coord[0], coord[1])
+                elif random.random() > 0.7:
                     bst = RedBoost(coord[0], coord[1])
-                elif rndm > 0.1:
+                elif random.random() > 0.9:
                     bst = MovementBoost(coord[0], coord[1])
-                else:
-                    bst = FederBoost(random.randint(100, 200), coord[1] + 5)
                 self.boosts.append(bst)
-
         if self.pl.rect.x < -80:
             self.pl.rect.x = 580
         elif self.pl.rect.x > 680:
@@ -238,14 +238,14 @@ class App:
                 if keys[pygame.K_2]:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
-                font = pygame.font.SysFont("al seana", 72)
-                text_paused = font.render("PAUSED", True, (255, 0, 0))
-                font = pygame.font.SysFont("al seana", 72)
-                best_players = font.render("BEST PLAYERS", True, (255, 0, 0))
-                self.screen.blit(text_paused, (210, 250))
-                self.screen.blit(best_players, (130, 340))
-                pygame.draw.rect(self.screen, (255, 255, 255),
-                                 (150, 420, 300, 180))
+                self.screen.blit(self.pause_screen, (0, 0))
+                # font = pygame.font.SysFont("al seana", 72)
+                # text_paused = font.render("PAUSED", True, (255, 0, 0))
+                # font = pygame.font.SysFont("al seana", 72)
+                # best_players = font.render("BEST PLAYERS", True, (255, 0, 0))
+                # self.screen.blit(text_paused, (210, 250))
+                # self.screen.blit(best_players, (130, 340))
+                # pygame.draw.rect(self.screen, (255, 255, 255), (150, 420, 300, 180))
                 pygame.display.flip()
 
 
