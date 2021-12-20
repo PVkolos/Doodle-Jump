@@ -31,9 +31,7 @@ class App:
     def draw(self, boosts, bullets):
         for boost in boosts:
             boost.update()
-            if type(boost) == FederBoost:
-                self.screen.blit(boost.get_image(), (boost.x - 60 / 2 + 30, boost.y - 35))
-            self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
+            boost.draw(self.screen)
         for bullet in bullets:
             self.screen.blit(bullet.image, (bullet.rect.x, bullet.rect.y))
             bullet.update()
