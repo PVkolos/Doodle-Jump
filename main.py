@@ -37,12 +37,7 @@ class App:
             bullet.draw(self.screen)
         for monster in self.monsters:
             monster.update()
-            if pygame.sprite.collide_mask(monster, self.pl):
-                self.game_over()
-            self.screen.blit(monster.image, (monster.rect.x, monster.rect.y))
-            if monster.rect.y > 800:
-                del self.monsters[0]
-                self.flag_monster = True
+            monster.draw(self.screen)
 
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
@@ -63,6 +58,8 @@ class App:
                         a -= 1
                     else:
                         break
+                if not self.flag_monster and pygame.sprite.collide_mask(self.monsters[0], self.pl):
+                    self.game_over()
                 bst = StaticBoost(coord[0], coord[1])
                 if random.random() > 0.5:
                     if random.random() > 0.7:
@@ -88,6 +85,9 @@ class App:
         for i in range(len(a)):
             if a[i].rect.y < -100:
                 del self.bullets[i]
+        if not self.flag_monster and self.monsters[0].rect.y > 800:
+            del self.monsters[0]
+            self.flag_monster = True
 
     def get_fps(self):
         f2 = pygame.font.SysFont('al seana', 14)
@@ -132,6 +132,11 @@ class App:
             pygame.display.flip()
 
     def new_game_over(self):
+        y = self.screen.get_size()[1]
+
+        def check(boost):
+            if boost.y < 0:
+                del self.boosts[self.boosts.index(boost)]
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -139,6 +144,22 @@ class App:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE]:
                     self.restart()
+            self.clock.tick(60)
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(self.bg, (0, 0))
+            self.pl.draw(self.screen)
+            if self.boosts:
+                self.draw(self.boosts, self.bullets)
+                for i in self.boosts:
+                    i.y -= 20
+                    check(i)
+                pygame.display.flip()
+                continue
+            if y > -10:
+                self.screen.blit(self.game_over_bg, (0, y))
+                y -= 20
+                self.pl.draw(self.screen)
+                pygame.display.flip()
 
     def get_score(self):
         if self.cntr < 6:
@@ -206,7 +227,7 @@ class App:
             self.lose_sound.play()
         if not self.flag:
             self.running = True
-            self.game_over()
+            self.new_game_over()
         else:
             pygame.quit()
 
