@@ -33,8 +33,8 @@ class App:
             boost.update()
             boost.draw(self.screen)
         for bullet in bullets:
-            self.screen.blit(bullet.image, (bullet.rect.x, bullet.rect.y))
             bullet.update()
+            bullet.draw(self.screen)
 
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
