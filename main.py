@@ -30,9 +30,8 @@ class App:
 
     def draw(self, boosts, bullets):
         for boost in boosts:
-            if type(boost) == MovementBoost:
-                boost.update()
-            elif type(boost) == FederBoost:
+            boost.update()
+            if type(boost) == FederBoost:
                 self.screen.blit(boost.get_image(), (boost.x - 60 / 2 + 30, boost.y - 35))
             self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
         for bullet in bullets:
