@@ -84,6 +84,9 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         self.rect.y -= self.speed
 
+    def draw(self, screen):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
 
 class Monster(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):
