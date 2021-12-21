@@ -116,23 +116,6 @@ class App:
                     break
 
     def game_over(self):
-        while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    exit()
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_SPACE]:
-                    self.restart()
-            self.screen.fill((0, 0, 0))
-            self.get_score()
-            self.screen.blit(self.game_over_bg, (0, 0))
-            f2 = pygame.font.SysFont('al seana', 30)
-            text2 = f2.render(str(self.score), False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (350, 400))
-            pygame.display.flip()
-
-    def new_game_over(self):
         y = self.screen.get_size()[1]
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(str(self.score), False,
@@ -236,7 +219,7 @@ class App:
             self.lose_sound.play()
         if not self.flag:
             self.running = True
-            self.new_game_over()
+            self.game_over()
         else:
             pygame.quit()
 
