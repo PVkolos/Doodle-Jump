@@ -134,6 +134,9 @@ class App:
 
     def new_game_over(self):
         y = self.screen.get_size()[1]
+        f2 = pygame.font.SysFont('al seana', 30)
+        text2 = f2.render(str(self.score), False,
+                          (255, 0, 0))
 
         def check(boost):
             if boost.y < 0:
@@ -150,16 +153,21 @@ class App:
             self.screen.blit(self.bg, (0, 0))
             self.pl.draw(self.screen)
             if self.boosts:
-                self.draw(self.boosts, self.bullets)
                 for i in self.boosts:
                     i.y -= 20
+                    i.draw(self.screen)
                     check(i)
-                pygame.display.flip()
+                    pygame.display.flip()
                 continue
             if y > -10:
                 self.screen.blit(self.game_over_bg, (0, y))
+                self.screen.blit(text2, (350, y + 407))
                 y -= 20
                 self.pl.draw(self.screen)
+                pygame.display.flip()
+            else:
+                self.screen.blit(self.game_over_bg, (0, 0))
+                self.screen.blit(text2, (350, y + 415))
                 pygame.display.flip()
 
     def get_score(self):
