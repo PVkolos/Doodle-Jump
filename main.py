@@ -1,4 +1,7 @@
 import random
+
+import pygame.display
+
 from player import *
 
 
@@ -140,7 +143,7 @@ class App:
                     i.y -= 20
                     i.draw(self.screen)
                     check(i)
-                    pygame.display.flip()
+                pygame.display.flip()
                 continue
             if y > -10:
                 self.screen.blit(self.game_over_bg, (0, y))
