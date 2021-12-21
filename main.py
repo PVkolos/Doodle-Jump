@@ -24,7 +24,7 @@ class App:
         self.cc = 0
         self.n_boosts = 20
         self.flag = True
-        self.playername = ''
+        self.player_name = ''
         self.pause_flag = False
         self.running = True
         self.flag_monster = True
@@ -239,7 +239,7 @@ class App:
             self.screen.blit(self.start_screen, (0, 0))
             pygame.draw.rect(self.screen, (255, 255, 255), (150, 450, 300, 60))
             font = pygame.font.SysFont("al seana", 62)
-            best_players = font.render(self.playername, True, (255, 0, 0))
+            best_players = font.render(self.player_name, True, (255, 0, 0))
             self.screen.blit(best_players, (160, 440))
             pygame.display.flip()
             for event in pygame.event.get():
@@ -252,12 +252,12 @@ class App:
                     if event.key == pygame.K_RETURN:
                         self.start_sound.play()
                         self.start()
-                        print(self.playername)
+                        print(self.player_name)
                     if event.key == pygame.K_BACKSPACE:
-                        self.playername = self.playername[:-1]
+                        self.player_name = self.player_name[:-1]
                     else:
-                        if len(self.playername) < 12:
-                            self.playername += event.unicode
+                        if len(self.player_name) < 12:
+                            self.player_name += event.unicode
 
     def pause(self):
         while self.pause_flag and self.running:
