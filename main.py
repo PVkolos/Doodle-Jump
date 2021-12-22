@@ -8,10 +8,12 @@ from player import *
 class App:
     def __init__(self):
         pygame.init()
+        if 1:
+            img = 'ice'
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
-        self.bg = pygame.image.load("images/bg.png")
+        self.bg = pygame.image.load(f"images/{img}/bg.png")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.png")
         self.pause_screen = pygame.image.load('images/pause.png')

@@ -5,11 +5,13 @@ from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, *groups):
         super().__init__(*groups)
+        if 1:
+            img = 'ice'
         self.width = 60
-        self.pl_right = pygame.image.load("images/right_1.png").convert_alpha()
-        self.pl_left = pygame.image.load("images/left_1.png").convert_alpha()
-        self.pl_left_pr = pygame.image.load("images/left.png").convert_alpha()
-        self.pl_right_pr = pygame.image.load("images/right.png").convert_alpha()
+        self.pl_right = pygame.image.load(f"images/{img}/right_1.png").convert_alpha()
+        self.pl_left = pygame.image.load(f"images/{img}/left_1.png").convert_alpha()
+        self.pl_left_pr = pygame.image.load(f"images/{img}/left.png").convert_alpha()
+        self.pl_right_pr = pygame.image.load(f"images/{img}/right.png").convert_alpha()
         self.image = self.pl_right
         self.jump = False
         self.screen = screen
