@@ -7,9 +7,13 @@ class Boost(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.size = 80
+        self.image = pygame.image.load('images/green.png').convert_alpha()
 
     def update(self) -> None:
         pass
+
+    def draw(self, screen: pygame.Surface):
+        screen.blit(self.image, (self.x - 60 / 2, self.y))
 
 
 class StaticBoost(Boost):
@@ -51,7 +55,6 @@ class RedBoost(Boost):
 class FederBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.image_spring = None
         self.image = pygame.image.load("images/green.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3')
@@ -68,12 +71,15 @@ class FederBoost(Boost):
         else:
             self.sound.play()
 
-    def get_image(self) -> str:
+    def get_image(self) -> pygame.Surface:
+        image_spring = self.spring_image
         if self.is_feder:
-            self.image_spring = self.spring_image2
-        else:
-            self.image_spring = self.spring_image
-        return self.image_spring
+            image_spring = self.spring_image2
+        return image_spring
+
+    def draw(self, screen: pygame.Surface):
+        screen.blit(self.get_image(), (self.x - 60 / 2 + 30, self.y - 35))
+        screen.blit(self.image, (self.x - 60 / 2, self.y))
 
 
 class MovementBoost(Boost):

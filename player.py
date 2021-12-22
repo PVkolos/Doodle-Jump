@@ -65,6 +65,9 @@ class Player(pygame.sprite.Sprite):
         self.shoot_pass = 60
         return Bullet(self.rect.x, self.rect.y - 82)
 
+    def draw(self, screen: pygame.Surface):
+        screen.blit(self.image, (self.rect.x, self.rect.y - 82))
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):
@@ -83,6 +86,9 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y -= self.speed
+
+    def draw(self, screen):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
 
 
 class Monster(pygame.sprite.Sprite):
@@ -115,3 +121,6 @@ class Monster(pygame.sprite.Sprite):
         else:
             self.rect.x += 5
         self.i += 1
+
+    def draw(self, screen: pygame.Surface):
+        screen.blit(self.image, (self.rect.x, self.rect.y))

@@ -1,4 +1,7 @@
 import random
+
+import pygame.display
+
 from player import *
 
 
@@ -8,9 +11,9 @@ class App:
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
-        self.bg = pygame.image.load("images/bg.png")
+        self.bg = pygame.image.load("images/bg.jpg")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
-        self.start_screen = pygame.image.load("images/start_screen_bg.png")
+        self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
         self.pause_screen = pygame.image.load('images/pause.png')
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
@@ -24,19 +27,21 @@ class App:
         self.cc = 0
         self.n_boosts = 20
         self.flag = True
+        self.player_name = ''
         self.pause_flag = False
         self.running = True
         self.flag_monster = True
 
-    def draw(self, boosts, bullets):
+    def draw(self, boosts: list, bullets: list):
         for boost in boosts:
             boost.update()
-            if type(boost) == FederBoost:
-                self.screen.blit(boost.get_image(), (boost.x - 60 / 2 + 30, boost.y - 35))
-            self.screen.blit(boost.image, (boost.x - 60 / 2, boost.y))
+            boost.draw(self.screen)
         for bullet in bullets:
-            self.screen.blit(bullet.image, (bullet.rect.x, bullet.rect.y))
             bullet.update()
+            bullet.draw(self.screen)
+        for monster in self.monsters:
+            monster.update()
+            monster.draw(self.screen)
 
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
@@ -57,6 +62,8 @@ class App:
                         a -= 1
                     else:
                         break
+                if not self.flag_monster and pygame.sprite.collide_mask(self.monsters[0], self.pl):
+                    self.game_over()
                 bst = StaticBoost(coord[0], coord[1])
                 if random.random() > 0.5:
                     if random.random() > 0.7:
@@ -82,6 +89,9 @@ class App:
         for i in range(len(a)):
             if a[i].rect.y < -100:
                 del self.bullets[i]
+        if not self.flag_monster and self.monsters[0].rect.y > 800:
+            del self.monsters[0]
+            self.flag_monster = True
 
     def get_fps(self):
         f2 = pygame.font.SysFont('al seana', 14)
@@ -93,7 +103,7 @@ class App:
         pass
 
     @staticmethod
-    def check_collision(items, item):
+    def check_collision(items, item) -> bool:
         for i in items:
             if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
                 return True
@@ -109,6 +119,14 @@ class App:
                     break
 
     def game_over(self):
+        y = self.screen.get_size()[1]
+        f2 = pygame.font.SysFont('al seana', 30)
+        text2 = f2.render(str(self.score), False,
+                          (255, 0, 0))
+
+        def check(boost):
+            if boost.y < 0:
+                del self.boosts[self.boosts.index(boost)]
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -116,14 +134,27 @@ class App:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE]:
                     self.restart()
+            self.clock.tick(60)
             self.screen.fill((0, 0, 0))
-            self.get_score()
-            self.screen.blit(self.game_over_bg, (0, 0))
-            f2 = pygame.font.SysFont('al seana', 30)
-            text2 = f2.render(str(self.score), False,
-                              (255, 0, 0))
-            self.screen.blit(text2, (350, 400))
-            pygame.display.flip()
+            self.screen.blit(self.bg, (0, 0))
+            self.pl.draw(self.screen)
+            if self.boosts:
+                for i in self.boosts:
+                    i.y -= 20
+                    i.draw(self.screen)
+                    check(i)
+                pygame.display.flip()
+                continue
+            if y > -10:
+                self.screen.blit(self.game_over_bg, (0, y))
+                self.screen.blit(text2, (350, y + 407))
+                y -= 20
+                self.pl.draw(self.screen)
+                pygame.display.flip()
+            else:
+                self.screen.blit(self.game_over_bg, (0, 0))
+                self.screen.blit(text2, (350, y + 415))
+                pygame.display.flip()
 
     def get_score(self):
         if self.cntr < 6:
@@ -142,16 +173,6 @@ class App:
                           (255, 0, 0))
         self.screen.blit(text2, (450, 10))
 
-    def draw_monster(self):
-        for monster in self.monsters:
-            monster.update()
-            if pygame.sprite.collide_mask(monster, self.pl):
-                self.game_over()
-            self.screen.blit(monster.image, (monster.rect.x, monster.rect.y))
-            if monster.rect.y > 800:
-                del self.monsters[0]
-                self.flag_monster = True
-
     def functions(self):
         self.clock.tick(60)
         self.check_play()
@@ -161,7 +182,6 @@ class App:
         self.get_fps()
         self.set_score()
         self.check_collision_monster_bullet()
-        self.draw_monster()
 
     def start(self):
         x = True
@@ -194,7 +214,7 @@ class App:
                 self.flag = False
                 break
             pygame.display.flip()
-            if self.score > 3000 and self.flag_monster:
+            if self.score > 9000 and self.flag_monster:
                 rnd = random.random()
                 if rnd < 0.005:
                     self.monster()
@@ -207,8 +227,8 @@ class App:
             pygame.quit()
 
     def monster(self):
-        monster_ = Monster(250, -400)
-        self.monsters.append(monster_)
+        monster = Monster(250, -400)
+        self.monsters.append(monster)
         self.flag_monster = False
 
     @staticmethod
@@ -220,6 +240,10 @@ class App:
         while True:
             self.cc = 1
             self.screen.blit(self.start_screen, (0, 0))
+            pygame.draw.rect(self.screen, (255, 255, 255), (150, 450, 300, 60))
+            font = pygame.font.SysFont("al seana", 62)
+            best_players = font.render(self.player_name, True, (255, 0, 0))
+            self.screen.blit(best_players, (160, 440))
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -228,6 +252,15 @@ class App:
                     if event.key == pygame.K_SPACE:
                         self.start_sound.play()
                         self.start()
+                    if event.key == pygame.K_RETURN:
+                        self.start_sound.play()
+                        self.start()
+                        print(self.player_name)
+                    if event.key == pygame.K_BACKSPACE:
+                        self.player_name = self.player_name[:-1]
+                    else:
+                        if len(self.player_name) < 12:
+                            self.player_name += event.unicode
 
     def pause(self):
         while self.pause_flag and self.running:
