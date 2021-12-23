@@ -102,10 +102,11 @@ class App:
         self.screen.blit(text2, (10, 10))
 
     def get_results(self):
-        with open('results.csv', 'a', newline='') as f_object:
-            writer_object = writer(f_object)
-            writer_object.writerow([self.player_name, self.score])
-            f_object.close()
+        if self.player_name != '':
+            with open('results.csv', 'a', newline='') as f_object:
+                writer_object = writer(f_object)
+                writer_object.writerow([self.player_name, self.score])
+                f_object.close()
 
     @staticmethod
     def check_collision(items, item) -> bool:
@@ -291,4 +292,3 @@ class App:
 if __name__ == '__main__':
     app = App()
     app.start()
- 
