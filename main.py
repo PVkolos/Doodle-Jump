@@ -120,9 +120,36 @@ class App:
                     writer_object = writer(f_object)
                     writer_object.writerow([self.player_name, self.score])
                     f_object.close()
+
     
-    def bestplayers(self):
-        pass
+    def best_players_sort(self):
+        all = []
+        k = 0
+        scr = []
+        r = csv.reader(open('results.csv'))
+        for i in list(r):
+            all.append(i[0])
+            all.append(int(i[1]))
+        for j in all:
+            if k % 2 == 1:
+                scr.append(int(j))
+            k += 1
+        scr = sorted(scr)
+        try:
+            best1 = (scr[-1], all[all.index(scr[-1]) - 1])
+            print('1:', best1)
+        except:
+            pass
+        try:
+            best2 = (scr[-2], all[all.index(scr[-2]) - 1])
+            print('2:', best2)
+        except:
+            pass
+        try:
+            best3 = (scr[-3], all[all.index(scr[-3]) - 1])
+            print('3:', best3)
+        except:
+            pass
 
     @staticmethod
     def check_collision(items, item) -> bool:
@@ -146,6 +173,7 @@ class App:
         text2 = f2.render(str(self.score), False,
                           (255, 0, 0))
         self.get_results()
+        self.best_players_sort()
 
         def check(boost):
             if boost.y < 0:
