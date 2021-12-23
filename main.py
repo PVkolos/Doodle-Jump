@@ -1,6 +1,6 @@
 import random
 
-import csv
+from csv import writer
 
 import pygame.display
 
@@ -102,9 +102,10 @@ class App:
         self.screen.blit(text2, (10, 10))
 
     def get_results(self):
-        with open("results.csv", mode="w", encoding='utf-8') as w_file:
-            file_writer = csv.writer(w_file, delimiter=",", lineterminator="\r")
-            file_writer.writerow([self.player_name, self.score])
+        with open('results.csv', 'a', newline='') as f_object:
+            writer_object = writer(f_object)
+            writer_object.writerow([self.player_name, self.score])
+            f_object.close()
 
     @staticmethod
     def check_collision(items, item) -> bool:
