@@ -1,5 +1,7 @@
 import random
 
+import csv
+
 import pygame.display
 
 from player import *
@@ -100,7 +102,9 @@ class App:
         self.screen.blit(text2, (10, 10))
 
     def get_results(self):
-        pass
+        with open("results.csv", mode="w", encoding='utf-8') as w_file:
+            file_writer = csv.writer(w_file, delimiter=",", lineterminator="\r")
+            file_writer.writerow([self.player_name, self.score])
 
     @staticmethod
     def check_collision(items, item) -> bool:
@@ -123,6 +127,7 @@ class App:
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(str(self.score), False,
                           (255, 0, 0))
+        self.get_results()
 
         def check(boost):
             if boost.y < 0:
