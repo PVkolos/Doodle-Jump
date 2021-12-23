@@ -120,6 +120,9 @@ class App:
                     writer_object = writer(f_object)
                     writer_object.writerow([self.player_name, self.score])
                     f_object.close()
+    
+    def bestplayers(self):
+        pass
 
     @staticmethod
     def check_collision(items, item) -> bool:
