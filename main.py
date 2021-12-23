@@ -136,18 +136,34 @@ class App:
             k += 1
         scr = sorted(scr)
         try:
-            best1 = (scr[-1], all[all.index(scr[-1]) - 1])
-            print('1:', best1)
+            self.best1 = (scr[-1], all[all.index(scr[-1]) - 1])
         except:
             pass
         try:
-            best2 = (scr[-2], all[all.index(scr[-2]) - 1])
-            print('2:', best2)
+            self.best2 = (scr[-2], all[all.index(scr[-2]) - 1])
         except:
             pass
         try:
-            best3 = (scr[-3], all[all.index(scr[-3]) - 1])
-            print('3:', best3)
+            self.best3 = (scr[-3], all[all.index(scr[-3]) - 1])
+        except:
+            pass
+
+    def best_players_draw(self):
+        font = pygame.font.SysFont("al seana", 32)
+        self.best_players_sort()
+        try:
+            best_player1 = font.render("1: " + str(self.best1), True, (255, 0, 0))
+            self.screen.blit(best_player1, (130, 250))
+        except:
+            pass
+        try:
+            best_player2 = font.render("2: " + str(self.best2), True, (255, 0, 0))
+            self.screen.blit(best_player2, (130, 280))
+        except:
+            pass
+        try:
+            best_player3 = font.render("3: " + str(self.best3), True, (255, 0, 0))
+            self.screen.blit(best_player3, (130, 310))
         except:
             pass
 
@@ -323,13 +339,7 @@ class App:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
                 self.screen.blit(self.pause_screen, (0, 0))
-                # font = pygame.font.SysFont("al seana", 72)
-                # text_paused = font.render("PAUSED", True, (255, 0, 0))
-                # font = pygame.font.SysFont("al seana", 72)
-                # best_players = font.render("BEST PLAYERS", True, (255, 0, 0))
-                # self.screen.blit(text_paused, (210, 250))
-                # self.screen.blit(best_players, (130, 340))
-                # pygame.draw.rect(self.screen, (255, 255, 255), (150, 420, 300, 180))
+                self.best_players_draw()
                 pygame.display.flip()
 
 
