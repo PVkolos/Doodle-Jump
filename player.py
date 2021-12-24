@@ -62,6 +62,12 @@ class Player(pygame.sprite.Sprite):
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.rect.x, self.rect.y - 82))
 
+    def update_images(self):
+        self.pl_right = pygame.image.load(get_image('right_1.png')).convert_alpha()
+        self.pl_left = pygame.image.load(get_image('left_1.png')).convert_alpha()
+        self.pl_left_pr = pygame.image.load(get_image('left.png')).convert_alpha()
+        self.pl_right_pr = pygame.image.load(get_image('right.png')).convert_alpha()
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):

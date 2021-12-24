@@ -227,8 +227,10 @@ class App:
                 self.pause()
             if keys[pygame.K_3]:
                 image_manager.is_snow = True
+                self.pl.update_images()
             if keys[pygame.K_4]:
                 image_manager.is_snow = False
+                self.pl.update_images()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.rect.x -= 5
