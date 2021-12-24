@@ -130,18 +130,21 @@ class App:
         all = []
         k = 0
         scr = []
-        try:
-            r = csv.reader(open('results.csv'))
-            for i in list(r):
+        r = csv.reader(open('results.csv'))
+        for i in list(r):
+            try:
                 all.append(i[0])
                 all.append(int(i[1]))
-            for j in all:
+            except:
+                pass
+        for j in all:
+            try:
                 if k % 2 == 1:
                     scr.append(int(j))
                 k += 1
-            scr = sorted(scr)
-        except:
-            pass
+            except:
+                pass
+        scr = sorted(scr)
         try:
             self.best1 = (scr[-1], all[all.index(scr[-1]) - 1])
         except:
