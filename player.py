@@ -1,14 +1,15 @@
 import pygame
+from image_manager import get_image
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, *groups):
         super().__init__(*groups)
         self.width = 60
-        self.pl_right = pygame.image.load("images/classic/right_1.png").convert_alpha()
-        self.pl_left = pygame.image.load("images/classic/left_1.png").convert_alpha()
-        self.pl_left_pr = pygame.image.load("images/classic/left.png").convert_alpha()
-        self.pl_right_pr = pygame.image.load("images/classic/right.png").convert_alpha()
+        self.pl_right = pygame.image.load(get_image('right_1.png')).convert_alpha()
+        self.pl_left = pygame.image.load(get_image('left_1.png')).convert_alpha()
+        self.pl_left_pr = pygame.image.load(get_image('left.png')).convert_alpha()
+        self.pl_right_pr = pygame.image.load(get_image('right.png')).convert_alpha()
         self.image = self.pl_right
         self.is_jump = False
         self.screen = screen

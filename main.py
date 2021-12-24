@@ -3,6 +3,7 @@ import pygame.display
 from static import *
 from player import *
 from boost import *
+from image_manager import *
 
 
 class App:
@@ -11,7 +12,7 @@ class App:
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
-        self.bg = pygame.image.load("images/classic/bg.png")
+        self.bg = pygame.image.load(get_image('bg.png'))
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.png")
         self.pause_screen = pygame.image.load('images/pause.png')
@@ -27,18 +28,10 @@ class App:
         self.cc = 0
         self.n_boosts = 20
         self.flag = True
-        self.flagtheme = True
         self.player_name = ''
         self.pause_flag = False
         self.running = True
         self.flag_monster = True
-        self.themechangerusual()
-
-    def themechangerusual(self):
-        self.bg = pygame.image.load("images/classic/bg.png")
-    
-    def themechangerny(self):
-        self.bg = pygame.image.load("images/nybg.png")  
 
     def draw(self, boosts: list, bullets: list):
         for boost in boosts:
@@ -231,9 +224,9 @@ class App:
                 self.pause_flag = True
                 self.pause()
             if keys[pygame.K_3]:
-                self.themechangerusual()
+                set_snow(True)
             if keys[pygame.K_4]:
-                self.themechangerny()
+                set_snow(False)
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.rect.x -= 5

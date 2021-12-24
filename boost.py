@@ -1,4 +1,5 @@
 import pygame
+from image_manager import get_image
 
 
 class Boost(pygame.sprite.Sprite):
@@ -7,7 +8,7 @@ class Boost(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.size = 80
-        self.image = pygame.image.load('images/classic/static_b.png').convert_alpha()
+        self.image = pygame.image.load(get_image('static_b.png')).convert_alpha()
         self.jump_range = 200
         self.jump_speed = 5
 
@@ -36,8 +37,8 @@ class StaticBoost(Boost):
 class RedBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.image = pygame.image.load("images/classic/red_b.png").convert_alpha()
-        self.destroy_image = pygame.image.load('images/classic/red3_b.png').convert_alpha()
+        self.image = pygame.image.load(get_image('red_b.png')).convert_alpha()
+        self.destroy_image = pygame.image.load(get_image('red3_b.png')).convert_alpha()
         self.is_destroyed = False
         self.sound = pygame.mixer.Sound('sfx/break.mp3')
         self.rect = self.image.get_rect()
@@ -94,7 +95,7 @@ class FederBoost(Boost):
 class MovementBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.image = pygame.image.load("images/classic/move_b.png").convert_alpha()
+        self.image = pygame.image.load(get_image('move_b.png')).convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.right = True
         self.left = True
