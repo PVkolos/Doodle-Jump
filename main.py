@@ -272,10 +272,10 @@ class App:
         name_text = font.render('name: ', True, (0, 0, 0))
         if self.player_name == '':
             enter_name = font.render('enter name', True, (128, 128, 128))
-            self.screen.blit(enter_name, (260, 440))
+            self.screen.blit(enter_name, (260, 360))
         player_name_text = font.render(self.player_name, True, (0, 0, 0))
-        self.screen.blit(player_name_text, (260, 440))
-        self.screen.blit(name_text, (140, 440))
+        self.screen.blit(player_name_text, (260, 360))
+        self.screen.blit(name_text, (140, 360))
 
     def start_scrn(self):
         while True:
