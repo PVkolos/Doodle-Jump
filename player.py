@@ -5,10 +5,10 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, screen, *groups):
         super().__init__(*groups)
         self.width = 60
-        self.pl_right = pygame.image.load("images/right_1.png").convert_alpha()
-        self.pl_left = pygame.image.load("images/left_1.png").convert_alpha()
-        self.pl_left_pr = pygame.image.load("images/left.png").convert_alpha()
-        self.pl_right_pr = pygame.image.load("images/right.png").convert_alpha()
+        self.pl_right = pygame.image.load("images/classic/right_1.png").convert_alpha()
+        self.pl_left = pygame.image.load("images/classic/left_1.png").convert_alpha()
+        self.pl_left_pr = pygame.image.load("images/classic/left.png").convert_alpha()
+        self.pl_right_pr = pygame.image.load("images/classic/right.png").convert_alpha()
         self.image = self.pl_right
         self.is_jump = False
         self.screen = screen

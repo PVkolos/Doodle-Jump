@@ -7,7 +7,7 @@ class Boost(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.size = 80
-        self.image = pygame.image.load('images/green.png').convert_alpha()
+        self.image = pygame.image.load('images/classic/static_b.png').convert_alpha()
         self.jump_range = 200
         self.jump_speed = 5
 
@@ -24,7 +24,6 @@ class Boost(pygame.sprite.Sprite):
 class StaticBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.image = pygame.image.load("images/green.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -37,8 +36,8 @@ class StaticBoost(Boost):
 class RedBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.image = pygame.image.load("images/red.png").convert_alpha()
-        self.destroy_image = pygame.image.load('images/red_1.png').convert_alpha()
+        self.image = pygame.image.load("images/classic/red_b.png").convert_alpha()
+        self.destroy_image = pygame.image.load('images/classic/red3_b.png').convert_alpha()
         self.is_destroyed = False
         self.sound = pygame.mixer.Sound('sfx/break.mp3')
         self.rect = self.image.get_rect()
@@ -64,7 +63,6 @@ class RedBoost(Boost):
 class FederBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.image = pygame.image.load("images/green.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.feder_sound = pygame.mixer.Sound('sfx/feder.mp3')
         self.spring_image = pygame.image.load("images/spring_comp.png").convert_alpha()
@@ -96,7 +94,7 @@ class FederBoost(Boost):
 class MovementBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.image = pygame.image.load("images/blue.png").convert_alpha()
+        self.image = pygame.image.load("images/classic/move_b.png").convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.right = True
         self.left = True
