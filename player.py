@@ -1,5 +1,4 @@
 import pygame
-from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
 
 
 class Player(pygame.sprite.Sprite):
