@@ -1,8 +1,4 @@
 import random
-
-from csv import writer
-
-import csv
 import pygame.display
 from static import *
 from player import *
@@ -103,80 +99,6 @@ class App:
         self.screen.blit(text2, (10, 10))
 
     def get_results(self):
-        flag = True
-        r = csv.reader(open('results.csv'))
-        lines = list(r)
-        for i in lines:
-            print(i)
-            try:
-                if i[0] == self.player_name:
-                    flag = False
-                    if int(i[1]) < self.score:
-                        i[1] = self.score
-                        writerr = csv.writer(open('results.csv', 'w'))
-                        writerr.writerows(lines)
-            except:
-                pass
-
-        if flag:
-            if self.player_name != '':
-                with open('results.csv', 'a', newline='') as f_object:
-                    writer_object = writer(f_object)
-                    writer_object.writerow([self.player_name, self.score])
-                    f_object.close()
-
-    def best_players_sort(self):
-        all = []
-        k = 0
-        scr = []
-        r = csv.reader(open('results.csv'))
-        for i in list(r):
-            try:
-                all.append(i[0])
-                all.append(int(i[1]))
-            except:
-                pass
-        for j in all:
-            try:
-                if k % 2 == 1:
-                    scr.append(int(j))
-                k += 1
-            except:
-                pass
-        scr = sorted(scr)
-        try:
-            self.best1 = (scr[-1], all[all.index(scr[-1]) - 1])
-        except:
-            pass
-        try:
-            self.best2 = (scr[-2], all[all.index(scr[-2]) - 1])
-        except:
-            pass
-        try:
-            self.best3 = (scr[-3], all[all.index(scr[-3]) - 1])
-        except:
-            pass
-
-    def best_players_draw(self):
-        font = pygame.font.SysFont("al seana", 32)
-        self.best_players_sort()
-        try:
-            best_player1 = font.render("1: " + str(self.best1), True, (0, 0, 0))
-            self.screen.blit(best_player1, (130, 250))
-        except:
-            pass
-        try:
-            best_player2 = font.render("2: " + str(self.best2), True, (0, 0, 0))
-            self.screen.blit(best_player2, (130, 280))
-        except:
-            pass
-        try:
-            best_player3 = font.render("3: " + str(self.best3), True, (0, 0, 0))
-            self.screen.blit(best_player3, (130, 310))
-        except:
-            pass
-
-    def new_get_results(self):
         results = results_loader()
         if self.player_name:
             if self.player_name in results:
@@ -218,9 +140,7 @@ class App:
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(str(self.score), False,
                           (255, 0, 0))
-        # self.get_results()
-        self.new_get_results()
-        # self.best_players_sort()
+        self.get_results()
 
         def check(boost):
             if boost.y < 0:
@@ -377,7 +297,6 @@ class App:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
                 self.screen.blit(self.pause_screen, (0, 0))
-                #self.best_players_draw()
                 self.set_results()
                 pygame.display.flip()
 
