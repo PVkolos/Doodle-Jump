@@ -116,7 +116,11 @@ class App:
     def set_results(self):
         font = pygame.font.SysFont("al seana", 32)
         results = results_loader()
-        for i in range(1, len(results) + 1):
+        if len(results) > 3:
+            a = 3
+        else:
+            a = len(results)
+        for i in range(1, a + 1):
             res = list(results.keys())[-i]
             self.screen.blit(font.render(f'{i}.{res}: {results.get(res)}', True, (0, 0, 0)), (130, 210 + 30 * i))
 
