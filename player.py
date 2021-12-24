@@ -5,7 +5,8 @@ from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, *groups):
         super().__init__(*groups)
-        if 1:
+        img = 'classic'
+        if 0:
             img = 'ice'
         self.width = 60
         self.pl_right = pygame.image.load(f"images/{img}/right_1.png").convert_alpha()

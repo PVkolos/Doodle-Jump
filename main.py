@@ -8,7 +8,8 @@ from player import *
 class App:
     def __init__(self):
         pygame.init()
-        if 1:
+        img = 'classic'
+        if 0:
             img = 'ice'
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
