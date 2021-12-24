@@ -1,22 +1,19 @@
 import random
-
 import pygame.display
-
+from static import *
 from player import *
+from boost import *
 
 
 class App:
     def __init__(self):
         pygame.init()
-        img = 'classic'
-        if 0:
-            img = 'ice'
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
-        self.bg = pygame.image.load(f"images/{img}/bg.png")
+        self.bg = pygame.image.load("images/bg.jpg")
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
-        self.start_screen = pygame.image.load("images/start_screen_bg.png")
+        self.start_screen = pygame.image.load("images/start_screen_bg.jpg")
         self.pause_screen = pygame.image.load('images/pause.png')
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
@@ -30,10 +27,18 @@ class App:
         self.cc = 0
         self.n_boosts = 20
         self.flag = True
+        self.flagtheme = True
         self.player_name = ''
         self.pause_flag = False
         self.running = True
         self.flag_monster = True
+        self.themechangerusual()
+
+    def themechangerusual(self):
+        self.bg = pygame.image.load("images/bg.jpg")
+    
+    def themechangerny(self):
+        self.bg = pygame.image.load("images/nybg.png")  
 
     def draw(self, boosts: list, bullets: list):
         for boost in boosts:
@@ -99,11 +104,29 @@ class App:
     def get_fps(self):
         f2 = pygame.font.SysFont('al seana', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
-                          (255, 0, 0))
+                          (100, 100, 100))
         self.screen.blit(text2, (10, 10))
 
     def get_results(self):
-        pass
+        results = results_loader()
+        if self.player_name:
+            if self.player_name in results:
+                if results[self.player_name] < self.score:
+                    results[self.player_name] = self.score
+            else:
+                results[self.player_name] = self.score
+            sorted_dict = {}
+            sorted_keys = sorted(results, key=results.get)
+            for w in sorted_keys:
+                sorted_dict[w] = results[w]
+            results_saver(sorted_dict)
+
+    def set_results(self):
+        font = pygame.font.SysFont("al seana", 32)
+        results = results_loader()
+        for i in range(1, len(results) + 1):
+            res = list(results.keys())[-i]
+            self.screen.blit(font.render(f'{i}.{res}: {results.get(res)}', True, (0, 0, 0)), (130, 210 + 30 * i))
 
     @staticmethod
     def check_collision(items, item) -> bool:
@@ -126,6 +149,7 @@ class App:
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(str(self.score), False,
                           (255, 0, 0))
+        self.get_results()
 
         def check(boost):
             if boost.y < 0:
@@ -173,7 +197,7 @@ class App:
         self.get_score()
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(f'Score: {str(self.score)}', False,
-                          (255, 0, 0))
+                          (100, 100, 100))
         self.screen.blit(text2, (450, 10))
 
     def functions(self):
@@ -206,6 +230,10 @@ class App:
             if keys[pygame.K_1] and not self.pause_flag:
                 self.pause_flag = True
                 self.pause()
+            if keys[pygame.K_3]:
+                self.themechangerusual()
+            if keys[pygame.K_4]:
+                self.themechangerny()
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.rect.x -= 5
@@ -239,14 +267,21 @@ class App:
         app = App()
         app.start()
 
+    def start_scrn_draw(self):
+        self.screen.blit(self.start_screen, (0, 0))
+        font = pygame.font.SysFont("al seana", 62)
+        name_text = font.render('name: ', True, (0, 0, 0))
+        if self.player_name == '':
+            enter_name = font.render('enter name', True, (128, 128, 128))
+            self.screen.blit(enter_name, (260, 440))
+        player_name_text = font.render(self.player_name, True, (0, 0, 0))
+        self.screen.blit(player_name_text, (260, 440))
+        self.screen.blit(name_text, (140, 440))
+
     def start_scrn(self):
         while True:
             self.cc = 1
-            self.screen.blit(self.start_screen, (0, 0))
-            pygame.draw.rect(self.screen, (255, 255, 255), (150, 450, 300, 60))
-            font = pygame.font.SysFont("al seana", 62)
-            best_players = font.render(self.player_name, True, (255, 0, 0))
-            self.screen.blit(best_players, (160, 440))
+            self.start_scrn_draw()
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -275,17 +310,10 @@ class App:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
                 self.screen.blit(self.pause_screen, (0, 0))
-                # font = pygame.font.SysFont("al seana", 72)
-                # text_paused = font.render("PAUSED", True, (255, 0, 0))
-                # font = pygame.font.SysFont("al seana", 72)
-                # best_players = font.render("BEST PLAYERS", True, (255, 0, 0))
-                # self.screen.blit(text_paused, (210, 250))
-                # self.screen.blit(best_players, (130, 340))
-                # pygame.draw.rect(self.screen, (255, 255, 255), (150, 420, 300, 180))
+                self.set_results()
                 pygame.display.flip()
 
 
 if __name__ == '__main__':
     app = App()
     app.start()
- 
