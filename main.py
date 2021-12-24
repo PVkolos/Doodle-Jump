@@ -15,7 +15,7 @@ class App:
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
         self.bg = pygame.image.load(f"images/{img}/bg.png")
-        self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
+        self.game_over_bg = pygame.image.load(f'images/{img}/gameover.png')
         self.start_screen = pygame.image.load("images/start_screen_bg.png")
         self.pause_screen = pygame.image.load('images/pause.png')
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')

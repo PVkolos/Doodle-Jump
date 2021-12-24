@@ -38,7 +38,7 @@ class Player(pygame.sprite.Sprite):
                     self.is_jump = 1000
                     self.speed_up = 10
                 else:
-                    el.image = pygame.image.load("images/red_1.png").convert_alpha()
+                    el.image = pygame.image.load("images/classic/red3_b.png").convert_alpha()
                 el.play_sound()
         if not self.jump:
             self.rect.y += self.speed_down
