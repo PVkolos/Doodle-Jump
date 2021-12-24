@@ -99,7 +99,7 @@ class App:
     def get_fps(self):
         f2 = pygame.font.SysFont('al seana', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
-                          (255, 0, 0))
+                          (100, 100, 100))
         self.screen.blit(text2, (10, 10))
 
     def get_results(self):
@@ -152,17 +152,17 @@ class App:
         font = pygame.font.SysFont("al seana", 32)
         self.best_players_sort()
         try:
-            best_player1 = font.render("1: " + str(self.best1), True, (255, 0, 0))
+            best_player1 = font.render("1: " + str(self.best1), True, (0, 0, 0))
             self.screen.blit(best_player1, (130, 250))
         except:
             pass
         try:
-            best_player2 = font.render("2: " + str(self.best2), True, (255, 0, 0))
+            best_player2 = font.render("2: " + str(self.best2), True, (0, 0, 0))
             self.screen.blit(best_player2, (130, 280))
         except:
             pass
         try:
-            best_player3 = font.render("3: " + str(self.best3), True, (255, 0, 0))
+            best_player3 = font.render("3: " + str(self.best3), True, (0, 0, 0))
             self.screen.blit(best_player3, (130, 310))
         except:
             pass
@@ -237,7 +237,7 @@ class App:
         self.get_score()
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(f'Score: {str(self.score)}', False,
-                          (255, 0, 0))
+                          (100, 100, 100))
         self.screen.blit(text2, (450, 10))
 
     def functions(self):
@@ -303,14 +303,21 @@ class App:
         app = App()
         app.start()
 
+    def start_scrn_draw(self):
+        self.screen.blit(self.start_screen, (0, 0))
+        font = pygame.font.SysFont("al seana", 62)
+        name_text = font.render('name: ', True, (0, 0, 0))
+        if self.player_name == '':
+            enter_name = font.render('enter name', True, (128, 128, 128))
+            self.screen.blit(enter_name, (260, 440))
+        player_name_text = font.render(self.player_name, True, (0, 0, 0))
+        self.screen.blit(player_name_text, (260, 440))
+        self.screen.blit(name_text, (140, 440))
+
     def start_scrn(self):
         while True:
             self.cc = 1
-            self.screen.blit(self.start_screen, (0, 0))
-            pygame.draw.rect(self.screen, (255, 255, 255), (150, 450, 300, 60))
-            font = pygame.font.SysFont("al seana", 62)
-            best_players = font.render(self.player_name, True, (255, 0, 0))
-            self.screen.blit(best_players, (160, 440))
+            self.start_scrn_draw()
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
