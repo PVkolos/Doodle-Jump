@@ -8,12 +8,17 @@ class Boost(pygame.sprite.Sprite):
         self.y = y
         self.size = 80
         self.image = pygame.image.load('images/green.png').convert_alpha()
+        self.jump_range = 200
+        self.jump_speed = 5
 
     def update(self) -> None:
         pass
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.x - 60 / 2, self.y))
+
+    def jump(self):
+        pass
 
 
 class StaticBoost(Boost):
@@ -33,23 +38,27 @@ class RedBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
         self.image = pygame.image.load("images/red.png").convert_alpha()
+        self.destroy_image = pygame.image.load('images/red_1.png').convert_alpha()
         self.is_destroyed = False
         self.sound = pygame.mixer.Sound('sfx/break.mp3')
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
         self.fall_speed = 5
+        self.jump_range = 0
+        self.jump_speed = 0
 
     def play_sound(self):
-        if self.is_destroyed:
-            pass
-        else:
+        if not self.is_destroyed:
             self.sound.play()
-            self.is_destroyed = True
 
     def update(self) -> None:
         if self.is_destroyed:
             self.y += self.fall_speed
+
+    def jump(self):
+        self.is_destroyed = True
+        self.image = self.destroy_image
 
 
 class FederBoost(Boost):
@@ -64,12 +73,11 @@ class FederBoost(Boost):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+        self.jump_range = 1000
+        self.jump_speed = 10
 
     def play_sound(self):
-        if self.is_feder:
-            self.feder_sound.play()
-        else:
-            self.sound.play()
+        self.feder_sound.play()
 
     def get_image(self) -> pygame.Surface:
         image_spring = self.spring_image

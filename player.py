@@ -11,9 +11,9 @@ class Player(pygame.sprite.Sprite):
         self.pl_left_pr = pygame.image.load("images/left.png").convert_alpha()
         self.pl_right_pr = pygame.image.load("images/right.png").convert_alpha()
         self.image = self.pl_right
-        self.jump = False
+        self.is_jump = False
         self.screen = screen
-        self.is_jump = 0
+        self.jump = 0
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.y = 400
@@ -25,24 +25,18 @@ class Player(pygame.sprite.Sprite):
     def down(self, boosts, monsters):
         for el in boosts:
             if ((el.x - 40 <= self.rect.x <= el.x + 55) or (el.x - 40 <= self.rect.x + self.width <= el.x + 55)) and self.rect.y == \
-                    el.y and not self.jump:
-                if type(el) == StaticBoost or type(el) == MovementBoost:
-                    self.jump = True
-                    self.is_jump = 200
-                elif type(el) == FederBoost:
-                    el.is_feder = True
-                    self.jump = True
-                    self.is_jump = 1000
-                    self.speed_up = 10
-                else:
-                    el.image = pygame.image.load("images/red_1.png").convert_alpha()
+                    el.y and not self.is_jump:
+                self.is_jump = True
+                self.jump = el.jump_range
+                self.speed_up = el.jump_speed
                 el.play_sound()
-        if not self.jump:
+                el.jump()
+        if not self.is_jump:
             self.rect.y += self.speed_down
-        elif self.is_jump == 0 or self.is_jump < 0:
-            self.jump = False
+        elif self.jump == 0 or self.jump < 0:
+            self.is_jump = False
             self.speed_up = 5
-        elif self.jump:
+        elif self.is_jump:
             if self.rect.y <= 400:
                 for el in boosts:
                     el.y += self.speed_up
@@ -50,14 +44,14 @@ class Player(pygame.sprite.Sprite):
                     monster.rect.y += self.speed_up
                 self.rect.y += self.speed_up
             self.rect.y -= self.speed_up
-            self.is_jump -= self.speed_up
-            if self.image == self.pl_right and self.is_jump > 100:
+            self.jump -= self.speed_up
+            if self.image == self.pl_right and self.jump > 100:
                 self.image = self.pl_right_pr
-            elif self.image == self.pl_left and self.is_jump > 100:
+            elif self.image == self.pl_left and self.jump > 100:
                 self.image = self.pl_left_pr
-            elif self.is_jump <= 100 and self.image == self.pl_right_pr:
+            elif self.jump <= 100 and self.image == self.pl_right_pr:
                 self.image = self.pl_right
-            elif self.is_jump <= 100 and self.image == self.pl_left_pr:
+            elif self.jump <= 100 and self.image == self.pl_left_pr:
                 self.image = self.pl_left
         self.screen.blit(self.image, (self.rect.x, self.rect.y - 82))
 
