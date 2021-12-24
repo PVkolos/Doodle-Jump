@@ -107,12 +107,16 @@ class App:
         r = csv.reader(open('results.csv'))
         lines = list(r)
         for i in lines:
-            if i[0] == self.player_name:
-                flag = False
-                if int(i[1]) < self.score:
-                    i[1] = self.score
-                    writerr = csv.writer(open('results.csv', 'w'))
-                    writerr.writerows(lines)
+            print(i)
+            try:
+                if i[0] == self.player_name:
+                    flag = False
+                    if int(i[1]) < self.score:
+                        i[1] = self.score
+                        writerr = csv.writer(open('results.csv', 'w'))
+                        writerr.writerows(lines)
+            except:
+                pass
 
         if flag:
             if self.player_name != '':
@@ -126,15 +130,18 @@ class App:
         all = []
         k = 0
         scr = []
-        r = csv.reader(open('results.csv'))
-        for i in list(r):
-            all.append(i[0])
-            all.append(int(i[1]))
-        for j in all:
-            if k % 2 == 1:
-                scr.append(int(j))
-            k += 1
-        scr = sorted(scr)
+        try:
+            r = csv.reader(open('results.csv'))
+            for i in list(r):
+                all.append(i[0])
+                all.append(int(i[1]))
+            for j in all:
+                if k % 2 == 1:
+                    scr.append(int(j))
+                k += 1
+            scr = sorted(scr)
+        except:
+            pass
         try:
             self.best1 = (scr[-1], all[all.index(scr[-1]) - 1])
         except:
