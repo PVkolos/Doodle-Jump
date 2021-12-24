@@ -4,7 +4,7 @@ from csv import writer
 
 import csv
 import pygame.display
-
+from static import *
 from player import *
 
 
@@ -125,7 +125,6 @@ class App:
                     writer_object.writerow([self.player_name, self.score])
                     f_object.close()
 
-    
     def best_players_sort(self):
         all = []
         k = 0
@@ -177,6 +176,27 @@ class App:
         except:
             pass
 
+    def new_get_results(self):
+        results = results_loader()
+        if self.player_name:
+            if self.player_name in results:
+                if results[self.player_name] < self.score:
+                    results[self.player_name] = self.score
+            else:
+                results[self.player_name] = self.score
+            sorted_dict = {}
+            sorted_keys = sorted(results, key=results.get)
+            for w in sorted_keys:
+                sorted_dict[w] = results[w]
+            results_saver(sorted_dict)
+
+    def set_results(self):
+        font = pygame.font.SysFont("al seana", 32)
+        results = results_loader()
+        print(results)
+        for i in range(1, len(results) + 1):
+            self.screen.blit(font.render(f"{i}: " + list(results.keys())[-i], True, (0, 0, 0)), (130, 210 + 30 * i))
+
     @staticmethod
     def check_collision(items, item) -> bool:
         for i in items:
@@ -198,8 +218,9 @@ class App:
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(str(self.score), False,
                           (255, 0, 0))
-        self.get_results()
-        self.best_players_sort()
+        # self.get_results()
+        self.new_get_results()
+        # self.best_players_sort()
 
         def check(boost):
             if boost.y < 0:
@@ -356,7 +377,8 @@ class App:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
                 self.screen.blit(self.pause_screen, (0, 0))
-                self.best_players_draw()
+                #self.best_players_draw()
+                self.set_results()
                 pygame.display.flip()
 
 
