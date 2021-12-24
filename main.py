@@ -1,5 +1,7 @@
 import random
 import pygame.display
+
+import image_manager
 from static import *
 from player import *
 from boost import *
@@ -224,9 +226,9 @@ class App:
                 self.pause_flag = True
                 self.pause()
             if keys[pygame.K_3]:
-                set_snow(True)
+                image_manager.is_snow = True
             if keys[pygame.K_4]:
-                set_snow(False)
+                image_manager.is_snow = False
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.rect.x -= 5
