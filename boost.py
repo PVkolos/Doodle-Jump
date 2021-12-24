@@ -81,6 +81,9 @@ class FederBoost(Boost):
     def jump(self):
         self.is_feder = True
 
+    def jump(self):
+        self.is_feder = True
+
 
 class MovementBoost(Boost):
     def __init__(self, x, y, *groups):
