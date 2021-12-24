@@ -2,6 +2,7 @@ import random
 import pygame.display
 from static import *
 from player import *
+from boost import *
 
 
 class App:
