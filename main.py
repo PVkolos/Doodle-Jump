@@ -1,6 +1,5 @@
 import random
 import pygame.display
-
 import image_manager
 from static import *
 from player import *
@@ -23,7 +22,7 @@ class App:
         self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
         self.bullets = []
         self.monsters = []
-        self.pl = Player(self.screen)
+        self.pl = Player()
         self.clock = pygame.time.Clock()
         self.score = 0
         self.cntr = 0
@@ -35,16 +34,17 @@ class App:
         self.running = True
         self.flag_monster = True
 
-    def draw(self, boosts: list, bullets: list):
-        for boost in boosts:
+    def draw(self):
+        for boost in self.boosts:
             boost.update()
             boost.draw(self.screen)
-        for bullet in bullets:
+        for bullet in self.bullets:
             bullet.update()
             bullet.draw(self.screen)
         for monster in self.monsters:
             monster.update()
             monster.draw(self.screen)
+        self.pl.draw(self.screen)
 
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
@@ -144,6 +144,7 @@ class App:
                     break
 
     def game_over(self):
+        self.lose_sound.play()
         y = self.screen.get_size()[1]
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(str(self.score), False,
@@ -180,6 +181,8 @@ class App:
             else:
                 self.screen.blit(self.game_over_bg, (0, 0))
                 self.screen.blit(text2, (350, y + 415))
+                self.pl.rect.y += 20
+                self.pl.draw(self.screen)
                 pygame.display.flip()
 
     def get_score(self):
@@ -203,7 +206,7 @@ class App:
         self.clock.tick(60)
         self.check_play()
         self.screen.blit(self.bg, (0, 0))
-        self.draw(self.boosts, self.bullets)
+        self.draw()
         self.pl.down(self.boosts, self.monsters)
         self.get_fps()
         self.set_score()
@@ -215,7 +218,7 @@ class App:
             self.start_scrn()
         self.cc = 1
         self.running = True
-        self.pl = Player(self.screen)
+        self.pl = Player()
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -252,8 +255,6 @@ class App:
                 rnd = random.random()
                 if rnd < 0.005:
                     self.monster()
-        if self.pl.rect.y > 800 and x:
-            self.lose_sound.play()
         if not self.flag:
             self.running = True
             self.game_over()

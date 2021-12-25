@@ -3,7 +3,7 @@ from image_manager import get_image
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, screen, *groups):
+    def __init__(self, *groups):
         super().__init__(*groups)
         self.width = 60
         self.pl_right = pygame.image.load(get_image('right_1.png')).convert_alpha()
@@ -12,7 +12,6 @@ class Player(pygame.sprite.Sprite):
         self.pl_right_pr = pygame.image.load(get_image('right.png')).convert_alpha()
         self.image = self.pl_right
         self.is_jump = False
-        self.screen = screen
         self.jump = 0
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
@@ -53,7 +52,6 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.pl_right
             elif self.jump <= 100 and self.image == self.pl_left_pr:
                 self.image = self.pl_left
-        self.screen.blit(self.image, (self.rect.x, self.rect.y - 82))
 
     def shoot(self):
         self.shoot_pass = 60
