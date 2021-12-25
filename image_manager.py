@@ -1,4 +1,4 @@
-is_snow = True
+is_snow = False
 
 
 def get_image(image: str):
