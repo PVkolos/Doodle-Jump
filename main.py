@@ -213,7 +213,6 @@ class App:
         self.check_collision_monster_bullet()
 
     def start(self):
-        x = True
         if self.cc != 1:
             self.start_scrn()
         self.cc = 1
