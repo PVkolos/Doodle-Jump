@@ -97,6 +97,9 @@ class App:
             self.flag_monster = True
 
     def get_fps(self):
+        """
+        метод отрисовки фпс
+        """
         f2 = pygame.font.SysFont('al seana', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (100, 100, 100))
@@ -144,6 +147,9 @@ class App:
                     break
 
     def game_over(self):
+        """
+        метод экрана проигрыша
+        """
         self.lose_sound.play()
         y = self.screen.get_size()[1]
         f2 = pygame.font.SysFont('al seana', 30)
@@ -186,6 +192,9 @@ class App:
                 pygame.display.flip()
 
     def get_score(self):
+        """
+        метод для получение результата в начале
+        """
         if self.cntr < 6:
             # в начале создается удаляется несколько платформ(чтобы их не считать создан cntr)
             if self.score < 0:
@@ -196,6 +205,9 @@ class App:
                 self.score = 100
 
     def set_score(self):
+        """
+        метод отрисовки счета
+        """
         self.get_score()
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render(f'Score: {str(self.score)}', False,
@@ -267,10 +279,16 @@ class App:
 
     @staticmethod
     def restart():
+        """
+        метод для перезапуска
+        """
         app = App()
         app.start()
 
     def start_scrn_draw(self):
+        """
+        метод для функций на главном экране
+        """
         self.screen.blit(self.start_screen, (0, 0))
         font = pygame.font.SysFont("al seana", 62)
         name_text = font.render('name: ', True, (0, 0, 0))
@@ -282,6 +300,9 @@ class App:
         self.screen.blit(name_text, (140, 360))
 
     def start_scrn(self):
+        """
+        метод для экрана старта
+        """
         while True:
             self.cc = 1
             self.start_scrn_draw()
@@ -304,6 +325,9 @@ class App:
                             self.player_name += event.unicode
 
     def pause(self):
+        """
+        метод для экрана паузы
+        """
         while self.pause_flag and self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
