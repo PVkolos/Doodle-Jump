@@ -149,10 +149,6 @@ class App:
         text2 = f2.render(str(self.score), False,
                           (255, 0, 0))
         self.get_results()
-
-        def check(boost):
-            if boost.y < 0:
-                del self.boosts[self.boosts.index(boost)]
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -168,7 +164,8 @@ class App:
                 for i in self.boosts:
                     i.y -= 20
                     i.draw(self.screen)
-                    check(i)
+                    if i.y < 0:
+                        del self.boosts[self.boosts.index(i)]
                 pygame.display.flip()
                 continue
             if y > -10:
