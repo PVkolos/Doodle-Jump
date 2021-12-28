@@ -306,8 +306,11 @@ class App:
             self.screen.blit(image, (20, 200))
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN and (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
-                if image_manager.is_snow == False: image_manager.is_snow = True
-                elif image_manager.is_snow == True: image_manager.is_snow = False
+                if not image_manager.is_snow:
+                    image_manager.is_snow = True
+                elif image_manager.is_snow:
+                    image_manager.is_snow = False
+                self.bg = pygame.image.load(get_image('bg.png'))
             if event.type == pygame.QUIT:
                 exit()
             if event.type == pygame.KEYDOWN:
@@ -323,7 +326,6 @@ class App:
                 else:
                     if len(self.player_name) < 12:
                         self.player_name += event.unicode
-
 
     def button_paused(self):
         self.pause_flag = True
