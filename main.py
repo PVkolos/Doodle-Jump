@@ -100,7 +100,7 @@ class App:
         """
         метод отрисовки фпс
         """
-        f2 = pygame.font.SysFont('al seana', 14)
+        f2 = pygame.font.SysFont('al-seana.ttf', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
                           (100, 100, 100))
         self.screen.blit(text2, (10, 10))
@@ -120,7 +120,7 @@ class App:
             results_saver(sorted_dict)
 
     def set_results(self):
-        font = pygame.font.SysFont("al seana", 32)
+        font = pygame.font.SysFont("al-seana.ttf", 32)
         results = results_loader()
         if len(results) > 3:
             a = 3
@@ -145,7 +145,7 @@ class App:
         """
         self.lose_sound.play()
         y = self.screen.get_size()[1]
-        f2 = pygame.font.SysFont('al seana', 30)
+        f2 = pygame.font.SysFont('al-seana.ttf', 30)
         text2 = f2.render(str(self.score), False,
                           (255, 0, 0))
         self.get_results()
@@ -199,7 +199,7 @@ class App:
         метод отрисовки счета
         """
         self.get_score()
-        f2 = pygame.font.SysFont('al seana', 30)
+        f2 = pygame.font.SysFont('al-seana.ttf', 30)
         text2 = f2.render(f'Score: {str(self.score)}', False,
                           (100, 100, 100))
         self.screen.blit(text2, (450, 10))
@@ -293,7 +293,7 @@ class App:
         height = 70
         x = 20
         y = 200
-        f2 = pygame.font.SysFont('al seana', 30)
+        f2 = pygame.font.SysFont('al-seana.ttf', 30)
         text2 = f2.render('Snow', False,
                           (200, 100, 100))
         text3 = f2.render('Standart', False,
@@ -340,7 +340,7 @@ class App:
         """
         self.screen.blit(self.start_screen, (0, 0))
         self.button_theme()
-        font = pygame.font.SysFont("al seana", 62)
+        font = pygame.font.SysFont("al-seana.ttf", 62)
         name_text = font.render('name: ', True, (0, 0, 0))
         if self.player_name == '':
             enter_name = font.render('enter name', True, (128, 128, 128))
