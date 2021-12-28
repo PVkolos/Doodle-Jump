@@ -2,9 +2,9 @@ import random
 import pygame.display
 import image_manager
 from static import *
+from player import *
+from boost import *
 from image_manager import *
-from player import Player, Monster
-from boost import StaticBoost, RedBoost, FederBoost, MovementBoost
 
 
 class App:
@@ -208,6 +208,7 @@ class App:
         self.clock.tick(60)
         self.check_play()
         self.screen.blit(self.bg, (0, 0))
+        self.button_paused()
         self.draw()
         self.pl.down(self.boosts, self.monsters)
         self.get_fps()
@@ -286,11 +287,59 @@ class App:
         self.flag_monster = True
         self.start()
 
+    def button_theme(self):
+        mouse = pygame.mouse.get_pos()
+        width = 200
+        height = 70
+        x = 20
+        y = 200
+        f2 = pygame.font.SysFont('al seana', 30)
+        text2 = f2.render('Snow', False,
+                          (200, 100, 100))
+        text3 = f2.render('Standart', False,
+                          (200, 100, 100))
+        if (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
+            pygame.draw.rect(self.screen, (247, 243, 231), (x, y, width, height))
+            if image_manager.is_snow:
+                self.screen.blit(text2, (90, 220))
+            else:
+                self.screen.blit(text3, (70, 220))
+            for i in pygame.event.get():
+                if i.type == pygame.MOUSEBUTTONDOWN:
+                    if image_manager.is_snow == False: image_manager.is_snow = True
+                    elif image_manager.is_snow == True: image_manager.is_snow = False
+        else:
+            pygame.draw.rect(self.screen, (239, 219, 198), (x, y, width, height))
+            if image_manager.is_snow:
+                self.screen.blit(text2, (90, 220))
+            else:
+                self.screen.blit(text3, (70, 220))
+
+    def button_paused(self):
+        mouse = pygame.mouse.get_pos()
+        width = 100
+        height = 36
+        x = 20
+        y = 20
+        image = pygame.image.load('images/classic/paused.jpg')
+        self.screen.blit(image, (x, y))
+        for i in pygame.event.get():
+            if (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
+                if i.type == pygame.MOUSEBUTTONDOWN:
+                    self.pause_flag = True
+                    self.pause()
+            if i.type == pygame.QUIT:
+                exit()
+            if i.type == pygame.KEYDOWN:
+                if i.key == pygame.K_UP:
+                    self.bullets.append(self.pl.shoot())
+
     def start_scrn_draw(self):
         """
         метод для функций на главном экране
         """
         self.screen.blit(self.start_screen, (0, 0))
+        self.button_theme()
         font = pygame.font.SysFont("al seana", 62)
         name_text = font.render('name: ', True, (0, 0, 0))
         if self.player_name == '':
