@@ -2,8 +2,8 @@ import random
 import pygame.display
 import image_manager
 from static import *
-from player import *
-from boost import *
+from player import Player, Monster
+from boost import StaticBoost, RedBoost, FederBoost, MovementBoost
 from image_manager import *
 
 
