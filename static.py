@@ -12,3 +12,10 @@ def results_loader() -> dict:
         with open('results.json') as f:
             return json.load(f)
     return {}
+
+
+def check_collision(items, item) -> bool:
+    for i in items:
+        if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
+            return True
+    return False

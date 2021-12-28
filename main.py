@@ -59,7 +59,7 @@ class App:
                          random.randrange(round(y - 150), round(y), 5))
                 a = 100
                 while a != 0:
-                    if self.check_collision(self.boosts, coord):
+                    if check_collision(self.boosts, coord):
                         coord = (random.randint(80, 600 - 80),
                                  random.randrange(round(y - 150), round(y), 5))
                         a -= 1
@@ -129,13 +129,6 @@ class App:
         for i in range(1, a + 1):
             res = list(results.keys())[-i]
             self.screen.blit(font.render(f'{i}.{res}: {results.get(res)}', True, (0, 0, 0)), (130, 210 + 30 * i))
-
-    @staticmethod
-    def check_collision(items, item) -> bool:
-        for i in items:
-            if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
-                return True
-        return False
 
     def check_collision_monster_bullet(self):
         for monster in self.monsters:
@@ -277,13 +270,11 @@ class App:
         self.monsters.append(monster)
         self.flag_monster = False
 
-    @staticmethod
-    def restart():
+    def restart(self):
         """
         метод для перезапуска
         """
-        app = App()
-        app.start()
+        App().start()
 
     def start_scrn_draw(self):
         """
@@ -342,5 +333,4 @@ class App:
 
 
 if __name__ == '__main__':
-    app = App()
-    app.start()
+    App().start()
