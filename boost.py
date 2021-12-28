@@ -9,11 +9,15 @@ class Boost(pygame.sprite.Sprite):
         self.y = y
         self.size = 80
         self.image = pygame.image.load(get_image('static_b.png')).convert_alpha()
+        self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.jump_range = 200
         self.jump_speed = 5
 
     def update(self) -> None:
         pass
+
+    def play_sound(self):
+        self.sound.play()
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.x - 60 / 2, self.y))
@@ -25,13 +29,9 @@ class Boost(pygame.sprite.Sprite):
 class StaticBoost(Boost):
     def __init__(self, x, y, *groups):
         super().__init__(x, y, *groups)
-        self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
-
-    def play_sound(self):
-        self.sound.play()
 
 
 class RedBoost(Boost):
@@ -102,9 +102,6 @@ class MovementBoost(Boost):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
-
-    def play_sound(self):
-        self.sound.play()
 
     def update(self) -> None:
         if self.x < 55:
