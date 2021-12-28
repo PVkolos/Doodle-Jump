@@ -271,7 +271,20 @@ class App:
         """
         метод для перезапуска
         """
-        App().start()
+        self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
+        self.bullets = []
+        self.monsters = []
+        self.pl = Player()
+        self.score = 0
+        self.cntr = 0
+        self.cc = 0
+        self.n_boosts = 20
+        self.flag = True
+        self.player_name = ''
+        self.pause_flag = False
+        self.running = True
+        self.flag_monster = True
+        self.start()
 
     def start_scrn_draw(self):
         """
