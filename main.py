@@ -2,8 +2,9 @@ import random
 import pygame.display
 import image_manager
 from static import *
-from player import Player, Monster
-from boost import StaticBoost, RedBoost, FederBoost, MovementBoost
+from player import *
+from boost import *
+from image_manager import *
 
 
 class App:
@@ -12,7 +13,7 @@ class App:
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
-        self.bg = pygame.image.load(image_manager.get_image('bg.png'))
+        self.bg = pygame.image.load(get_image('bg.png'))
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.png")
         self.pause_screen = pygame.image.load('images/pause.png')
@@ -207,7 +208,7 @@ class App:
         self.clock.tick(60)
         self.check_play()
         self.screen.blit(self.bg, (0, 0))
-        self.button_paused()
+        self.screen.blit(pygame.image.load('images/classic/paused.png'), (20, 20))
         self.draw()
         self.pl.down(self.boosts, self.monsters)
         self.get_fps()
@@ -221,9 +222,13 @@ class App:
         self.running = True
         self.pl = Player()
         while self.running:
+            mouse = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if (20 < mouse[0] < 20 + 100) and (20 < mouse[1] < 20 + 36):
+                        self.button_paused()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.bullets.append(self.pl.shoot())
@@ -236,11 +241,11 @@ class App:
             if keys[pygame.K_3]:
                 image_manager.is_snow = True
                 self.pl.update_images()
-                self.bg = pygame.image.load(image_manager.get_image('bg.png'))
+                self.bg = pygame.image.load(get_image('bg.png'))
             if keys[pygame.K_4]:
                 image_manager.is_snow = False
                 self.pl.update_images()
-                self.bg = pygame.image.load(image_manager.get_image('bg.png'))
+                self.bg = pygame.image.load(get_image('bg.png'))
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.rect.x -= 5
@@ -288,52 +293,41 @@ class App:
 
     def button_theme(self):
         mouse = pygame.mouse.get_pos()
-        width = 200
-        height = 70
-        x = 20
-        y = 200
-        f2 = pygame.font.SysFont('al seana', 30)
-        text2 = f2.render('Snow', False,
-                          (200, 100, 100))
-        text3 = f2.render('Standard', False,
-                          (200, 100, 100))
-        if (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
-            pygame.draw.rect(self.screen, (247, 243, 231), (x, y, width, height))
-            if image_manager.is_snow:
-                self.screen.blit(text2, (90, 220))
-            else:
-                self.screen.blit(text3, (70, 220))
-            for i in pygame.event.get():
-                if i.type == pygame.MOUSEBUTTONDOWN:
-                    if image_manager.is_snow:
-                        image_manager.set_snow(False)
-                    else:
-                        image_manager.set_snow(True)
-        else:
-            pygame.draw.rect(self.screen, (239, 219, 198), (x, y, width, height))
-            if image_manager.is_snow:
-                self.screen.blit(text2, (90, 220))
-            else:
-                self.screen.blit(text3, (70, 220))
-
-    def button_paused(self):
-        mouse = pygame.mouse.get_pos()
         width = 100
         height = 36
         x = 20
-        y = 20
-        image = pygame.image.load('images/classic/paused.jpg')
-        self.screen.blit(image, (x, y))
-        for i in pygame.event.get():
-            if (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
-                if i.type == pygame.MOUSEBUTTONDOWN:
-                    self.pause_flag = True
-                    self.pause()
-            if i.type == pygame.QUIT:
+        y = 200
+        image = pygame.image.load('images/classic/theme.png')
+        image2 = pygame.image.load('images/classic/theme2.png')
+        pygame.draw.rect(self.screen, (247, 243, 231), (x, y, width, height))
+        if image_manager.is_snow:
+            self.screen.blit(image2, (20, 200))
+        else:
+            self.screen.blit(image, (20, 200))
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN and (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
+                if image_manager.is_snow == False: image_manager.is_snow = True
+                elif image_manager.is_snow == True: image_manager.is_snow = False
+            if event.type == pygame.QUIT:
                 exit()
-            if i.type == pygame.KEYDOWN:
-                if i.key == pygame.K_UP:
-                    self.bullets.append(self.pl.shoot())
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.start_sound.play()
+                    self.start()
+                if event.key == pygame.K_RETURN:
+                    self.start_sound.play()
+                    self.start()
+                    print(self.player_name)
+                if event.key == pygame.K_BACKSPACE:
+                    self.player_name = self.player_name[:-1]
+                else:
+                    if len(self.player_name) < 12:
+                        self.player_name += event.unicode
+
+
+    def button_paused(self):
+        self.pause_flag = True
+        self.pause()
 
     def start_scrn_draw(self):
         """
@@ -388,7 +382,13 @@ class App:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
                 self.screen.blit(self.pause_screen, (0, 0))
+                image = pygame.image.load('images/classic/paused.png')
+                self.screen.blit(image, (20, 20))
                 self.set_results()
+                mouse = pygame.mouse.get_pos()
+                if (20 < mouse[0] < 20 + 100) and (20 < mouse[1] < 20 + 36):
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        self.pause_flag = False
                 pygame.display.flip()
 
 
