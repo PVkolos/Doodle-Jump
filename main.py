@@ -4,7 +4,6 @@ import image_manager
 from static import *
 from player import Player, Monster
 from boost import StaticBoost, RedBoost, FederBoost, MovementBoost
-from image_manager import *
 
 
 class App:
@@ -13,7 +12,7 @@ class App:
         pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
-        self.bg = pygame.image.load(get_image('bg.png'))
+        self.bg = pygame.image.load(image_manager.get_image('bg.png'))
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen = pygame.image.load("images/start_screen_bg.png")
         self.pause_screen = pygame.image.load('images/pause.png')
@@ -237,11 +236,11 @@ class App:
             if keys[pygame.K_3]:
                 image_manager.is_snow = True
                 self.pl.update_images()
-                self.bg = pygame.image.load(get_image('bg.png'))
+                self.bg = pygame.image.load(image_manager.get_image('bg.png'))
             if keys[pygame.K_4]:
                 image_manager.is_snow = False
                 self.pl.update_images()
-                self.bg = pygame.image.load(get_image('bg.png'))
+                self.bg = pygame.image.load(image_manager.get_image('bg.png'))
             if keys[pygame.K_LEFT]:
                 self.pl.image = self.pl.pl_left
                 self.pl.rect.x -= 5
@@ -296,7 +295,7 @@ class App:
         f2 = pygame.font.SysFont('al seana', 30)
         text2 = f2.render('Snow', False,
                           (200, 100, 100))
-        text3 = f2.render('Standart', False,
+        text3 = f2.render('Standard', False,
                           (200, 100, 100))
         if (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
             pygame.draw.rect(self.screen, (247, 243, 231), (x, y, width, height))
@@ -306,8 +305,10 @@ class App:
                 self.screen.blit(text3, (70, 220))
             for i in pygame.event.get():
                 if i.type == pygame.MOUSEBUTTONDOWN:
-                    if image_manager.is_snow == False: image_manager.is_snow = True
-                    elif image_manager.is_snow == True: image_manager.is_snow = False
+                    if image_manager.is_snow:
+                        image_manager.set_snow(False)
+                    else:
+                        image_manager.set_snow(True)
         else:
             pygame.draw.rect(self.screen, (239, 219, 198), (x, y, width, height))
             if image_manager.is_snow:
