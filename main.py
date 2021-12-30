@@ -105,7 +105,7 @@ class App:
         метод отрисовки фпс
         """
         f2 = pygame.font.Font('al-seana.ttf', 14)
-        text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', False,
+        text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', True,
                           (100, 100, 100))
         self.screen.blit(text2, (10, 10))
 
@@ -150,7 +150,7 @@ class App:
         self.lose_sound.play()
         y = self.screen.get_size()[1]
         f2 = pygame.font.Font('al-seana.ttf', 30)
-        text2 = f2.render(str(self.score), False,
+        text2 = f2.render(str(self.score), True,
                           (255, 0, 0))
         self.get_results()
         while self.running:
@@ -204,7 +204,7 @@ class App:
         """
         self.get_score()
         f2 = pygame.font.Font('al-seana.ttf', 30)
-        text2 = f2.render(f'Score: {str(self.score)}', False,
+        text2 = f2.render(f'Score: {str(self.score)}', True,
                           (100, 100, 100))
         self.screen.blit(text2, (450, 10))
 
