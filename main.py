@@ -19,9 +19,12 @@ class App:
         self.pause_screen = pygame.image.load('images/pause.png')
         self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
-        self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
-        self.bullets = []
-        self.monsters = []
+        self.boosts = pygame.sprite.Group()
+        self.boosts.add(StaticBoost(100, 750))
+        self.boosts.add(StaticBoost(300, 750))
+        self.boosts.add(StaticBoost(500, 750))
+        self.bullets = pygame.sprite.Group()
+        self.monsters = pygame.sprite.Group()
         self.pl = Player()
         self.clock = pygame.time.Clock()
         self.score = 0
@@ -35,37 +38,36 @@ class App:
         self.flag_monster = True
 
     def draw(self):
-        for boost in self.boosts:
-            boost.update()
-            boost.draw(self.screen)
-        for bullet in self.bullets:
-            bullet.update()
-            bullet.draw(self.screen)
-        for monster in self.monsters:
-            monster.update()
-            monster.draw(self.screen)
+        self.boosts.update()
+        self.boosts.draw(self.screen)
+        self.monsters.update()
+        self.monsters.draw(self.screen)
+        self.bullets.update()
+        self.bullets.draw(self.screen)
         self.pl.draw(self.screen)
 
     def check_play(self):
         if len(self.boosts) < self.n_boosts:
             while self.n_boosts - len(self.boosts) != 0:
-                y = self.boosts[-1].y
-                if not type(self.boosts[-1]) == StaticBoost:
+                a = self.boosts.sprites()
+                y = a[-1].rect.y
+                if not type(a[-1]) == StaticBoost:
                     for i in range(2, 15):
-                        if type(self.boosts[-i]) == StaticBoost:
-                            y = self.boosts[-i].y
+                        if type(self.boosts.sprites()[-i]) == StaticBoost:
+                            y = self.boosts.sprites()[-i].rect.y
                             break
                 coord = (random.randint(80, 600 - 80),
                          random.randrange(round(y - 150), round(y), 5))
                 a = 100
                 while a != 0:
-                    if check_collision(self.boosts, coord):
+                    if check_collision(self.boosts.sprites(), coord):
                         coord = (random.randint(80, 600 - 80),
                                  random.randrange(round(y - 150), round(y), 5))
                         a -= 1
                     else:
                         break
-                if not self.flag_monster and pygame.sprite.collide_mask(self.monsters[0], self.pl):
+                monsters = self.monsters.sprites()
+                if not self.flag_monster and pygame.sprite.collide_mask(monsters[0], self.pl):
                     self.game_over()
                 bst = StaticBoost(coord[0], coord[1])
                 if random.random() > 0.5:
@@ -77,24 +79,26 @@ class App:
                     bst = RedBoost(coord[0], coord[1])
                 elif random.random() > 0.9:
                     bst = MovementBoost(coord[0], coord[1])
-                self.boosts.append(bst)
+                self.boosts.add(bst)
         if self.pl.rect.x < -80:
             self.pl.rect.x = 580
         elif self.pl.rect.x > 680:
             self.pl.rect.x = -40
         a = self.boosts.copy()
-        for i in range(len(a)):
-            if a[i].y > 800:
-                del self.boosts[i]
+        for i in a:
+            if i.rect.y > 800:
+                self.boosts.remove(i)
                 self.score += 100
                 self.cntr += 1
         a = self.bullets.copy()
-        for i in range(len(a)):
-            if a[i].rect.y < -100:
-                del self.bullets[i]
-        if not self.flag_monster and self.monsters[0].rect.y > 800:
-            del self.monsters[0]
-            self.flag_monster = True
+        for i in a:
+            if i.rect.y < -100:
+                self.bullets.remove(i)
+        a = self.monsters.copy()
+        for i in a:
+            if not self.flag_monster and i.rect.y > 800:
+                self.monsters.remove(i)
+                self.flag_monster = True
 
     def get_fps(self):
         """
@@ -134,8 +138,8 @@ class App:
         for monster in self.monsters:
             for bullet in self.bullets:
                 if pygame.sprite.collide_mask(monster, bullet):
-                    del self.monsters[0]
-                    del self.bullets[self.bullets.index(bullet)]
+                    self.monsters = pygame.sprite.Group()
+                    self.bullets.remove(bullet)
                     self.flag_monster = True
                     break
 
@@ -161,11 +165,11 @@ class App:
             self.screen.blit(self.bg, (0, 0))
             self.pl.draw(self.screen)
             if self.boosts:
+                self.boosts.draw(self.screen)
                 for i in self.boosts:
-                    i.y -= 20
-                    i.draw(self.screen)
-                    if i.y < 0:
-                        del self.boosts[self.boosts.index(i)]
+                    i.rect.y -= 20
+                    if i.rect.y < 0:
+                        self.boosts.remove(i)
                 pygame.display.flip()
                 continue
             if y > -10:
@@ -231,7 +235,7 @@ class App:
                         self.button_paused()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        self.bullets.append(self.pl.shoot())
+                        self.bullets.add(self.pl.shoot())
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
                 self.restart()
@@ -269,16 +273,19 @@ class App:
 
     def monster(self):
         monster = Monster(250, -400)
-        self.monsters.append(monster)
+        self.monsters.add(monster)
         self.flag_monster = False
 
     def restart(self):
         """
         метод для перезапуска
         """
-        self.boosts = [StaticBoost(100, 750), StaticBoost(300, 750), StaticBoost(500, 750)]
-        self.bullets = []
-        self.monsters = []
+        self.boosts = pygame.sprite.Group()
+        self.boosts.add(StaticBoost(100, 750))
+        self.boosts.add(StaticBoost(300, 750))
+        self.boosts.add(StaticBoost(500, 750))
+        self.bullets = pygame.sprite.Group()
+        self.monsters = pygame.sprite.Group()
         self.pl = Player()
         self.score = 0
         self.cntr = 0
