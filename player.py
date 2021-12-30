@@ -23,8 +23,9 @@ class Player(pygame.sprite.Sprite):
 
     def down(self, boosts, monsters):
         for el in boosts:
-            if ((el.x - 40 <= self.rect.x <= el.x + 55) or (el.x - 40 <= self.rect.x + self.width <= el.x + 55)) and ((self.rect.y + 30) == \
-                    el.y) and not self.is_jump:
+            if ((el.rect.x - 40 <= self.rect.x <= el.rect.x + 55) or
+                (el.rect.x - 40 <= self.rect.x + self.width <= el.rect.x + 55)) and \
+                    ((self.rect.y + 30) == el.rect.y) and not self.is_jump:
                 self.is_jump = True
                 self.jump = el.jump_range
                 self.speed_up = el.jump_speed
@@ -38,7 +39,7 @@ class Player(pygame.sprite.Sprite):
         elif self.is_jump:
             if self.rect.y <= 400:
                 for el in boosts:
-                    el.y += self.speed_up
+                    el.rect.y += self.speed_up
                 for monster in monsters:
                     monster.rect.y += self.speed_up
                 self.rect.y += self.speed_up
