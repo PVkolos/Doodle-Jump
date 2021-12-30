@@ -16,6 +16,6 @@ def results_loader() -> dict:
 
 def check_collision(items, item) -> bool:
     for i in items:
-        if item[0] + 70 >= i.x and item[1] + 15 >= i.y:
+        if item[0] + 70 >= i.rect.x and item[1] + 15 >= i.rect.y:
             return True
     return False
