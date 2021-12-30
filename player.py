@@ -59,6 +59,7 @@ class Player(pygame.sprite.Sprite):
         return Bullet(self.rect.x, self.rect.y - 82)
 
     def draw(self, screen: pygame.Surface):
+        self.mask = pygame.mask.from_surface(self.image)
         screen.blit(self.image, (self.rect.x, self.rect.y - 82))
 
     def update_images(self):
@@ -95,31 +96,23 @@ class Monster(pygame.sprite.Sprite):
         super().__init__(*groups)
         self.image_one = pygame.image.load("images/bat1.png").convert_alpha()
         self.image_two = pygame.image.load("images/bat2.png").convert_alpha()
-        self.image_free = pygame.image.load("images/bat3.png").convert_alpha()
-        self.im_dict = {0: self.image_one, 1: self.image_two, 2: self.image_free}
-        self.image = self.im_dict[0]
+        self.image_three = pygame.image.load("images/bat3.png").convert_alpha()
+        self.images = [self.image_one, self.image_two, self.image_three]
+        self.image = self.images[0]
         self.rect = self.image.get_rect()
-        self.mask = pygame.mask.from_surface(self.image)
-        self.right = True
-        self.left = True
+        # self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
         self.rect.y = y
-        self.i = 1
+        self.speed = 5
+        self.direction = 1
 
     def update(self):
-        self.image = self.im_dict[self.i % 3]
-        if self.rect.x < 55:
-            self.left = False
-            self.right = True
-            self.rect.x += 5
-        elif self.rect.x >= 500:
-            self.left = True
-            self.right = False
-        if self.left:
-            self.rect.x -= 5
-        else:
-            self.rect.x += 5
-        self.i += 1
+        self.image = self.images[(self.images.index(self.image) + 1) % 3]
+        self.rect = self.image.get_rect()
+        # self.mask = pygame.mask.from_surface(self.image)
+        if self.rect.x < 55 or self.rect.x >= 500:
+            self.direction = -self.direction
+        self.rect.x += self.direction * self.speed
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.rect.x, self.rect.y))
