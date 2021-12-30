@@ -108,7 +108,7 @@ class Monster(pygame.sprite.Sprite):
 
     def update(self):
         self.image = self.images[(self.images.index(self.image) + 1) % 3]
-        self.rect = self.image.get_rect()
+        # self.rect = self.image.get_rect()
         # self.mask = pygame.mask.from_surface(self.image)
         if self.rect.x < 55 or self.rect.x >= 500:
             self.direction = -self.direction
