@@ -10,14 +10,14 @@ from image_manager import *
 class App:
     def __init__(self):
         pygame.init()
-        pygame.display.set_icon(pygame.image.load("images/doodlejump.PNG"))
+        pygame.display.set_icon(pygame.image.load("images/doodle-jump.png"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
         self.bg = pygame.image.load(get_image('bg.png'))
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
-        self.start_screen = pygame.image.load("images/start_screen_bg.png")
-        self.pause_screen = pygame.image.load('images/pause.png')
-        self.lose_sound = pygame.mixer.Sound('sfx/pada.mp3')
+        self.start_screen_bg = pygame.image.load("images/start_screen_bg.png")
+        self.pause_screen_bg = pygame.image.load('images/pause.png')
+        self.lose_sound = pygame.mixer.Sound('sfx/fall.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = pygame.sprite.Group()
         self.boosts.add(StaticBoost(100, 750))
@@ -67,7 +67,9 @@ class App:
                     else:
                         break
                 monsters = self.monsters.sprites()
-                if not self.flag_monster and pygame.sprite.collide_mask(monsters[0], self.pl):
+                # if not self.flag_monster and pygame.sprite.collide_mask(monsters[0], self.pl):
+                #   self.game_over()
+                if not self.flag_monster and pygame.sprite.collide_rect(monsters[0], self.pl):
                     self.game_over()
                 bst = StaticBoost(coord[0], coord[1])
                 if random.random() > 0.5:
@@ -102,7 +104,7 @@ class App:
 
     def get_fps(self):
         """
-        метод отрисовки фпс
+        Метод отрисовки фпс
         """
         f2 = pygame.font.Font('al-seana.ttf', 14)
         text2 = f2.render(f'FPS: {int(self.clock.get_fps() // 1)}', True,
@@ -145,7 +147,7 @@ class App:
 
     def game_over(self):
         """
-        метод экрана проигрыша
+        Метод экрана проигрыша
         """
         self.lose_sound.play()
         y = self.screen.get_size()[1]
@@ -187,10 +189,10 @@ class App:
 
     def get_score(self):
         """
-        метод для получение результата в начале
+        Метод для получения результата в начале
         """
         if self.cntr < 6:
-            # в начале создается удаляется несколько платформ(чтобы их не считать создан cntr)
+            # в начале создается / удаляется несколько платформ(чтобы их не считать создан cntr)
             if self.score < 0:
                 self.score = 0
             elif self.score == 0:
@@ -200,7 +202,7 @@ class App:
 
     def set_score(self):
         """
-        метод отрисовки счета
+        Метод отрисовки счета
         """
         self.get_score()
         f2 = pygame.font.Font('al-seana.ttf', 30)
@@ -221,7 +223,7 @@ class App:
 
     def start(self):
         if self.cc != 1:
-            self.start_scrn()
+            self.start_screen()
         self.cc = 1
         self.running = True
         self.pl = Player()
@@ -278,7 +280,7 @@ class App:
 
     def restart(self):
         """
-        метод для перезапуска
+        Метод для перезапуска
         """
         self.boosts = pygame.sprite.Group()
         self.boosts.add(StaticBoost(100, 750))
@@ -338,11 +340,11 @@ class App:
         self.pause_flag = True
         self.pause()
 
-    def start_scrn_draw(self):
+    def start_screen_draw(self):
         """
-        метод для функций на главном экране
+        Метод для функций на главном экране
         """
-        self.screen.blit(self.start_screen, (0, 0))
+        self.screen.blit(self.start_screen_bg, (0, 0))
         self.button_theme()
         font = pygame.font.Font("al-seana.ttf", 62)
         name_text = font.render('name: ', True, (0, 0, 0))
@@ -353,13 +355,13 @@ class App:
         self.screen.blit(player_name_text, (260, 360))
         self.screen.blit(name_text, (140, 360))
 
-    def start_scrn(self):
+    def start_screen(self):
         """
         метод для экрана старта
         """
         while True:
             self.cc = 1
-            self.start_scrn_draw()
+            self.start_screen_draw()
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -390,7 +392,7 @@ class App:
                 if keys[pygame.K_2]:
                     self.pause_flag = False
                 self.screen.blit(self.bg, (0, 0))
-                self.screen.blit(self.pause_screen, (0, 0))
+                self.screen.blit(self.pause_screen_bg, (0, 0))
                 image = pygame.image.load('images/classic/paused.png')
                 self.screen.blit(image, (20, 20))
                 self.set_results()
