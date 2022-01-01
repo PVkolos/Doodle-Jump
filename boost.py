@@ -92,18 +92,10 @@ class MovementBoost(Boost):
         super().__init__(x, y, *groups)
         self.image = pygame.image.load(get_image('move_b.png')).convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
-        self.right = True
-        self.left = True
+        self.speed = 5
+        self.direction = 1
 
     def update(self) -> None:
-        if self.rect.x < 55:
-            self.left = False
-            self.right = True
-            self.rect.x += 5
-        elif self.rect.x >= 500:
-            self.left = True
-            self.right = False
-        if self.left:
-            self.rect.x -= 5
-        else:
-            self.rect.x += 5
+        if self.rect.x < 55 or self.rect.x >= 500:
+            self.direction = -self.direction
+        self.rect.x += self.direction * self.speed
