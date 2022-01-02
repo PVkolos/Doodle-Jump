@@ -14,19 +14,13 @@ class Boost(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-    def update(self) -> None:
-        pass
+    def update(self, screen: pygame.Surface):
+        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
 
     def play_sound(self):
         self.sound.play()
 
-    def draw(self, screen: pygame.Surface):
-        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
-
     def jump(self):
-        pass
-
-    def die(self):
         pass
 
 
@@ -50,9 +44,10 @@ class RedBoost(Boost):
         if not self.is_destroyed:
             self.sound.play()
 
-    def update(self) -> None:
+    def update(self, screen: pygame.Surface):
         if self.is_destroyed:
             self.rect.y += self.fall_speed
+        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
 
     def jump(self):
         self.is_destroyed = True
@@ -79,7 +74,7 @@ class FederBoost(Boost):
             image_spring = self.spring_image2
         return image_spring
 
-    def draw(self, screen: pygame.Surface):
+    def update(self, screen: pygame.Surface):
         screen.blit(self.get_image(), (self.rect.x - 60 / 2 + 30, self.rect.y - 35))
         screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
 
@@ -95,7 +90,8 @@ class MovementBoost(Boost):
         self.speed = 5
         self.direction = 1
 
-    def update(self) -> None:
+    def update(self, screen: pygame.Surface):
         if self.rect.x < 55 or self.rect.x >= 500:
             self.direction = -self.direction
         self.rect.x += self.direction * self.speed
+        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
