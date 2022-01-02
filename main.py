@@ -14,7 +14,7 @@ class App:
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 750))
         self.bg = pygame.image.load(get_image('bg.png'))
-        self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
+        self.game_over_bg = pygame.image.load('game_over_bg.jpg')
         self.start_screen_bg = pygame.image.load("images/start_screen_bg.png")
         self.pause_screen_bg = pygame.image.load('images/pause.png')
         self.lose_sound = pygame.mixer.Sound('sfx/fall.mp3')
@@ -38,8 +38,7 @@ class App:
         self.flag_monster = True
 
     def draw(self):
-        self.boosts.update()
-        self.boosts.draw(self.screen)
+        self.boosts.update(self.screen)
         self.monsters.update()
         self.monsters.draw(self.screen)
         self.bullets.update()
@@ -121,8 +120,8 @@ class App:
                 results[self.player_name] = self.score
             sorted_dict = {}
             sorted_keys = sorted(results, key=results.get)
-            for w in sorted_keys:
-                sorted_dict[w] = results[w]
+            for i in sorted_keys:
+                sorted_dict[i] = results[i]
             results_saver(sorted_dict)
 
     def set_results(self):
@@ -167,7 +166,7 @@ class App:
             self.screen.blit(self.bg, (0, 0))
             self.pl.draw(self.screen)
             if self.boosts:
-                self.boosts.draw(self.screen)
+                self.boosts.update(self.screen)
                 for i in self.boosts:
                     i.rect.y -= 20
                     if i.rect.y < 0:
