@@ -13,19 +13,16 @@ class Player(pygame.sprite.Sprite):
         self.image = self.pl_right
         self.is_jump = False
         self.jump = 0
-        self.rect = self.image.get_rect()
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect.y = 400
-        self.rect.x = 270
+        self.rect = pygame.rect.Rect(0, 0, 60, 10)
+        self.rect.x = 400
+        self.rect.y = 270
         self.speed_down = 5
         self.speed_up = 5
         self.shoot_pass = 0
 
     def down(self, boosts, monsters):
         for el in boosts:
-            if ((el.rect.x - 40 <= self.rect.x <= el.rect.x + 55) or
-                (el.rect.x - 40 <= self.rect.x + self.width <= el.rect.x + 55)) and \
-                    ((self.rect.y + 30) == el.rect.y) and not self.is_jump:
+            if pygame.sprite.collide_rect(self, el) and not self.is_jump:
                 self.is_jump = True
                 self.jump = el.jump_range
                 self.speed_up = el.jump_speed
@@ -59,8 +56,7 @@ class Player(pygame.sprite.Sprite):
         return Bullet(self.rect.x, self.rect.y - 82)
 
     def draw(self, screen: pygame.Surface):
-        self.mask = pygame.mask.from_surface(self.image)
-        screen.blit(self.image, (self.rect.x, self.rect.y - 82))
+        screen.blit(self.image, (self.rect.x - 35, self.rect.y - 110))
 
     def update_images(self):
         self.pl_right = pygame.image.load(get_image('right_1.png')).convert_alpha()
@@ -100,7 +96,6 @@ class Monster(pygame.sprite.Sprite):
         self.images = [self.image_one, self.image_two, self.image_three]
         self.image = self.images[0]
         self.rect = self.image.get_rect()
-        # self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
         self.rect.y = y
         self.speed = 5
@@ -108,9 +103,7 @@ class Monster(pygame.sprite.Sprite):
 
     def update(self):
         self.image = self.images[(self.images.index(self.image) + 1) % 3]
-        # self.rect = self.image.get_rect()
-        # self.mask = pygame.mask.from_surface(self.image)
-        if self.rect.x < 55 or self.rect.x >= 500:
+        if self.rect.x < 55 or self.rect.x >= 520:
             self.direction = -self.direction
         self.rect.x += self.direction * self.speed
 
