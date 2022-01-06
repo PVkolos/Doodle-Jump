@@ -3,19 +3,19 @@ from image_manager import get_image
 
 
 class Boost(pygame.sprite.Sprite):
-    def __init__(self, x, y, *groups):
+    def __init__(self, x: int = 0, y: int = 0, *groups):
         super().__init__(*groups)
         self.size = 80
         self.image = pygame.image.load(get_image('static_b.png')).convert_alpha()
         self.sound = pygame.mixer.Sound('sfx/jump.wav')
         self.jump_range = 200
         self.jump_speed = 5
-        self.rect = self.image.get_rect()
+        self.rect = pygame.rect.Rect(0, 0, 114, 10)
         self.rect.x = x
         self.rect.y = y
 
     def update(self, screen: pygame.Surface):
-        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
+        screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def play_sound(self):
         self.sound.play()
@@ -47,7 +47,7 @@ class RedBoost(Boost):
     def update(self, screen: pygame.Surface):
         if self.is_destroyed:
             self.rect.y += self.fall_speed
-        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
+        screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def jump(self):
         self.is_destroyed = True
@@ -75,8 +75,8 @@ class FederBoost(Boost):
         return image_spring
 
     def update(self, screen: pygame.Surface):
-        screen.blit(self.get_image(), (self.rect.x - 60 / 2 + 30, self.rect.y - 35))
-        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
+        screen.blit(self.get_image(), (self.rect.x + 30, self.rect.y - 35))
+        screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def jump(self):
         self.is_feder = True
@@ -91,7 +91,7 @@ class MovementBoost(Boost):
         self.direction = 1
 
     def update(self, screen: pygame.Surface):
-        if self.rect.x < 55 or self.rect.x >= 500:
+        if self.rect.x < 55 or self.rect.x >= 520:
             self.direction = -self.direction
         self.rect.x += self.direction * self.speed
-        screen.blit(self.image, (self.rect.x - 60 / 2, self.rect.y))
+        screen.blit(self.image, (self.rect.x, self.rect.y))
