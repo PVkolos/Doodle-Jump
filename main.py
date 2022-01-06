@@ -12,7 +12,7 @@ class App:
         pygame.init()
         pygame.display.set_icon(pygame.image.load("images/doodle-jump.png"))
         pygame.display.set_caption('DoodleJumpDemo')
-        self.screen = pygame.display.set_mode((600, 750))
+        self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load(get_image('bg.png'))
         self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
         self.start_screen_bg = pygame.image.load("images/start_screen_bg.png")
@@ -46,41 +46,9 @@ class App:
         self.pl.draw(self.screen)
 
     def check_play(self):
-        if len(self.boosts) < self.n_boosts:
-            while self.n_boosts - len(self.boosts) != 0:
-                a = self.boosts.sprites()
-                y = a[-1].rect.y
-                if not type(a[-1]) == StaticBoost:
-                    for i in range(2, 15):
-                        if type(self.boosts.sprites()[-i]) == StaticBoost:
-                            y = self.boosts.sprites()[-i].rect.y
-                            break
-                coord = (random.randint(80, 600 - 80),
-                         random.randrange(round(y - 150), round(y), 5))
-                a = 100
-                while a != 0:
-                    if check_collision(self.boosts.sprites(), coord):
-                        coord = (random.randint(80, 600 - 80),
-                                 random.randrange(round(y - 150), round(y), 5))
-                        a -= 1
-                    else:
-                        break
-                monsters = self.monsters.sprites()
-                # if not self.flag_monster and pygame.sprite.collide_mask(monsters[0], self.pl):
-                #   self.game_over()
-                if not self.flag_monster and pygame.sprite.collide_rect(monsters[0], self.pl):
-                    self.game_over()
-                bst = StaticBoost(coord[0], coord[1])
-                if random.random() > 0.5:
-                    if random.random() > 0.7:
-                        bst = FederBoost(random.randint(100, 200), coord[1] + 5)
-                    else:
-                        bst = StaticBoost(coord[0], coord[1])
-                elif random.random() > 0.7:
-                    bst = RedBoost(coord[0], coord[1])
-                elif random.random() > 0.9:
-                    bst = MovementBoost(coord[0], coord[1])
-                self.boosts.add(bst)
+        monsters = self.monsters.sprites()
+        if not self.flag_monster and pygame.sprite.collide_rect(monsters[0], self.pl):
+            self.game_over()
         if self.pl.rect.x < -80:
             self.pl.rect.x = 580
         elif self.pl.rect.x > 680:
@@ -90,7 +58,6 @@ class App:
             if i.rect.y > 800:
                 self.boosts.remove(i)
                 self.score += 100
-                self.cntr += 1
         a = self.bullets.copy()
         for i in a:
             if i.rect.y < -100:
@@ -100,6 +67,28 @@ class App:
             if not self.flag_monster and i.rect.y > 800:
                 self.monsters.remove(i)
                 self.flag_monster = True
+
+    def generate_boosts(self):
+        while len(self.boosts) < 30:
+            coord = [random.randint(80, 520), self.boosts.sprites()[-1].rect.y - random.randint(50, 80)]
+            if self.cntr:
+                if self.boosts.sprites()[-1].rect.x not in range(80, 194):
+                    coord = [random.randint(80, 194), self.boosts.sprites()[-1].rect.y - random.randint(25, 50)]
+                elif self.boosts.sprites()[-1].rect.x not in range(406, 520):
+                    coord = [random.randint(406, 520), self.boosts.sprites()[-1].rect.y - random.randint(25, 50)]
+                i = self.get_random_boost()
+                bst = i(coord[0], coord[1])
+                self.cntr = 0
+            else:
+                self.cntr = 1
+                bst = self.get_random_boost()(coord[0], coord[1])
+            self.boosts.add(bst)
+
+    @staticmethod
+    def get_random_boost():
+        boosts = [StaticBoost, StaticBoost, StaticBoost, StaticBoost, StaticBoost,
+                  RedBoost, RedBoost, MovementBoost, FederBoost, FederBoost]
+        return random.choice(boosts)
 
     def get_fps(self):
         """
@@ -186,24 +175,10 @@ class App:
                 self.pl.draw(self.screen)
                 pygame.display.flip()
 
-    def get_score(self):
-        """
-        Метод для получения результата в начале
-        """
-        if self.cntr < 6:
-            # в начале создается / удаляется несколько платформ(чтобы их не считать создан cntr)
-            if self.score < 0:
-                self.score = 0
-            elif self.score == 0:
-                self.score = 0
-            elif self.score > 0:
-                self.score = 100
-
     def set_score(self):
         """
         Метод отрисовки счета
         """
-        self.get_score()
         f2 = pygame.font.Font('al-seana.ttf', 30)
         text2 = f2.render(f'Score: {str(self.score)}', True,
                           (100, 100, 100))
@@ -212,6 +187,7 @@ class App:
     def functions(self):
         self.clock.tick(60)
         self.check_play()
+        self.generate_boosts()
         self.screen.blit(self.bg, (0, 0))
         self.draw()
         self.pl.down(self.boosts, self.monsters)
