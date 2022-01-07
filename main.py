@@ -5,6 +5,7 @@ from static import *
 from player import *
 from boost import *
 from image_manager import *
+from screen import Start
 
 
 class App:
@@ -20,8 +21,6 @@ class App:
         self.lose_sound = pygame.mixer.Sound('sfx/fall.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = pygame.sprite.Group()
-        self.boosts.add(StaticBoost(100, 750))
-        self.boosts.add(StaticBoost(300, 750))
         self.boosts.add(StaticBoost(500, 750))
         self.bullets = pygame.sprite.Group()
         self.monsters = pygame.sprite.Group()
@@ -197,6 +196,7 @@ class App:
         self.check_collision_monster_bullet()
 
     def start(self):
+        self.start_sound.play()
         if self.cc != 1:
             self.start_screen()
         self.cc = 1
@@ -220,11 +220,7 @@ class App:
                 self.pause_flag = True
                 self.pause()
             if keys[pygame.K_3]:
-                image_manager.is_snow = True
-                self.pl.update_images()
-                self.bg = pygame.image.load(get_image('bg.png'))
-            if keys[pygame.K_4]:
-                image_manager.is_snow = False
+                image_manager.change_theme()
                 self.pl.update_images()
                 self.bg = pygame.image.load(get_image('bg.png'))
             if keys[pygame.K_LEFT]:
@@ -275,85 +271,22 @@ class App:
         self.flag_monster = True
         self.start()
 
-    def button_theme(self):
-        mouse = pygame.mouse.get_pos()
-        width = 100
-        height = 36
-        x = 20
-        y = 200
-        image = pygame.image.load('images/classic/theme.png')
-        image2 = pygame.image.load('images/classic/theme2.png')
-        pygame.draw.rect(self.screen, (247, 243, 231), (x, y, width, height))
-        if image_manager.is_snow:
-            self.screen.blit(image2, (20, 200))
-        else:
-            self.screen.blit(image, (20, 200))
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and (x < mouse[0] < x + width) and (y < mouse[1] < y + height):
-                if not image_manager.is_snow:
-                    image_manager.is_snow = True
-                elif image_manager.is_snow:
-                    image_manager.is_snow = False
-                self.bg = pygame.image.load(get_image('bg.png'))
-            if event.type == pygame.QUIT:
-                exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    self.start_sound.play()
-                    self.start()
-                if event.key == pygame.K_RETURN:
-                    self.start_sound.play()
-                    self.start()
-                    print(self.player_name)
-                if event.key == pygame.K_BACKSPACE:
-                    self.player_name = self.player_name[:-1]
-                else:
-                    if len(self.player_name) < 12:
-                        self.player_name += event.unicode
-
     def button_paused(self):
         self.pause_flag = True
         self.pause()
-
-    def start_screen_draw(self):
-        """
-        Метод для функций на главном экране
-        """
-        self.screen.blit(self.start_screen_bg, (0, 0))
-        self.button_theme()
-        font = pygame.font.Font("al-seana.ttf", 62)
-        name_text = font.render('name: ', True, (0, 0, 0))
-        if self.player_name == '':
-            enter_name = font.render('enter name', True, (128, 128, 128))
-            self.screen.blit(enter_name, (260, 360))
-        player_name_text = font.render(self.player_name, True, (0, 0, 0))
-        self.screen.blit(player_name_text, (260, 360))
-        self.screen.blit(name_text, (140, 360))
 
     def start_screen(self):
         """
         метод для экрана старта
         """
+        screen = Start(self.screen)
         while True:
             self.cc = 1
-            self.start_screen_draw()
-            pygame.display.flip()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.start_sound.play()
-                        self.start()
-                    if event.key == pygame.K_RETURN:
-                        self.start_sound.play()
-                        self.start()
-                        print(self.player_name)
-                    if event.key == pygame.K_BACKSPACE:
-                        self.player_name = self.player_name[:-1]
-                    else:
-                        if len(self.player_name) < 12:
-                            self.player_name += event.unicode
+            for event in screen.get_event():
+                if event == 'start':
+                    self.player_name = screen.name
+                    self.start()
+            screen.draw()
 
     def pause(self):
         """
