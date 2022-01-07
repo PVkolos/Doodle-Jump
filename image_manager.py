@@ -8,6 +8,11 @@ def get_image(image: str):
         return f'images/classic/{image}'
 
 
+def change_theme():
+    global is_snow
+    is_snow = not is_snow
+
+
 def set_snow(a: bool):
     global is_snow
     is_snow = a
