@@ -5,12 +5,11 @@ from static import *
 from player import *
 from boost import *
 from image_manager import *
-from screen import Start
+from screen import Start, Pause
 
 
 class App:
     def __init__(self):
-        pygame.init()
         pygame.display.set_icon(pygame.image.load("images/doodle-jump.png"))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 800))
@@ -28,11 +27,9 @@ class App:
         self.clock = pygame.time.Clock()
         self.score = 0
         self.cntr = 0
-        self.cc = 0
         self.n_boosts = 20
         self.flag = True
         self.player_name = ''
-        self.pause_flag = False
         self.running = True
         self.flag_monster = True
 
@@ -52,17 +49,14 @@ class App:
             self.pl.rect.x = 580
         elif self.pl.rect.x > 680:
             self.pl.rect.x = -40
-        a = self.boosts.copy()
-        for i in a:
+        for i in self.boosts.copy():
             if i.rect.y > 800:
                 self.boosts.remove(i)
                 self.score += 100
-        a = self.bullets.copy()
-        for i in a:
+        for i in self.bullets.copy():
             if i.rect.y < -100:
                 self.bullets.remove(i)
-        a = self.monsters.copy()
-        for i in a:
+        for i in self.monsters.copy():
             if not self.flag_monster and i.rect.y > 800:
                 self.monsters.remove(i)
                 self.flag_monster = True
@@ -112,17 +106,6 @@ class App:
                 sorted_dict[i] = results[i]
             results_saver(sorted_dict)
 
-    def set_results(self):
-        font = pygame.font.Font("al-seana.ttf", 32)
-        results = results_loader()
-        if len(results) > 3:
-            a = 3
-        else:
-            a = len(results)
-        for i in range(1, a + 1):
-            res = list(results.keys())[-i]
-            self.screen.blit(font.render(f'{i}.{res}: {results.get(res)}', True, (0, 0, 0)), (130, 210 + 30 * i))
-
     def check_collision_monster_bullet(self):
         for monster in self.monsters:
             for bullet in self.bullets:
@@ -148,7 +131,7 @@ class App:
                     exit()
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE]:
-                    self.restart()
+                    self.start()
             self.clock.tick(60)
             self.screen.fill((0, 0, 0))
             self.screen.blit(self.bg, (0, 0))
@@ -196,10 +179,8 @@ class App:
         self.check_collision_monster_bullet()
 
     def start(self):
+        self.restart()
         self.start_sound.play()
-        if self.cc != 1:
-            self.start_screen()
-        self.cc = 1
         self.running = True
         self.pl = Player()
         while self.running:
@@ -215,9 +196,9 @@ class App:
                         self.bullets.add(self.pl.shoot())
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
-                self.restart()
-            if keys[pygame.K_1] and not self.pause_flag:
-                self.pause_flag = True
+                self.running = False
+                self.start_scene()
+            if keys[pygame.K_1]:
                 self.pause()
             if keys[pygame.K_3]:
                 image_manager.change_theme()
@@ -254,62 +235,47 @@ class App:
         Метод для перезапуска
         """
         self.boosts = pygame.sprite.Group()
-        self.boosts.add(StaticBoost(100, 750))
-        self.boosts.add(StaticBoost(300, 750))
         self.boosts.add(StaticBoost(500, 750))
         self.bullets = pygame.sprite.Group()
         self.monsters = pygame.sprite.Group()
         self.pl = Player()
         self.score = 0
         self.cntr = 0
-        self.cc = 0
         self.n_boosts = 20
         self.flag = True
-        self.player_name = ''
-        self.pause_flag = False
         self.running = True
         self.flag_monster = True
-        self.start()
 
     def button_paused(self):
-        self.pause_flag = True
         self.pause()
 
-    def start_screen(self):
+    def start_scene(self):
         """
         метод для экрана старта
         """
-        screen = Start(self.screen)
-        while True:
-            self.cc = 1
-            for event in screen.get_event():
+        start = Start(self.screen)
+        x = True
+        while x:
+            for event in start.get_event():
                 if event == 'start':
-                    self.player_name = screen.name
-                    self.start()
-            screen.draw()
+                    self.player_name = start.name
+                    x = False
+            start.draw()
+        self.start()
 
     def pause(self):
         """
         метод для экрана паузы
         """
-        while self.pause_flag and self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    exit()
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_2]:
-                    self.pause_flag = False
-                self.screen.blit(self.bg, (0, 0))
-                self.screen.blit(self.pause_screen_bg, (0, 0))
-                image = pygame.image.load('images/classic/paused.png')
-                self.screen.blit(image, (20, 20))
-                self.set_results()
-                mouse = pygame.mouse.get_pos()
-                if (20 < mouse[0] < 20 + 100) and (20 < mouse[1] < 20 + 36):
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        self.pause_flag = False
-                pygame.display.flip()
+        pause = Pause(self.screen)
+        pause_flag = True
+        pause.draw()
+        while pause_flag:
+            for event in pause.get_event():
+                if event == 'start':
+                    pause_flag = False
 
 
 if __name__ == '__main__':
-    App().start()
+    pygame.init()
+    App().start_scene()
