@@ -1,5 +1,5 @@
 import pygame
-from image_manager import get_image
+from file_manager import get_image
 
 
 class Boost(pygame.sprite.Sprite):

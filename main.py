@@ -1,22 +1,21 @@
 import random
 import pygame.display
-import image_manager
 from static import *
 from player import *
 from boost import *
-from image_manager import *
+from file_manager import *
 from screen import Start, Pause
 
 
 class App:
     def __init__(self):
-        pygame.display.set_icon(pygame.image.load("images/doodle-jump.png"))
+        pygame.display.set_icon(pygame.image.load(get_image('doodle-jump.png')))
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load(get_image('bg.png'))
-        self.game_over_bg = pygame.image.load('images/game_over_bg.jpg')
-        self.start_screen_bg = pygame.image.load("images/start_screen_bg.png")
-        self.pause_screen_bg = pygame.image.load('images/pause.png')
+        self.game_over_bg = pygame.image.load(get_image('game_over_bg.jpg'))
+        self.start_screen_bg = pygame.image.load(get_image('start_screen_bg.png'))
+        self.pause_screen_bg = pygame.image.load(get_image('pause.png'))
         self.lose_sound = pygame.mixer.Sound('sfx/fall.mp3')
         self.start_sound = pygame.mixer.Sound('sfx/start.wav')
         self.boosts = pygame.sprite.Group()
@@ -173,7 +172,7 @@ class App:
         self.screen.blit(self.bg, (0, 0))
         self.draw()
         self.pl.down(self.boosts, self.monsters)
-        self.screen.blit(pygame.image.load('images/classic/paused.png'), (20, 20))
+        self.screen.blit(pygame.image.load(get_image('paused.png')), (20, 20))
         self.get_fps()
         self.set_score()
         self.check_collision_monster_bullet()
@@ -201,7 +200,7 @@ class App:
             if keys[pygame.K_1]:
                 self.pause()
             if keys[pygame.K_3]:
-                image_manager.change_theme()
+                change_theme()
                 self.pl.update_images()
                 self.bg = pygame.image.load(get_image('bg.png'))
             if keys[pygame.K_LEFT]:

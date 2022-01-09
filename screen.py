@@ -1,7 +1,7 @@
-import image_manager
 import pygame
 from widgets import CheckButton, PushButton
 from static import results_loader
+from file_manager import change_theme, get_image
 
 
 class Screen:
@@ -21,7 +21,7 @@ class Pause(Screen):
 
     def init_objects(self):
         x = PushButton(100, 36, 20, 20)
-        x.def_image = pygame.image.load("images/classic/paused.png")
+        x.def_image = pygame.image.load(get_image('paused.png'))
         self.objects.append(x)
 
     def get_event(self):
@@ -58,15 +58,15 @@ class GameOver(Screen):
 class Start(Screen):
     def __init__(self, screen):
         super().__init__(screen)
-        self.bg = pygame.image.load("images/start_screen_bg.png")
+        self.bg = pygame.image.load(get_image('start_screen_bg.png'))
         self.name = ''
         self.init_objects()
 
     def init_objects(self):
         x = CheckButton(100, 36, 20, 200)
-        x.def_image = pygame.image.load('images/classic/theme.png')
-        x.check_image = pygame.image.load('images/classic/theme2.png')
-        x.connect(image_manager.change_theme)
+        x.def_image = pygame.image.load(get_image('theme.png'))
+        x.check_image = pygame.image.load(get_image('theme2.png'))
+        x.connect(change_theme)
         x.update()
         self.objects.append(x)
 
