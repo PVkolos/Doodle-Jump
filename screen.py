@@ -1,6 +1,7 @@
 import image_manager
 import pygame
-from widgets import CheckButton
+from widgets import CheckButton, PushButton
+from static import results_loader
 
 
 class Screen:
@@ -14,6 +15,39 @@ class Screen:
 class Pause(Screen):
     def __init__(self, screen):
         super().__init__(screen)
+        self.bg = pygame.image.load("images/pause.png")
+        self.init_objects()
+        self.font = pygame.font.Font("al-seana.ttf", 32)
+
+    def init_objects(self):
+        x = PushButton(100, 36, 20, 20)
+        x.def_image = pygame.image.load("images/classic/paused.png")
+        self.objects.append(x)
+
+    def get_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.update()
+                return ['start']
+        return []
+
+    def update(self):
+        for i in self.objects:
+            i.update()
+
+    def draw(self):
+        self.screen.blit(self.bg, (0, 0))
+        results = results_loader()
+        if len(results) > 3:
+            a = 3
+        else:
+            a = len(results)
+        for i in range(1, a + 1):
+            res = list(results.keys())[-i]
+            self.screen.blit(self.font.render(f'{i}.{res}: {results.get(res)}', True, (0, 0, 0)), (130, 210 + 30 * i))
+        pygame.display.flip()
 
 
 class GameOver(Screen):
@@ -32,6 +66,8 @@ class Start(Screen):
         x = CheckButton(100, 36, 20, 200)
         x.def_image = pygame.image.load('images/classic/theme.png')
         x.check_image = pygame.image.load('images/classic/theme2.png')
+        x.connect(image_manager.change_theme)
+        x.update()
         self.objects.append(x)
 
     def get_event(self):
@@ -55,9 +91,6 @@ class Start(Screen):
     def update(self):
         for i in self.objects:
             i.update()
-            for event in i.get_event():
-                if event == 'clicked':
-                    image_manager.change_theme()
 
     def draw(self):
         self.screen.blit(self.bg, (0, 0))
@@ -69,6 +102,5 @@ class Start(Screen):
         self.screen.blit(player_name_text, (260, 360))
         self.screen.blit(name_text, (140, 360))
         for i in self.objects:
-            i.update()
             i.draw(self.screen)
         pygame.display.flip()
