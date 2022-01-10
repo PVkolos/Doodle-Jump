@@ -35,17 +35,26 @@ class CheckButton(Button):
         self.func = self.do_nothing
 
     def connect(self, func):
+        if callable(func):
+            self.func = func
         self.func = func
 
-    def update(self):
+    def click_check(self):
         mouse = pygame.mouse.get_pos()
         if (self.x < mouse[0] < self.x + self.w) and (self.y < mouse[1] < self.y + self.h):
             self.checked = not self.checked
             self.func()
+            self.update()
+
+    def update(self):
         if self.checked:
             self.image = self.check_image
         else:
             self.image = self.def_image
+
+    def set_checked(self, a: bool):
+        if type(a) == bool:
+            self.checked = a
 
 
 class PushButton(Button):
