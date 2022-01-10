@@ -15,6 +15,12 @@ def get_image(image: str):
         return f'images/{image}'
 
 
+def get_sound(sound: str):
+    path = f'sfx/{sound}'
+    if os.path.exists(path):
+        return path
+
+
 def change_theme():
     global is_snow
     is_snow = not is_snow
@@ -23,3 +29,8 @@ def change_theme():
 def set_snow(a: bool):
     global is_snow
     is_snow = a
+
+
+def get_snow() -> bool:
+    global is_snow
+    return is_snow
