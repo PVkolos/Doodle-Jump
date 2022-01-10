@@ -258,6 +258,7 @@ class App:
             for event in start.get_event():
                 if event == 'start':
                     self.player_name = start.name
+                    self.bg = pygame.image.load(get_image('bg.png'))
                     x = False
             start.draw()
         self.start()
