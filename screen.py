@@ -1,7 +1,7 @@
 import pygame
 from widgets import CheckButton, PushButton
 from static import results_loader
-from file_manager import change_theme, get_image
+from file_manager import get_image, change_theme, get_snow
 
 
 class Screen:
@@ -67,6 +67,7 @@ class Start(Screen):
         x.def_image = pygame.image.load(get_image('theme.png'))
         x.check_image = pygame.image.load(get_image('theme2.png'))
         x.connect(change_theme)
+        x.set_checked(get_snow())
         x.update()
         self.objects.append(x)
 
@@ -75,7 +76,8 @@ class Start(Screen):
             if event.type == pygame.QUIT:
                 exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.update()
+                for i in self.objects:
+                    i.click_check()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     return ['start']
