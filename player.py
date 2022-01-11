@@ -1,5 +1,5 @@
 import pygame
-from file_manager import get_image
+from file_manager import get_image, get_sound
 
 
 class Player(pygame.sprite.Sprite):
@@ -50,6 +50,10 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.pl_right
             elif self.jump <= 100 and self.image == self.pl_left_pr:
                 self.image = self.pl_left
+        if self.rect.x < -80:
+            self.rect.x = 580
+        elif self.rect.x > 680:
+            self.rect.x = -40
 
     def shoot(self):
         self.shoot_pass = 60
@@ -69,12 +73,12 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):
         super().__init__(*groups)
         self.speed = 10
-        self.image = pygame.image.load("images/bullet.png").convert_alpha()
+        self.image = pygame.image.load(get_image('bullet.png')).convert_alpha()
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
         self.rect.y = y
-        self.sound = pygame.mixer.Sound('sfx/pistol_shoot.mp3')
+        self.sound = pygame.mixer.Sound(get_sound('pistol_shoot.mp3'))
         self.play_sound()
 
     def play_sound(self):
@@ -90,9 +94,9 @@ class Bullet(pygame.sprite.Sprite):
 class Monster(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):
         super().__init__(*groups)
-        self.image_one = pygame.image.load("images/bat1.png").convert_alpha()
-        self.image_two = pygame.image.load("images/bat2.png").convert_alpha()
-        self.image_three = pygame.image.load("images/bat3.png").convert_alpha()
+        self.image_one = pygame.image.load(get_image('bat1.png')).convert_alpha()
+        self.image_two = pygame.image.load(get_image('bat2.png')).convert_alpha()
+        self.image_three = pygame.image.load(get_image('bat3.png')).convert_alpha()
         self.images = [self.image_one, self.image_two, self.image_three]
         self.image = self.images[0]
         self.rect = self.image.get_rect()

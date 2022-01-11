@@ -1,7 +1,8 @@
 import pygame
 from widgets import CheckButton, PushButton
 from static import results_loader
-from file_manager import get_image, change_theme, get_snow
+from file_manager import get_image, change_theme, get_snow, get_path
+import sys
 
 
 class Screen:
@@ -9,15 +10,15 @@ class Screen:
         self.objects = []
         self.screen = screen
         self.bg = None
-        self.font = pygame.font.Font("al-seana.ttf", 62)
+        self.font = pygame.font.Font(get_path('al-seana.ttf'), 62)
 
 
 class Pause(Screen):
     def __init__(self, screen):
         super().__init__(screen)
-        self.bg = pygame.image.load("images/pause.png")
+        self.bg = pygame.image.load(get_image('pause.png'))
         self.init_objects()
-        self.font = pygame.font.Font("al-seana.ttf", 32)
+        self.font = pygame.font.Font(get_path('al-seana.ttf'), 32)
 
     def init_objects(self):
         x = PushButton(100, 36, 20, 20)
@@ -27,7 +28,7 @@ class Pause(Screen):
     def get_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                exit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.update()
                 return ['start']
@@ -53,6 +54,15 @@ class Pause(Screen):
 class GameOver(Screen):
     def __init__(self, screen):
         super().__init__(screen)
+        self.bg = pygame.image.load(get_image('bg.png'))
+
+    def get_event(self):
+        pass
+
+
+class Game(Screen):
+    def __init__(self, screen):
+        super().__init__(screen)
 
 
 class Start(Screen):
@@ -74,7 +84,7 @@ class Start(Screen):
     def get_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                exit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for i in self.objects:
                     i.click_check()

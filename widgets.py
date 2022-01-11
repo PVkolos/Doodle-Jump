@@ -34,11 +34,6 @@ class CheckButton(Button):
         self.checked = False
         self.func = self.do_nothing
 
-    def connect(self, func):
-        if callable(func):
-            self.func = func
-        self.func = func
-
     def click_check(self):
         mouse = pygame.mouse.get_pos()
         if (self.x < mouse[0] < self.x + self.w) and (self.y < mouse[1] < self.y + self.h):
