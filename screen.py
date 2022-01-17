@@ -51,20 +51,6 @@ class Pause(Screen):
         pygame.display.flip()
 
 
-class GameOver(Screen):
-    def __init__(self, screen):
-        super().__init__(screen)
-        self.bg = pygame.image.load(get_image('bg.png'))
-
-    def get_event(self):
-        pass
-
-
-class Game(Screen):
-    def __init__(self, screen):
-        super().__init__(screen)
-
-
 class Start(Screen):
     def __init__(self, screen):
         super().__init__(screen)
