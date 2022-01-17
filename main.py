@@ -2,10 +2,23 @@ import random
 import sys
 import pygame.display
 from static import *
-from player import *
-from boost import *
+from player import Player, Monster
+from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
 from file_manager import *
-from screen import Start, Pause, Game
+from screen import Start, Pause
+from random import randint
+
+
+def get_random_boost():
+    x = randint(1, 100)
+    if x in range(1, 50):
+        return StaticBoost
+    elif x in range(50, 75):
+        return RedBoost
+    elif x in range(80, 90):
+        return MovementBoost
+    else:
+        return FederBoost
 
 
 class App:
@@ -66,19 +79,16 @@ class App:
                     coord = [random.randint(80, 194), self.boosts.sprites()[-1].rect.y - random.randint(25, 50)]
                 elif self.boosts.sprites()[-1].rect.x not in range(406, 520):
                     coord = [random.randint(406, 520), self.boosts.sprites()[-1].rect.y - random.randint(25, 50)]
-                i = self.get_random_boost()
+                i = get_random_boost()
+                if i == RedBoost:
+                    while i == RedBoost:
+                        i = get_random_boost()
                 bst = i(coord[0], coord[1])
                 self.cntr = 0
             else:
                 self.cntr = 1
-                bst = self.get_random_boost()(coord[0], coord[1])
+                bst = get_random_boost()(coord[0], coord[1])
             self.boosts.add(bst)
-
-    @staticmethod
-    def get_random_boost():
-        boosts = [StaticBoost, StaticBoost, StaticBoost, StaticBoost, StaticBoost,
-                  RedBoost, RedBoost, MovementBoost, FederBoost, FederBoost]
-        return random.choice(boosts)
 
     def get_fps(self):
         """
