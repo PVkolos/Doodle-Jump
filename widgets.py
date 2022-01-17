@@ -24,15 +24,8 @@ class Button:
 class CheckButton(Button):
     def __init__(self, w, h, x, y):
         super().__init__(w, h, x, y)
-        self.w = w
-        self.h = h
-        self.x = x
-        self.y = y
-        self.def_image = None
         self.check_image = None
-        self.image = self.def_image
         self.checked = False
-        self.func = self.do_nothing
 
     def click_check(self):
         mouse = pygame.mouse.get_pos()
