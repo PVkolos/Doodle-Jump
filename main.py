@@ -27,7 +27,7 @@ class App:
         pygame.display.set_caption('DoodleJumpDemo')
         self.screen = pygame.display.set_mode((600, 800))
         self.bg = pygame.image.load(get_image('bg.png'))
-        self.game_over_bg = pygame.image.load(get_image('game_over_bg.jpg'))
+        self.game_over_bg = pygame.image.load(get_image('game_over.png'))
         self.start_screen_bg = pygame.image.load(get_image('start_screen_bg.png'))
         self.pause_screen_bg = pygame.image.load(get_image('pause.png'))
         self.lose_sound = pygame.mixer.Sound(get_sound('fall.mp3'))
@@ -151,15 +151,15 @@ class App:
                         self.boosts.remove(i)
                 pygame.display.flip()
                 continue
-            if y > -10:
+            if y > -120:
                 self.screen.blit(self.game_over_bg, (0, y))
-                self.screen.blit(text2, (350, y + 407))
+                self.screen.blit(text2, (370, y + 510 ))
                 y -= 20
                 self.pl.draw(self.screen)
                 pygame.display.flip()
             else:
-                self.screen.blit(self.game_over_bg, (0, 0))
-                self.screen.blit(text2, (350, y + 415))
+                self.screen.blit(self.game_over_bg, (0, -120))
+                self.screen.blit(text2, (370, y + 510))
                 self.pl.rect.y += 20
                 self.pl.draw(self.screen)
                 pygame.display.flip()
@@ -188,6 +188,7 @@ class App:
         self.restart()
         self.start_sound.play()
         self.bg = pygame.image.load(get_image('bg.png'))
+        self.game_over_bg = pygame.image.load(get_image('game_over.png'))
         while True:
             self.clock.tick(self.fps)
             mouse = pygame.mouse.get_pos()
