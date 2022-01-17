@@ -41,8 +41,7 @@ class CheckButton(Button):
             self.image = self.def_image
 
     def set_checked(self, a: bool):
-        if type(a) == bool:
-            self.checked = a
+        self.checked = a
 
 
 class PushButton(Button):
