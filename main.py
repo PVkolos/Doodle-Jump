@@ -1,6 +1,6 @@
 import random
 import sys
-import pygame.display
+import pygame
 from static import *
 from player import Player, Monster
 from boost import StaticBoost, RedBoost, MovementBoost, FederBoost
