@@ -153,7 +153,7 @@ class App:
                 continue
             if y > -120:
                 self.screen.blit(self.game_over_bg, (0, y))
-                self.screen.blit(text2, (370, y + 510 ))
+                self.screen.blit(text2, (370, y + 510))
                 y -= 20
                 self.pl.draw(self.screen)
                 pygame.display.flip()
