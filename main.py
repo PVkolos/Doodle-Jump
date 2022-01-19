@@ -10,12 +10,12 @@ from random import randint
 
 
 def get_random_boost():
-    x = randint(1, 100)
-    if x in range(1, 50):
+    x = randint(1, 10)
+    if x in range(1, 6):
         return StaticBoost
-    elif x in range(50, 75):
+    elif x in range(6, 9):
         return RedBoost
-    elif x in range(80, 90):
+    elif x in range(9, 10):
         return MovementBoost
     else:
         return FederBoost
