@@ -29,7 +29,8 @@ class CheckButton(Button):
 
     def click_check(self):
         mouse = pygame.mouse.get_pos()
-        if (self.x < mouse[0] < self.x + self.w) and (self.y < mouse[1] < self.y + self.h):
+        if (self.x < mouse[0] < self.x + self.w) and (
+                self.y < mouse[1] < self.y + self.h):
             self.checked = not self.checked
             self.func()
             self.update()
@@ -50,5 +51,13 @@ class PushButton(Button):
 
     def update(self):
         mouse = pygame.mouse.get_pos()
-        if (self.x < mouse[0] < self.x + self.w) and (self.y < mouse[1] < self.y + self.h):
+        if (self.x < mouse[0] < self.x + self.w) and (
+                self.y < mouse[1] < self.y + self.h):
             self.func()
+
+
+__all__ = [
+    "Button",
+    "CheckButton",
+    "PushButton",
+]
