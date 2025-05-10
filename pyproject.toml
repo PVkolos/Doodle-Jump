@@ -1,0 +1,12 @@
+[tool.flake8]
+max-line-length = 79
+inline-quotes="double"
+import-order-style="google"
+exclude = [
+    ".git",
+    "__pycache__",
+    "venv",
+]
+
+[tool.black]
+line-length = 79
